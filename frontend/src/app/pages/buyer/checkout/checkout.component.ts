@@ -141,7 +141,7 @@ export class CheckoutComponent {
       error: (err: HttpErrorResponse) => {
         this.loading.set(false);
         if (err.status === 0) {
-          this.error.set('Cannot connect to server. Please try again in a moment.');
+          this.error.set('Server is waking up. Please wait 10 seconds and try again.');
         } else {
           this.error.set(`Order failed (${err.status}). Please try again.`);
         }
