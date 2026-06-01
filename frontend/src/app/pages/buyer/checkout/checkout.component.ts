@@ -141,7 +141,7 @@ export class CheckoutComponent {
       error: (err: HttpErrorResponse) => {
         this.loading.set(false);
         if (err.status === 0) {
-          this.error.set('Cannot reach server. Make sure the backend is running on port 8001.');
+          this.error.set('Cannot connect to server. Please try again in a moment.');
         } else {
           this.error.set(`Order failed (${err.status}). Please try again.`);
         }
