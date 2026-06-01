@@ -25,7 +25,11 @@ app.add_middleware(
 # Create tables on startup
 @app.on_event('startup')
 def startup():
-    init_db()
+    try:
+        init_db()
+    except Exception as e:
+        print(f'[DB] Warning: Could not initialize database: {e}')
+        print('[DB] App will start anyway — check DATABASE_URL variable')
 
 app.include_router(products.router, prefix='/api/products', tags=['products'])
 app.include_router(orders.router,   prefix='/api/orders',   tags=['orders'])
