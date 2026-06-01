@@ -15,7 +15,9 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         os.getenv('ALLOWED_ORIGINS', 'http://localhost:4200'),
-        'http://localhost:4201'
+        'http://localhost:4200',
+        'http://localhost:4201',
+        'https://glow-mart-taupe.vercel.app',
     ],
     allow_credentials=True,
     allow_methods=['*'],
