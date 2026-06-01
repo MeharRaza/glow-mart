@@ -6,7 +6,7 @@ import { Order } from '../models/order.model';
 @Injectable({ providedIn: 'root' })
 export class OrderService {
   private http = inject(HttpClient);
-  private apiUrl = 'http://localhost:8001/api';
+  private apiUrl = 'https://glow-mart-production.up.railway.app/api';
 
   placeOrder(order: Omit<Order, 'id' | 'status' | 'createdAt' | 'updatedAt'>): Observable<Order> {
     return this.http.post<Order>(`${this.apiUrl}/orders`, order);

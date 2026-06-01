@@ -14,7 +14,7 @@ export interface ScrapedProduct {
 @Injectable({ providedIn: 'root' })
 export class ScraperService {
   private http = inject(HttpClient);
-  private apiUrl = 'http://localhost:8001/api';
+  private apiUrl = 'https://glow-mart-production.up.railway.app/api';
 
   scrapeCategory(categoryUrl: string): Observable<ScrapedProduct[]> {
     return this.http.post<ScrapedProduct[]>(`${this.apiUrl}/scraper/scrape`, { url: categoryUrl });
