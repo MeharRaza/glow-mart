@@ -18,6 +18,7 @@ app.add_middleware(
         'http://localhost:4200',
         'http://localhost:4201',
         'https://glow-mart-taupe.vercel.app',
+        'https://glow-mart-woad.vercel.app',
     ],
     allow_credentials=True,
     allow_methods=['*'],
