@@ -8,54 +8,273 @@ import { OrderService } from '../../services/order.service';
   selector: 'app-seller-layout',
   standalone: true,
   imports: [RouterOutlet, RouterLink, RouterLinkActive, CommonModule],
+  styles: [`
+    :host { display: block; }
+
+    .shell {
+      min-height: 100vh;
+      display: flex;
+      background: #faf7f4;
+    }
+
+    /* ── Sidebar ── */
+    .sidebar {
+      width: 240px;
+      flex-shrink: 0;
+      background: #1a1410;
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      top: 0; bottom: 0; left: 0;
+      z-index: 50;
+    }
+
+    .sidebar-logo {
+      height: 72px;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0 1.5rem;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .logo-text {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 1.4rem;
+      font-weight: 500;
+      background: linear-gradient(135deg, #c9a96e, #8b6914);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .logo-badge {
+      font-family: 'Jost', sans-serif;
+      font-size: 0.58rem;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #6b6560;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      padding: 0.15rem 0.5rem;
+    }
+
+    .sidebar-nav {
+      flex: 1;
+      padding: 1.25rem 0.875rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.125rem;
+    }
+
+    .nav-section-label {
+      font-family: 'Jost', sans-serif;
+      font-size: 0.58rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #4a4540;
+      padding: 0 0.625rem;
+      margin: 0.75rem 0 0.375rem;
+    }
+    .nav-section-label:first-child { margin-top: 0; }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.625rem 0.875rem;
+      font-family: 'Jost', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 400;
+      color: #6b6560;
+      text-decoration: none;
+      border: 1px solid transparent;
+      transition: all 0.2s;
+    }
+    .nav-item:hover {
+      color: #e8e0d6;
+      background: rgba(255,255,255,0.04);
+    }
+    .nav-item.active {
+      color: #c9a96e;
+      background: rgba(201,169,110,0.08);
+      border-color: rgba(201,169,110,0.18);
+    }
+
+    .pending-badge {
+      margin-left: auto;
+      background: rgba(217,119,6,0.2);
+      border: 1px solid rgba(217,119,6,0.35);
+      color: #d97706;
+      font-size: 0.62rem;
+      font-weight: 700;
+      font-family: 'Jost', sans-serif;
+      padding: 0.1rem 0.45rem;
+      border-radius: 99px;
+      min-width: 18px;
+      text-align: center;
+    }
+
+    .sidebar-footer {
+      padding: 0.875rem;
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+    .logout-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      width: 100%;
+      padding: 0.625rem 0.875rem;
+      background: none;
+      border: 1px solid transparent;
+      font-family: 'Jost', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 400;
+      color: #6b6560;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: left;
+    }
+    .logout-btn:hover {
+      color: #fca5a5;
+      background: rgba(239,68,68,0.06);
+      border-color: rgba(239,68,68,0.12);
+    }
+
+    /* ── Main ── */
+    .main {
+      margin-left: 240px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    .topbar {
+      height: 72px;
+      background: rgba(250,247,244,0.95);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid #e8e0d6;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 40;
+    }
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .topbar-divider {
+      width: 1px; height: 16px;
+      background: #ddd8d0;
+    }
+    .topbar-label {
+      font-family: 'Jost', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #9e9890;
+    }
+    .topbar-page {
+      font-family: 'Jost', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: #1a1410;
+    }
+
+    .pending-alert {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: 'Jost', sans-serif;
+      font-size: 0.75rem;
+      color: #d97706;
+      background: rgba(217,119,6,0.06);
+      border: 1px solid rgba(217,119,6,0.2);
+      padding: 0.375rem 0.875rem;
+    }
+    .pulse-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: #d97706;
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+    .content {
+      flex: 1;
+      padding: 2.5rem 2rem;
+      background: #faf7f4;
+    }
+
+    @media (max-width: 768px) {
+      .sidebar { transform: translateX(-100%); }
+      .main { margin-left: 0; }
+    }
+  `],
   template: `
-    <div class="min-h-screen bg-dark-900 flex">
+    <div class="shell">
 
       <!-- Sidebar -->
-      <aside class="w-64 bg-dark-800 border-r border-white/5 flex flex-col fixed top-0 bottom-0 left-0 z-40">
-        <div class="h-16 flex items-center px-6 border-b border-white/5">
-          <span class="font-display text-lg font-bold gradient-text">GlowMart</span>
-          <span class="ml-2 text-xs font-mono text-gray-500 bg-dark-700 px-2 py-0.5 rounded">Seller</span>
+      <aside class="sidebar">
+        <div class="sidebar-logo">
+          <span class="logo-text">GlowMart</span>
+          <span class="logo-badge">Seller</span>
         </div>
 
-        <nav class="flex-1 p-4 space-y-1">
+        <nav class="sidebar-nav">
+          <div class="nav-section-label">Menu</div>
           @for (link of navLinks; track link.path) {
-            <a [routerLink]="link.path" routerLinkActive="bg-brand-600/20 text-brand-300 border-brand-500/40"
-               class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-body font-medium text-gray-400 hover:text-white hover:bg-white/5 transition-all border border-transparent">
-              <span class="text-lg">{{ link.icon }}</span>
-              <span class="flex-1">{{ link.label }}</span>
-              <!-- Pending badge on Orders link -->
+            <a [routerLink]="link.path" routerLinkActive="active" class="nav-item">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                   stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path [attr.d]="link.svg"/>
+              </svg>
+              {{ link.label }}
               @if (link.label === 'Orders' && pendingCount() > 0) {
-                <span class="px-2 py-0.5 bg-yellow-500 text-yellow-900 rounded-full text-xs font-bold min-w-[20px] text-center">
-                  {{ pendingCount() }}
-                </span>
+                <span class="pending-badge">{{ pendingCount() }}</span>
               }
             </a>
           }
         </nav>
 
-        <div class="p-4 border-t border-white/5">
-          <button (click)="auth.logout()"
-            class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-body font-medium text-gray-400 hover:text-red-400 hover:bg-red-500/10 transition-all">
-            <span class="text-lg">🚪</span> Logout
+        <div class="sidebar-footer">
+          <button class="logout-btn" (click)="auth.logout()">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+            </svg>
+            Logout
           </button>
         </div>
       </aside>
 
       <!-- Main -->
-      <div class="ml-64 flex-1 min-h-screen">
-        <header class="h-16 bg-dark-800 border-b border-white/5 flex items-center justify-between px-8">
-          <h1 class="text-sm font-body text-gray-400">Seller Panel</h1>
+      <div class="main">
+        <header class="topbar">
+          <div class="topbar-left">
+            <span class="topbar-label">GlowMart</span>
+            <div class="topbar-divider"></div>
+            <span class="topbar-page">Seller Panel</span>
+          </div>
           @if (pendingCount() > 0) {
-            <span class="flex items-center gap-2 text-xs font-body text-yellow-400">
-              <span class="w-2 h-2 rounded-full bg-yellow-400 animate-pulse"></span>
+            <div class="pending-alert">
+              <span class="pulse-dot"></span>
               {{ pendingCount() }} order{{ pendingCount() === 1 ? '' : 's' }} awaiting action
-            </span>
+            </div>
           }
         </header>
-        <main class="p-8">
+        <div class="content">
           <router-outlet />
-        </main>
+        </div>
       </div>
 
     </div>
@@ -69,25 +288,23 @@ export class SellerLayoutComponent implements OnInit, OnDestroy {
   private pollInterval: ReturnType<typeof setInterval> | null = null;
 
   navLinks = [
-    { path: '/seller/dashboard', icon: '📊', label: 'Dashboard' },
-    { path: '/seller/products',  icon: '📦', label: 'Products'  },
-    { path: '/seller/orders',    icon: '🛍️', label: 'Orders'    },
-    { path: '/seller/scraper',   icon: '🕷️', label: 'Scraper'   },
+    { path: '/seller/dashboard', label: 'Dashboard', svg: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6' },
+    { path: '/seller/products',  label: 'Products',  svg: 'M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4' },
+    { path: '/seller/orders',    label: 'Orders',    svg: 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01' },
+    { path: '/seller/scraper',   label: 'Scraper',   svg: 'M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4' },
   ];
 
   ngOnInit() {
     this.fetchPendingCount();
     this.pollInterval = setInterval(() => this.fetchPendingCount(), 30_000);
   }
-
   ngOnDestroy() {
     if (this.pollInterval) clearInterval(this.pollInterval);
   }
-
   private fetchPendingCount() {
     this.orderService.getOrderCount().subscribe({
       next: ({ pending }) => this.pendingCount.set(pending),
-      error: () => {}   // silently ignore when backend is offline
+      error: () => {}
     });
   }
 }

@@ -12,245 +12,353 @@ import { Review } from '../../../models/order.model';
   selector: 'app-product-detail',
   standalone: true,
   imports: [CommonModule, FormsModule, RouterLink],
-  template: `
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+  styles: [`
+    .page { max-width: 1280px; margin: 0 auto; padding: 3rem 2rem 5rem; }
 
+    .breadcrumb {
+      display: flex; align-items: center; gap: 0.5rem;
+      font-family: 'Jost', sans-serif; font-size: 0.75rem;
+      letter-spacing: 0.08em; color: #9e9890;
+      margin-bottom: 3rem;
+    }
+    .breadcrumb a { color: #9e9890; text-decoration: none; transition: color 0.2s; }
+    .breadcrumb a:hover { color: #c9a96e; }
+
+    .product-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      margin-bottom: 5rem;
+    }
+    @media (max-width: 900px) { .product-grid { grid-template-columns: 1fr; gap: 2.5rem; } }
+
+    .img-main {
+      aspect-ratio: 1/1;
+      overflow: hidden;
+      background: #f5f0e8;
+      position: relative;
+    }
+    .img-main img { width: 100%; height: 100%; object-fit: cover; }
+
+    .cat-tag {
+      font-family: 'Jost', sans-serif;
+      font-size: 0.65rem; font-weight: 500;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      color: #c9a96e; margin-bottom: 0.875rem;
+    }
+    .product-title {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: clamp(1.75rem, 3vw, 2.5rem);
+      font-weight: 400; color: #1a1410;
+      line-height: 1.15; margin-bottom: 1rem;
+    }
+
+    .stars { display: flex; gap: 2px; }
+    .star-filled { color: #c9a96e; }
+    .star-empty  { color: #ddd8d0; }
+
+    .price-block {
+      background: #f5f0e8;
+      border: 1px solid #e8e0d6;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .price-main {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2rem; font-weight: 600; color: #1a1410;
+    }
+    .price-orig {
+      font-family: 'Jost', sans-serif;
+      font-size: 0.9rem; color: #b0a898;
+      text-decoration: line-through; margin-left: 0.5rem;
+    }
+
+    .stock-row {
+      display: flex; align-items: center; gap: 0.5rem;
+      margin-bottom: 1.5rem;
+      font-family: 'Jost', sans-serif; font-size: 0.8rem;
+    }
+    .stock-dot { width: 7px; height: 7px; border-radius: 50%; }
+
+    .qty-row {
+      display: flex; align-items: center; gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+    .qty-label {
+      font-family: 'Jost', sans-serif; font-size: 0.75rem;
+      letter-spacing: 0.1em; text-transform: uppercase; color: #9e9890;
+      width: 70px;
+    }
+    .qty-ctrl { display: flex; align-items: center; border: 1px solid #ddd8d0; }
+    .qty-btn {
+      width: 40px; height: 40px;
+      display: flex; align-items: center; justify-content: center;
+      background: none; border: none; cursor: pointer;
+      font-size: 1.1rem; color: #6b6560; transition: background 0.2s;
+    }
+    .qty-btn:hover { background: #f5f0e8; }
+    .qty-num {
+      width: 40px; text-align: center;
+      font-family: 'Jost', sans-serif; font-size: 0.9rem; color: #1a1410;
+    }
+
+    .cta-row { display: flex; gap: 1rem; }
+
+    .tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1.5rem; }
+    .tag {
+      padding: 0.25rem 0.75rem;
+      border: 1px solid #e8e0d6;
+      font-family: 'Jost', sans-serif; font-size: 0.72rem;
+      color: #9e9890; letter-spacing: 0.05em;
+    }
+
+    /* Reviews */
+    .reviews-section { max-width: 800px; }
+    .reviews-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.75rem; font-weight: 400; color: #1a1410;
+      margin-bottom: 0.375rem;
+    }
+    .reviews-sub {
+      font-family: 'Jost', sans-serif; font-size: 0.8rem;
+      color: #9e9890; margin-bottom: 2rem;
+    }
+
+    .rating-summary {
+      display: flex; gap: 3rem; align-items: center;
+      padding: 2rem; background: #f5f0e8;
+      border: 1px solid #e8e0d6; margin-bottom: 1.5rem;
+    }
+    .rating-big {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 3.5rem; font-weight: 600; color: #1a1410;
+      line-height: 1; text-align: center;
+    }
+    .rating-bar-row { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.375rem; }
+    .rating-bar-track { flex: 1; height: 4px; background: #e8e0d6; }
+    .rating-bar-fill { height: 100%; background: #c9a96e; transition: width 0.3s; }
+
+    .review-card {
+      padding: 1.5rem 0;
+      border-bottom: 1px solid #f0ebe4;
+    }
+    .reviewer-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem; font-weight: 500; color: #1a1410;
+    }
+    .review-text {
+      font-family: 'Jost', sans-serif; font-size: 0.875rem;
+      color: #6b6560; line-height: 1.7; margin-top: 0.75rem;
+    }
+    .verified-badge {
+      font-family: 'Jost', sans-serif; font-size: 0.65rem;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: #16a34a; background: rgba(22,163,74,0.08);
+      border: 1px solid rgba(22,163,74,0.2);
+      padding: 0.2rem 0.5rem;
+    }
+  `],
+  template: `
+    <div class="page">
       @if (product()) {
-        <!-- Breadcrumb -->
-        <nav class="flex items-center gap-2 text-xs font-body text-gray-500 mb-8">
-          <a routerLink="/" class="hover:text-brand-400 transition-colors">Home</a>
-          <span>/</span>
-          <a routerLink="/products" class="hover:text-brand-400 transition-colors">Products</a>
-          <span>/</span>
-          <span class="text-gray-400">{{ product()!.name }}</span>
+        <nav class="breadcrumb">
+          <a routerLink="/">Home</a>
+          <span>›</span>
+          <a routerLink="/products">Products</a>
+          <span>›</span>
+          <span style="color:#1a1410;">{{ product()!.name }}</span>
         </nav>
 
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
-
+        <div class="product-grid">
           <!-- Image -->
-          <div class="space-y-4">
-            <div class="relative rounded-3xl overflow-hidden bg-dark-800 ring-1 ring-white/5"
-                 style="aspect-ratio:1/1;">
-              <img [src]="product()!.images[0]" [alt]="product()!.name"
-                   class="w-full h-full object-cover" />
+          <div>
+            <div class="img-main">
+              <img [src]="product()!.images[0]" [alt]="product()!.name" />
               @if (discount() > 0) {
-                <div class="absolute top-4 right-4 badge badge-green text-sm px-3 py-1">
-                  {{ discount() }}% OFF
+                <div style="position:absolute;top:1rem;right:1rem;background:#1a1410;color:#c9a96e;font-family:'Jost',sans-serif;font-size:0.7rem;font-weight:600;letter-spacing:0.1em;padding:0.3rem 0.75rem;">
+                  −{{ discount() }}%
                 </div>
               }
             </div>
           </div>
 
           <!-- Details -->
-          <div class="flex flex-col justify-center">
+          <div>
+            <div class="cat-tag">{{ product()!.category }}</div>
+            <h1 class="product-title">{{ product()!.name }}</h1>
 
-            <!-- Category + badges -->
-            <div class="flex items-center gap-2 mb-4 flex-wrap">
-              <span class="badge badge-brand uppercase tracking-widest">{{ product()!.category }}</span>
-              @if (product()!.stock > 0 && product()!.stock <= 5) {
-                <span class="badge badge-yellow">Only {{ product()!.stock }} left</span>
-              }
-            </div>
-
-            <h1 class="font-display text-3xl lg:text-4xl font-bold text-white mb-3 leading-tight">
-              {{ product()!.name }}
-            </h1>
-
-            <!-- Review summary (real) -->
-            <div class="flex items-center gap-3 mb-6">
+            <!-- Stars -->
+            <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1.25rem;">
               @if (reviews().length > 0) {
-                <div class="flex gap-0.5">
+                <div class="stars">
                   @for (s of [1,2,3,4,5]; track s) {
-                    <svg class="w-4 h-4" [class.star-filled]="s <= avgRating()"
-                         [class.star-empty]="s > avgRating()" fill="currentColor" viewBox="0 0 20 20">
+                    <svg width="14" height="14" [style.color]="s <= avgRating() ? '#c9a96e' : '#ddd8d0'" fill="currentColor" viewBox="0 0 20 20">
                       <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
                     </svg>
                   }
                 </div>
-                <span class="text-sm font-body text-gray-400">
-                  {{ avgRating().toFixed(1) }} · {{ reviews().length }} verified review{{ reviews().length !== 1 ? 's' : '' }}
+                <span style="font-family:'Jost',sans-serif;font-size:0.8rem;color:#9e9890;">
+                  {{ avgRating().toFixed(1) }} · {{ reviews().length }} review{{ reviews().length !== 1 ? 's' : '' }}
                 </span>
               } @else {
-                <span class="text-sm font-body text-gray-500 italic">No reviews yet — be the first after your delivery!</span>
+                <span style="font-family:'Jost',sans-serif;font-size:0.8rem;color:#b0a898;font-style:italic;">No reviews yet</span>
               }
             </div>
 
-            <p class="text-gray-300 font-body leading-relaxed mb-8 text-base">
+            <p style="font-family:'Jost',sans-serif;font-size:0.9rem;color:#6b6560;line-height:1.8;margin-bottom:1.5rem;">
               {{ product()!.description }}
             </p>
 
-            <!-- Price block -->
-            <div class="glass-card p-5 mb-6 flex items-center justify-between">
+            <!-- Price -->
+            <div class="price-block">
               <div>
-                <p class="text-xs font-body text-gray-500 mb-1 uppercase tracking-widest">Your Price</p>
-                <div class="flex items-baseline gap-3">
-                  <span class="font-display text-3xl font-bold text-brand-400">
-                    PKR {{ product()!.sellerPrice | number }}
-                  </span>
-                  @if (product()!.originalPrice > product()!.sellerPrice) {
-                    <span class="font-body text-gray-500 line-through text-lg">
-                      {{ product()!.originalPrice | number }}
-                    </span>
-                  }
-                </div>
+                <div style="font-family:'Jost',sans-serif;font-size:0.65rem;letter-spacing:0.15em;text-transform:uppercase;color:#9e9890;margin-bottom:0.375rem;">Your Price</div>
+                <span class="price-main">PKR {{ product()!.sellerPrice | number }}</span>
+                @if (product()!.originalPrice > product()!.sellerPrice) {
+                  <span class="price-orig">{{ product()!.originalPrice | number }}</span>
+                }
               </div>
-              <div class="text-right">
-                <p class="text-xs font-body text-gray-500 mb-1">Payment</p>
-                <span class="badge badge-green">💳 Cash on Delivery</span>
+              <div style="text-align:right;">
+                <div style="font-family:'Jost',sans-serif;font-size:0.65rem;letter-spacing:0.15em;text-transform:uppercase;color:#9e9890;margin-bottom:0.375rem;">Payment</div>
+                <span style="font-family:'Jost',sans-serif;font-size:0.78rem;color:#16a34a;display:flex;align-items:center;gap:0.375rem;">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                  Cash on Delivery
+                </span>
               </div>
             </div>
 
             <!-- Stock -->
-            <div class="flex items-center gap-2 mb-6">
+            <div class="stock-row">
               @if (product()!.stock > 10) {
-                <span class="w-2 h-2 rounded-full bg-green-400"></span>
-                <span class="text-sm font-body text-green-400">In Stock</span>
+                <span class="stock-dot" style="background:#16a34a;"></span>
+                <span style="color:#16a34a;">In Stock</span>
               } @else if (product()!.stock > 0) {
-                <span class="w-2 h-2 rounded-full bg-yellow-400 animate-pulse"></span>
-                <span class="text-sm font-body text-yellow-400">Only {{ product()!.stock }} left</span>
+                <span class="stock-dot" style="background:#d97706;"></span>
+                <span style="color:#d97706;">Only {{ product()!.stock }} left</span>
               } @else {
-                <span class="w-2 h-2 rounded-full bg-red-400"></span>
-                <span class="text-sm font-body text-red-400">Out of Stock</span>
+                <span class="stock-dot" style="background:#dc2626;"></span>
+                <span style="color:#dc2626;">Out of Stock</span>
               }
             </div>
 
-            <!-- Quantity -->
-            <div class="flex items-center gap-4 mb-6">
-              <span class="text-sm font-body text-gray-400 w-20">Quantity</span>
-              <div class="flex items-center glass rounded-xl overflow-hidden">
-                <button (click)="qty > 1 ? qty = qty - 1 : null"
-                  class="w-10 h-10 flex items-center justify-center text-gray-400
-                         hover:text-white hover:bg-white/5 transition-colors text-xl font-light">
-                  −
-                </button>
-                <span class="w-10 text-center font-body font-semibold text-white text-base">{{ qty }}</span>
-                <button (click)="qty = qty + 1"
-                  class="w-10 h-10 flex items-center justify-center text-gray-400
-                         hover:text-white hover:bg-white/5 transition-colors text-xl font-light">
-                  +
-                </button>
+            <!-- Qty -->
+            <div class="qty-row">
+              <span class="qty-label">Quantity</span>
+              <div class="qty-ctrl">
+                <button class="qty-btn" (click)="qty > 1 ? qty = qty - 1 : null">−</button>
+                <span class="qty-num">{{ qty }}</span>
+                <button class="qty-btn" (click)="qty = qty + 1">+</button>
               </div>
             </div>
 
-            <!-- CTA buttons -->
-            <div class="flex gap-3">
+            <!-- CTAs -->
+            <div class="cta-row">
               <button (click)="addToCart()" [disabled]="product()!.stock === 0"
-                class="btn-primary flex-1 disabled:opacity-50 disabled:cursor-not-allowed">
-                🛒 Add to Cart
+                class="btn-primary" style="flex:1;opacity:1;"
+                [style.opacity]="product()!.stock === 0 ? '0.4' : '1'"
+                [style.cursor]="product()!.stock === 0 ? 'not-allowed' : 'pointer'">
+                Add to Bag
               </button>
-              <a routerLink="/cart" class="btn-ghost px-5">
-                View Cart
-              </a>
+              <a routerLink="/cart" class="btn-outline">View Bag</a>
             </div>
 
-            <!-- Tags -->
             @if (product()!.tags && product()!.tags.length > 0) {
-              <div class="flex flex-wrap gap-2 mt-6">
+              <div class="tags">
                 @for (tag of product()!.tags; track tag) {
-                  <span class="px-3 py-1 bg-dark-700 rounded-full text-xs font-body text-gray-500
-                               border border-white/5 hover:border-brand-500/30 transition-colors">
-                    #{{ tag }}
-                  </span>
+                  <span class="tag">#{{ tag }}</span>
                 }
               </div>
             }
           </div>
         </div>
 
-        <!-- ── Reviews Section ──────────────────────────────────────────────── -->
-        <div class="section-divider mb-12"></div>
+        <!-- Reviews -->
+        <div style="height:1px;background:linear-gradient(90deg,transparent,#e8e0d6,transparent);margin-bottom:4rem;"></div>
 
-        <div class="max-w-3xl">
-          <h2 class="font-display text-2xl font-bold text-white mb-2">Customer Reviews</h2>
-          <p class="text-gray-500 font-body text-sm mb-8">
-            Reviews are only from verified buyers who received their order.
-          </p>
+        <div class="reviews-section">
+          <h2 class="reviews-title">Customer Reviews</h2>
+          <p class="reviews-sub">Only from verified buyers who received their order.</p>
 
           @if (reviews().length === 0) {
-            <div class="glass-card p-10 text-center">
-              <div class="text-4xl mb-3">⭐</div>
-              <p class="font-display text-lg text-white mb-1">No reviews yet</p>
-              <p class="text-gray-500 font-body text-sm">
-                Reviews appear here after customers receive their orders.
-              </p>
+            <div style="padding:3rem 2rem;background:#f5f0e8;border:1px solid #e8e0d6;text-align:center;">
+              <div style="display:flex;justify-content:center;margin-bottom:0.75rem;">
+                <svg width="32" height="32" viewBox="0 0 20 20" fill="#ddd8d0"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+              </div>
+              <div style="font-family:'Cormorant Garamond',serif;font-size:1.25rem;color:#6b6560;">No reviews yet</div>
+              <div style="font-family:'Jost',sans-serif;font-size:0.8rem;color:#9e9890;margin-top:0.375rem;">Reviews appear after customers receive their orders.</div>
             </div>
           } @else {
-            <!-- Rating summary -->
-            <div class="glass-card p-6 mb-6 flex items-center gap-8">
-              <div class="text-center">
-                <p class="font-display text-5xl font-bold text-white">{{ avgRating().toFixed(1) }}</p>
-                <div class="flex gap-0.5 justify-center mt-2">
+            <div class="rating-summary">
+              <div>
+                <div class="rating-big">{{ avgRating().toFixed(1) }}</div>
+                <div style="display:flex;gap:2px;justify-content:center;margin-top:0.5rem;">
                   @for (s of [1,2,3,4,5]; track s) {
-                    <svg class="w-4 h-4" [class.star-filled]="s <= avgRating()"
-                         [class.star-empty]="s > avgRating()" fill="currentColor" viewBox="0 0 20 20">
+                    <svg width="12" height="12" [style.color]="s <= avgRating() ? '#c9a96e' : '#ddd8d0'" fill="currentColor" viewBox="0 0 20 20">
                       <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
                     </svg>
                   }
                 </div>
-                <p class="text-gray-500 text-xs font-body mt-1">{{ reviews().length }} review{{ reviews().length !== 1 ? 's' : '' }}</p>
+                <div style="font-family:'Jost',sans-serif;font-size:0.7rem;color:#9e9890;text-align:center;margin-top:0.25rem;">{{ reviews().length }} reviews</div>
               </div>
-              <div class="flex-1 space-y-1.5">
+              <div style="flex:1;">
                 @for (n of [5,4,3,2,1]; track n) {
-                  <div class="flex items-center gap-2">
-                    <span class="text-xs font-body text-gray-500 w-3">{{ n }}</span>
-                    <div class="flex-1 h-1.5 bg-dark-700 rounded-full overflow-hidden">
-                      <div class="h-full bg-brand-500 rounded-full transition-all"
-                           [style.width.%]="ratingPercent(n)"></div>
+                  <div class="rating-bar-row">
+                    <span style="font-family:'Jost',sans-serif;font-size:0.72rem;color:#9e9890;width:8px;">{{ n }}</span>
+                    <div class="rating-bar-track">
+                      <div class="rating-bar-fill" [style.width.%]="ratingPercent(n)"></div>
                     </div>
-                    <span class="text-xs font-body text-gray-600 w-6">{{ ratingCount(n) }}</span>
+                    <span style="font-family:'Jost',sans-serif;font-size:0.72rem;color:#b0a898;width:20px;">{{ ratingCount(n) }}</span>
                   </div>
                 }
               </div>
             </div>
 
-            <!-- Review list -->
-            <div class="space-y-4">
-              @for (review of reviews(); track review.id) {
-                <div class="glass-card p-5">
-                  <div class="flex items-start justify-between mb-3">
-                    <div class="flex items-center gap-3">
-                      <div class="w-9 h-9 rounded-full bg-brand-600/20 border border-brand-500/30
-                                  flex items-center justify-center text-brand-300 font-display font-bold text-sm">
-                        {{ review.buyerName.charAt(0).toUpperCase() }}
-                      </div>
-                      <div>
-                        <p class="font-body font-semibold text-white text-sm">{{ review.buyerName }}</p>
-                        <div class="flex gap-0.5 mt-0.5">
-                          @for (s of [1,2,3,4,5]; track s) {
-                            <svg class="w-3 h-3" [class.star-filled]="s <= review.rating"
-                                 [class.star-empty]="s > review.rating" fill="currentColor" viewBox="0 0 20 20">
-                              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-                            </svg>
-                          }
-                        </div>
-                      </div>
+            @for (review of reviews(); track review.id) {
+              <div class="review-card">
+                <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;flex-wrap:wrap;">
+                  <div style="display:flex;align-items:center;gap:0.875rem;">
+                    <div style="width:36px;height:36px;background:#e8e0d6;display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:600;color:#6b6560;">
+                      {{ review.buyerName.charAt(0).toUpperCase() }}
                     </div>
-                    <div class="flex items-center gap-2">
-                      <span class="badge badge-green text-xs">✓ Verified Purchase</span>
-                      <span class="text-xs font-body text-gray-600">
-                        {{ review.createdAt | date:'MMM d, y' }}
-                      </span>
+                    <div>
+                      <div class="reviewer-name">{{ review.buyerName }}</div>
+                      <div style="display:flex;gap:2px;margin-top:2px;">
+                        @for (s of [1,2,3,4,5]; track s) {
+                          <svg width="11" height="11" [style.color]="s <= review.rating ? '#c9a96e' : '#ddd8d0'" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                          </svg>
+                        }
+                      </div>
                     </div>
                   </div>
-                  @if (review.comment) {
-                    <p class="text-gray-300 font-body text-sm leading-relaxed">{{ review.comment }}</p>
-                  }
+                  <div style="display:flex;align-items:center;gap:0.75rem;">
+                    <span class="verified-badge">
+                      <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:middle;margin-right:2px;"><polyline points="20 6 9 17 4 12"/></svg>
+                      Verified
+                    </span>
+                    <span style="font-family:'Jost',sans-serif;font-size:0.72rem;color:#b0a898;">{{ review.createdAt | date:'MMM d, y' }}</span>
+                  </div>
                 </div>
-              }
-            </div>
+                @if (review.comment) {
+                  <p class="review-text">{{ review.comment }}</p>
+                }
+              </div>
+            }
           }
         </div>
 
       } @else {
-        <!-- Loading state -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
-          <div class="skeleton rounded-3xl" style="aspect-ratio:1/1;"></div>
-          <div class="space-y-4 py-8">
-            <div class="skeleton h-6 w-24 rounded-full"></div>
-            <div class="skeleton h-10 w-3/4 rounded-xl"></div>
-            <div class="skeleton h-4 w-full rounded-lg"></div>
-            <div class="skeleton h-4 w-5/6 rounded-lg"></div>
-            <div class="skeleton h-20 w-full rounded-2xl mt-4"></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:4rem;padding:3rem 0;">
+          <div class="skeleton" style="aspect-ratio:1/1;"></div>
+          <div style="display:flex;flex-direction:column;gap:1rem;padding-top:1rem;">
+            <div class="skeleton" style="height:12px;width:80px;"></div>
+            <div class="skeleton" style="height:40px;width:75%;"></div>
+            <div class="skeleton" style="height:14px;width:100%;"></div>
+            <div class="skeleton" style="height:14px;width:85%;"></div>
+            <div class="skeleton" style="height:80px;width:100%;margin-top:1rem;"></div>
           </div>
         </div>
       }
@@ -281,10 +389,7 @@ export class ProductDetailComponent implements OnInit {
     return r.reduce((sum, rv) => sum + rv.rating, 0) / r.length;
   });
 
-  ratingCount(n: number): number {
-    return this.reviews().filter(r => r.rating === n).length;
-  }
-
+  ratingCount(n: number): number { return this.reviews().filter(r => r.rating === n).length; }
   ratingPercent(n: number): number {
     if (!this.reviews().length) return 0;
     return (this.ratingCount(n) / this.reviews().length) * 100;
@@ -294,14 +399,12 @@ export class ProductDetailComponent implements OnInit {
     const id = this.route.snapshot.paramMap.get('id')!;
     this.productService.getProductById(id).subscribe(p => this.product.set(p));
     this.http.get<Review[]>(`${this.apiUrl}/reviews/${id}`).subscribe({
-      next: (r) => this.reviews.set(r),
+      next: r => this.reviews.set(r),
       error: () => this.reviews.set([])
     });
   }
 
   addToCart() {
-    if (this.product()) {
-      this.cartService.addToCart(this.product()!, this.qty);
-    }
+    if (this.product()) this.cartService.addToCart(this.product()!, this.qty);
   }
 }

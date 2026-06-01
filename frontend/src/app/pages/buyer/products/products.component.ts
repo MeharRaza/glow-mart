@@ -10,71 +10,145 @@ import { Product } from '../../../models/product.model';
   selector: 'app-products',
   standalone: true,
   imports: [CommonModule, FormsModule, ProductCardComponent],
-  template: `
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+  styles: [`
+    .page { max-width: 1280px; margin: 0 auto; padding: 4rem 2rem; }
 
-      <!-- Header -->
-      <div class="mb-10">
-        <h1 class="font-display text-4xl font-bold text-white mb-2">All Products</h1>
-        <p class="text-gray-400 font-body">{{ filtered().length }} products found</p>
+    .page-header { margin-bottom: 3rem; border-bottom: 1px solid #e8e0d6; padding-bottom: 2rem; }
+    .page-title {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 2.5rem; font-weight: 400; color: #1a1410; margin-bottom: 0.375rem;
+    }
+    .page-count {
+      font-family: 'Jost', sans-serif; font-size: 0.8rem;
+      letter-spacing: 0.08em; color: #9e9890;
+    }
+
+    .layout { display: flex; gap: 3rem; align-items: flex-start; }
+    @media (max-width: 768px) { .layout { flex-direction: column; } }
+
+    .sidebar {
+      width: 220px;
+      flex-shrink: 0;
+      position: sticky;
+      top: 100px;
+    }
+    @media (max-width: 768px) { .sidebar { width: 100%; position: static; } }
+
+    .filter-section { margin-bottom: 2rem; }
+    .filter-title {
+      font-family: 'Jost', sans-serif;
+      font-size: 0.65rem; font-weight: 600;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      color: #1a1410; margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid #e8e0d6;
+    }
+
+    .search-input {
+      width: 100%;
+      background: #fff;
+      border: 1px solid #ddd8d0;
+      padding: 0.625rem 0.875rem;
+      font-family: 'Jost', sans-serif;
+      font-size: 0.85rem;
+      color: #1a1410;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .search-input::placeholder { color: #b0a898; }
+    .search-input:focus { border-color: #c9a96e; }
+
+    .cat-btn {
+      display: block; width: 100%;
+      text-align: left;
+      padding: 0.5rem 0;
+      font-family: 'Jost', sans-serif;
+      font-size: 0.82rem;
+      color: #9e9890;
+      background: none; border: none; cursor: pointer;
+      transition: color 0.2s;
+      border-bottom: 1px solid transparent;
+    }
+    .cat-btn:hover { color: #1a1410; }
+    .cat-btn.active { color: #1a1410; font-weight: 500; border-bottom-color: #c9a96e; }
+
+    .sort-select {
+      width: 100%;
+      background: #fff;
+      border: 1px solid #ddd8d0;
+      padding: 0.625rem 0.875rem;
+      font-family: 'Jost', sans-serif;
+      font-size: 0.82rem;
+      color: #1a1410;
+      outline: none;
+      cursor: pointer;
+    }
+    .sort-select:focus { border-color: #c9a96e; }
+
+    .products-grid {
+      flex: 1;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+    @media (max-width: 1100px) { .products-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 480px)  { .products-grid { grid-template-columns: 1fr; } }
+
+    .empty {
+      grid-column: 1/-1;
+      text-align: center;
+      padding: 5rem 2rem;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.5rem;
+      color: #b0a898;
+    }
+  `],
+  template: `
+    <div class="page">
+      <div class="page-header">
+        <h1 class="page-title">All Products</h1>
+        <p class="page-count">{{ filtered().length }} products found</p>
       </div>
 
-      <div class="flex flex-col lg:flex-row gap-8">
+      <div class="layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+          <div class="filter-section">
+            <div class="filter-title">Search</div>
+            <input type="text" class="search-input" placeholder="Search products..."
+              [ngModel]="searchQuery()" (ngModelChange)="searchQuery.set($event)" />
+          </div>
 
-        <!-- Filters -->
-        <aside class="w-full lg:w-56 flex-shrink-0">
-          <div class="glass rounded-2xl p-5 sticky top-20">
-            <h3 class="font-body font-semibold text-white mb-4 text-sm uppercase tracking-widest">Filters</h3>
+          <div class="filter-section">
+            <div class="filter-title">Category</div>
+            <button class="cat-btn" [class.active]="selectedCategory() === ''"
+              (click)="selectedCategory.set('')">All</button>
+            @for (cat of categories(); track cat) {
+              <button class="cat-btn" [class.active]="selectedCategory() === cat"
+                (click)="selectedCategory.set(cat)">{{ cat }}</button>
+            }
+          </div>
 
-            <!-- Search -->
-            <div class="mb-4">
-              <input type="text" [ngModel]="searchQuery()" (ngModelChange)="searchQuery.set($event)" placeholder="Search products..."
-                class="w-full bg-dark-700 border border-white/10 rounded-xl px-3 py-2 text-sm font-body text-white placeholder-gray-500 focus:outline-none focus:border-brand-500/50" />
-            </div>
-
-            <!-- Categories -->
-            <div class="mb-4">
-              <p class="text-xs font-body text-gray-500 uppercase tracking-widest mb-2">Category</p>
-              <div class="space-y-1">
-                <button (click)="selectedCategory.set('')"
-                  [class.text-brand-400]="selectedCategory() === ''"
-                  class="w-full text-left text-sm font-body text-gray-400 hover:text-white transition-colors py-1">All</button>
-                @for (cat of categories(); track cat) {
-                  <button (click)="selectedCategory.set(cat)"
-                    [class.text-brand-400]="selectedCategory() === cat"
-                    class="w-full text-left text-sm font-body text-gray-400 hover:text-white transition-colors py-1">
-                    {{ cat }}
-                  </button>
-                }
-              </div>
-            </div>
-
-            <!-- Sort -->
-            <div>
-              <p class="text-xs font-body text-gray-500 uppercase tracking-widest mb-2">Sort by</p>
-              <select [ngModel]="sortBy()" (ngModelChange)="sortBy.set($event)"
-                class="w-full bg-dark-700 border border-white/10 rounded-xl px-3 py-2 text-sm font-body text-white focus:outline-none focus:border-brand-500/50">
-                <option value="default">Default</option>
-                <option value="price-asc">Price: Low to High</option>
-                <option value="price-desc">Price: High to Low</option>
-              </select>
-            </div>
+          <div class="filter-section">
+            <div class="filter-title">Sort By</div>
+            <select class="sort-select" [ngModel]="sortBy()" (ngModelChange)="sortBy.set($event)">
+              <option value="default">Default</option>
+              <option value="price-asc">Price: Low to High</option>
+              <option value="price-desc">Price: High to Low</option>
+            </select>
           </div>
         </aside>
 
         <!-- Grid -->
-        <div class="flex-1">
+        <div class="products-grid">
           @if (filtered().length === 0) {
-            <div class="text-center py-20 text-gray-500 font-body">No products found.</div>
+            <div class="empty">No products found.</div>
           } @else {
-            <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
-              @for (product of filtered(); track product.id) {
-                <app-product-card [product]="product" />
-              }
-            </div>
+            @for (product of filtered(); track product.id) {
+              <app-product-card [product]="product" />
+            }
           }
         </div>
-
       </div>
     </div>
   `
@@ -93,12 +167,8 @@ export class ProductsComponent implements OnInit {
     const q = this.searchQuery().toLowerCase();
     const cat = this.selectedCategory();
     const sort = this.sortBy();
-    if (q) {
-      items = items.filter(p => p.name.toLowerCase().includes(q) || p.description.toLowerCase().includes(q));
-    }
-    if (cat) {
-      items = items.filter(p => p.category === cat);
-    }
+    if (q) items = items.filter(p => p.name.toLowerCase().includes(q) || p.description.toLowerCase().includes(q));
+    if (cat) items = items.filter(p => p.category === cat);
     if (sort === 'price-asc') items = [...items].sort((a, b) => a.sellerPrice - b.sellerPrice);
     if (sort === 'price-desc') items = [...items].sort((a, b) => b.sellerPrice - a.sellerPrice);
     return items;
@@ -107,7 +177,6 @@ export class ProductsComponent implements OnInit {
   ngOnInit() {
     this.productService.getProducts().subscribe(p => this.allProducts.set(p));
     this.productService.getCategories().subscribe(c => this.categories.set(c));
-    // Read category from query params (e.g. from home page category links)
     this.route.queryParams.subscribe(params => {
       if (params['category']) this.selectedCategory.set(params['category']);
     });

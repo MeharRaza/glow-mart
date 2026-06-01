@@ -8,106 +8,236 @@ import { CartService } from '../../services/cart.service';
   selector: 'app-product-card',
   standalone: true,
   imports: [RouterLink, CommonModule],
+  styles: [`
+    .card {
+      background: #fff;
+      border: 1px solid #ede8e0;
+      display: flex;
+      flex-direction: column;
+      transition: box-shadow 0.3s ease, transform 0.3s ease;
+      position: relative;
+    }
+    .card:hover {
+      box-shadow: 0 16px 48px rgba(26,20,16,0.1);
+      transform: translateY(-4px);
+    }
+
+    .img-wrap {
+      position: relative;
+      overflow: hidden;
+      aspect-ratio: 1/1;
+      background: #f5f0e8;
+    }
+    .img-wrap img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s ease;
+    }
+    .card:hover .img-wrap img { transform: scale(1.06); }
+
+    .overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(26,20,16,0.35);
+      opacity: 0;
+      transition: opacity 0.3s;
+      display: flex;
+      align-items: flex-end;
+      padding: 1rem;
+    }
+    .card:hover .overlay { opacity: 1; }
+
+    .quick-add {
+      width: 100%;
+      padding: 0.75rem;
+      background: #faf7f4;
+      color: #1a1410;
+      font-family: 'Jost', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+    .quick-add:hover { background: #fff; }
+
+    .cat-pill {
+      position: absolute;
+      top: 0.75rem;
+      left: 0.75rem;
+      background: rgba(250,247,244,0.92);
+      font-family: 'Jost', sans-serif;
+      font-size: 0.62rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #6b6560;
+      padding: 0.25rem 0.625rem;
+    }
+    .discount-pill {
+      position: absolute;
+      top: 0.75rem;
+      right: 0.75rem;
+      background: #1a1410;
+      color: #c9a96e;
+      font-family: 'Jost', sans-serif;
+      font-size: 0.62rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      padding: 0.25rem 0.625rem;
+    }
+
+    .info { padding: 1.25rem; flex: 1; display: flex; flex-direction: column; gap: 0.5rem; }
+
+    .product-name {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 1.05rem;
+      font-weight: 500;
+      color: #1a1410;
+      line-height: 1.3;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      text-decoration: none;
+    }
+    .product-name:hover { color: #8b6914; }
+
+    .product-desc {
+      font-family: 'Jost', sans-serif;
+      font-size: 0.78rem;
+      color: #9e9890;
+      line-height: 1.6;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .stock-row {
+      display: flex;
+      align-items: center;
+      gap: 0.375rem;
+    }
+    .stock-dot { width: 6px; height: 6px; border-radius: 50%; }
+
+    .price-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: auto;
+      padding-top: 0.75rem;
+      border-top: 1px solid #f0ebe4;
+    }
+    .price-main {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: #1a1410;
+    }
+    .price-orig {
+      font-family: 'Jost', sans-serif;
+      font-size: 0.78rem;
+      color: #b0a898;
+      text-decoration: line-through;
+      margin-left: 0.375rem;
+    }
+
+    .add-btn-mobile {
+      display: none;
+      padding: 0.4rem 0.875rem;
+      background: #1a1410;
+      color: #faf7f4;
+      font-family: 'Jost', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .add-btn-mobile:hover { background: #2d2520; }
+
+    @media (max-width: 768px) {
+      .add-btn-mobile { display: block; }
+    }
+
+    .added-flash {
+      position: absolute;
+      inset: 0;
+      border: 2px solid #c9a96e;
+      pointer-events: none;
+      animation: fadeIn 0.2s ease;
+    }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  `],
   template: `
-    <div class="glass-card card-hover group relative flex flex-col overflow-hidden">
-
+    <div class="card">
       <!-- Image -->
-      <a [routerLink]="['/product', product.id]" class="block relative overflow-hidden"
-         style="aspect-ratio:1/1;">
-        <img [src]="product.images[0]" [alt]="product.name"
-             class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+      <a [routerLink]="['/product', product.id]" class="img-wrap">
+        <img [src]="product.images[0]" [alt]="product.name" loading="lazy" />
 
-        <!-- Overlay on hover -->
-        <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent
-                    opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+        <span class="cat-pill">{{ product.category }}</span>
 
-        <!-- Category pill -->
-        <span class="absolute top-3 left-3 badge badge-brand text-xs">
-          {{ product.category }}
-        </span>
-
-        <!-- Discount badge -->
         @if (discount > 0) {
-          <span class="absolute top-3 right-3 badge badge-green text-xs">
-            {{ discount }}% OFF
-          </span>
+          <span class="discount-pill">−{{ discount }}%</span>
         }
 
-        <!-- Quick add overlay -->
-        <div class="absolute bottom-3 left-3 right-3 opacity-0 group-hover:opacity-100
-                    transition-all duration-300 translate-y-2 group-hover:translate-y-0">
-          <button (click)="addToCart($event)"
-            class="w-full py-2.5 bg-brand-500 hover:bg-brand-400 rounded-xl
-                   text-white text-sm font-body font-semibold
-                   transition-all active:scale-95 flex items-center justify-center gap-2">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+        <div class="overlay">
+          <button (click)="addToCart($event)" class="quick-add">
+            <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
             </svg>
-            Add to Cart
+            Add to Bag
           </button>
         </div>
       </a>
 
       <!-- Info -->
-      <div class="flex flex-col flex-1 p-4 gap-2">
-        <a [routerLink]="['/product', product.id]" class="flex-1">
-          <h3 class="font-display text-sm font-semibold text-white leading-snug
-                     line-clamp-2 group-hover:text-brand-300 transition-colors duration-200">
-            {{ product.name }}
-          </h3>
-          <p class="text-gray-500 text-xs font-body line-clamp-2 mt-1 leading-relaxed">
-            {{ product.description }}
-          </p>
-        </a>
+      <div class="info">
+        <a [routerLink]="['/product', product.id]" class="product-name">{{ product.name }}</a>
+        <p class="product-desc">{{ product.description }}</p>
 
-        <!-- Stock indicator -->
-        <div class="flex items-center gap-1.5">
+        <div class="stock-row">
           @if (product.stock > 10) {
-            <span class="w-1.5 h-1.5 rounded-full bg-green-400"></span>
-            <span class="text-xs text-green-400 font-body">In Stock</span>
+            <span class="stock-dot" style="background:#16a34a;"></span>
+            <span style="font-family:'Jost',sans-serif;font-size:0.72rem;color:#16a34a;letter-spacing:0.05em;">In Stock</span>
           } @else if (product.stock > 0) {
-            <span class="w-1.5 h-1.5 rounded-full bg-yellow-400"></span>
-            <span class="text-xs text-yellow-400 font-body">Only {{ product.stock }} left</span>
+            <span class="stock-dot" style="background:#d97706;"></span>
+            <span style="font-family:'Jost',sans-serif;font-size:0.72rem;color:#d97706;letter-spacing:0.05em;">Only {{ product.stock }} left</span>
           } @else {
-            <span class="w-1.5 h-1.5 rounded-full bg-red-400"></span>
-            <span class="text-xs text-red-400 font-body">Out of Stock</span>
+            <span class="stock-dot" style="background:#dc2626;"></span>
+            <span style="font-family:'Jost',sans-serif;font-size:0.72rem;color:#dc2626;letter-spacing:0.05em;">Out of Stock</span>
           }
         </div>
 
-        <!-- Price row -->
-        <div class="flex items-center justify-between mt-1">
-          <div class="flex items-baseline gap-2">
-            <span class="text-brand-400 font-body font-bold text-lg leading-none">
-              PKR {{ product.sellerPrice | number }}
-            </span>
+        <div class="price-row">
+          <div>
+            <span class="price-main">PKR {{ product.sellerPrice | number }}</span>
             @if (product.originalPrice > product.sellerPrice) {
-              <span class="text-gray-600 text-xs line-through font-body">
-                {{ product.originalPrice | number }}
-              </span>
+              <span class="price-orig">{{ product.originalPrice | number }}</span>
             }
           </div>
-
-          <!-- Mobile add button (always visible) -->
-          <button (click)="addToCart($event)"
-            [class.opacity-50]="added()"
-            class="md:hidden flex items-center gap-1 px-3 py-2 bg-brand-600 hover:bg-brand-500
-                   rounded-xl text-xs font-body font-semibold text-white
-                   transition-all active:scale-95">
-            @if (added()) { ✓ Added } @else {
-              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-              </svg>
-              Add
-            }
+          <button (click)="addToCart($event)" class="add-btn-mobile"
+                  [disabled]="product.stock === 0">
+            @if (added()) {
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              Added
+            } @else { + Add }
           </button>
         </div>
       </div>
 
-      <!-- Added flash -->
       @if (added()) {
-        <div class="absolute inset-0 bg-brand-500/10 border border-brand-500/30 rounded-[1.25rem]
-                    pointer-events-none animate-fade-in"></div>
+        <div class="added-flash"></div>
       }
     </div>
   `
