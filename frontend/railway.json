@@ -1,0 +1,10 @@
+{
+  "build": {
+    "builder": "NIXPACKS",
+    "buildCommand": "npm install --legacy-peer-deps && npm run build"
+  },
+  "deploy": {
+    "startCommand": "npx serve dist/oriflame-reseller/browser -l $PORT --single",
+    "restartPolicyType": "ON_FAILURE"
+  }
+}
