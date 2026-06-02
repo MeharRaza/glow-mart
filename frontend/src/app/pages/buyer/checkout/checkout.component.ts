@@ -222,6 +222,11 @@ import { OrderService } from '../../../services/order.service';
           </div>
 
           <div class="field">
+            <label class="field-label">Email Address (for receipt)</label>
+            <input class="field-input" [(ngModel)]="form.email" type="email" placeholder="you@example.com" />
+          </div>
+
+          <div class="field full">
             <label class="field-label">Notes (optional)</label>
             <input class="field-input" [(ngModel)]="form.notes" type="text" placeholder="Special instructions..." />
           </div>
@@ -307,7 +312,7 @@ export class CheckoutComponent {
   private orderService = inject(OrderService);
   private router       = inject(Router);
 
-  form    = { name: '', phone: '', city: '', address: '', notes: '' };
+  form    = { name: '', phone: '', city: '', address: '', notes: '', email: '' };
   loading = signal(false);
   error   = signal('');
 
@@ -323,6 +328,7 @@ export class CheckoutComponent {
     const order = {
       buyerName:    this.form.name,
       buyerPhone:   this.form.phone,
+      buyerEmail:   this.form.email || undefined,
       buyerAddress: this.form.address,
       buyerCity:    this.form.city,
       notes:        this.form.notes,

@@ -72,10 +72,19 @@ def test_email():
         'items': [{'productName': 'Test Product', 'quantity': 1, 'price': 1000}],
         'total': 1000,
     }
-    success = send_order_notification(dummy)
+    import traceback, io
+    error_detail = None
+    success = False
+    try:
+        success = send_order_notification(dummy)
+    except Exception as e:
+        error_detail = traceback.format_exc()
     return {
         'success': success,
         'sent_to': SELLER_EMAIL,
+        'smtp_host': 'smtp.gmail.com',
+        'smtp_port': 465,
+        'error': error_detail,
         'message': 'Test email sent! Check your inbox.' if success else
-                   'Failed — check backend terminal for the exact error'
+                   'Failed — see error field for details'
     }

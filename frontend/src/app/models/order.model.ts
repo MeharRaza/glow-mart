@@ -2,6 +2,7 @@ export interface Order {
   id: string;
   buyerName: string;
   buyerPhone: string;
+  buyerEmail?: string;
   buyerAddress: string;
   buyerCity: string;
   items: OrderItem[];
