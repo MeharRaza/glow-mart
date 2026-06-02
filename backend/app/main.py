@@ -13,15 +13,8 @@ app = FastAPI(title='GlowMart API', version='1.0.0')
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        os.getenv('ALLOWED_ORIGINS', 'http://localhost:4200'),
-        'http://localhost:4200',
-        'http://localhost:4201',
-        'https://glow-mart-taupe.vercel.app',
-        'https://glow-mart-woad.vercel.app',
-        'https://glow-mart-one.vercel.app',
-    ],
-    allow_credentials=True,
+    allow_origins=['*'],
+    allow_credentials=False,
     allow_methods=['*'],
     allow_headers=['*'],
 )
