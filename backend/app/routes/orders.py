@@ -59,9 +59,10 @@ def get_order_count(db: Session = Depends(get_db)):
 
 @router.post('/')
 def place_order(order: Order, background_tasks: BackgroundTasks, db: Session = Depends(get_db)):
-    order_id = f'GM-{str(uuid.uuid4())[:6].upper()}'
+    import json
+    order_id   = f'GM-{str(uuid.uuid4())[:6].upper()}'
+    items_json = json.dumps([i.model_dump() for i in order.items])
 
-    # Use raw SQL INSERT to guarantee buyerEmail is written correctly
     db.execute(text("""
         INSERT INTO orders
             (id, "buyerName", "buyerPhone", "buyerEmail",
@@ -70,7 +71,7 @@ def place_order(order: Order, background_tasks: BackgroundTasks, db: Session = D
              "createdAt", "updatedAt")
         VALUES
             (:id, :buyerName, :buyerPhone, :buyerEmail,
-             :buyerAddress, :buyerCity, :items::jsonb, :total,
+             :buyerAddress, :buyerCity, CAST(:items AS jsonb), :total,
              'pending', 'cod', :notes, NULL,
              NOW(), NOW())
     """), {
@@ -80,13 +81,12 @@ def place_order(order: Order, background_tasks: BackgroundTasks, db: Session = D
         'buyerEmail':   order.buyerEmail,
         'buyerAddress': order.buyerAddress,
         'buyerCity':    order.buyerCity,
-        'items':        __import__('json').dumps([i.model_dump() for i in order.items]),
+        'items':        items_json,
         'total':        order.total,
         'notes':        order.notes,
     })
     db.commit()
 
-    # Fetch the saved row to return + send email
     result = db.execute(text("""
         SELECT id, "buyerName", "buyerPhone", "buyerEmail",
                "buyerAddress", "buyerCity", items, total,
