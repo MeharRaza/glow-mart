@@ -1,5 +1,6 @@
 from fastapi import APIRouter, HTTPException, BackgroundTasks, Depends
 from sqlalchemy.orm import Session
+from sqlalchemy import text
 from app.models.order import Order
 from app.database import OrderDB, get_db
 from app.email_service import send_order_notification
@@ -21,6 +22,7 @@ def _row_to_dict(row: OrderDB) -> dict:
         'id':            row.id,
         'buyerName':     row.buyerName,
         'buyerPhone':    row.buyerPhone,
+        'buyerEmail':    row.buyerEmail,
         'buyerAddress':  row.buyerAddress,
         'buyerCity':     row.buyerCity,
         'items':         row.items,
@@ -34,10 +36,18 @@ def _row_to_dict(row: OrderDB) -> dict:
     }
 
 
-@router.get('/', response_model=list[Order])
+@router.get('/')
 def get_orders(db: Session = Depends(get_db)):
-    rows = db.query(OrderDB).order_by(OrderDB.createdAt.desc()).all()
-    return [_row_to_dict(r) for r in rows]
+    result = db.execute(text("""
+        SELECT id, "buyerName", "buyerPhone", "buyerEmail",
+               "buyerAddress", "buyerCity", items, total,
+               status, "paymentMethod", notes, "trackingId",
+               "createdAt", "updatedAt"
+        FROM orders
+        ORDER BY "createdAt" DESC
+    """))
+    rows = result.mappings().all()
+    return [dict(r) for r in rows]
 
 
 @router.get('/count')
@@ -47,13 +57,14 @@ def get_order_count(db: Session = Depends(get_db)):
     return {'total': total, 'pending': pending}
 
 
-@router.post('/', response_model=Order)
+@router.post('/')
 def place_order(order: Order, background_tasks: BackgroundTasks, db: Session = Depends(get_db)):
     order_id = f'GM-{str(uuid.uuid4())[:6].upper()}'
     row = OrderDB(
         id            = order_id,
         buyerName     = order.buyerName,
         buyerPhone    = order.buyerPhone,
+        buyerEmail    = order.buyerEmail,
         buyerAddress  = order.buyerAddress,
         buyerCity     = order.buyerCity,
         items         = [i.model_dump() for i in order.items],
@@ -67,8 +78,10 @@ def place_order(order: Order, background_tasks: BackgroundTasks, db: Session = D
     )
     db.add(row)
     db.commit()
-    db.refresh(row)
-    result = _row_to_dict(row)
+
+    # Re-query the row to get all columns including buyerEmail
+    saved = db.query(OrderDB).filter(OrderDB.id == order_id).first()
+    result = _row_to_dict(saved)
     background_tasks.add_task(send_order_notification, result)
     return result
 
