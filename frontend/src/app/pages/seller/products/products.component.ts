@@ -219,8 +219,36 @@ import { Product } from '../../../models/product.model';
               </div>
             </div>
             <div>
-              <label class="field-label">Image URL</label>
-              <input class="field-input" [(ngModel)]="form.imageUrl" type="url" placeholder="https://..." />
+              <label class="field-label">Product Image</label>
+              <div style="display:flex;flex-direction:column;gap:0.5rem;">
+                <!-- File upload -->
+                <label style="display:flex;align-items:center;gap:0.75rem;padding:0.625rem 0.875rem;border:1px dashed #ddd8d0;background:#faf7f4;cursor:pointer;transition:border-color 0.2s;"
+                       [style.border-color]="form.imageUrl ? '#c9a96e' : '#ddd8d0'">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9e9890" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+                    <polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
+                  </svg>
+                  <span style="font-family:'Jost',sans-serif;font-size:0.78rem;color:#9e9890;">
+                    {{ imageFileName || 'Click to upload image from PC' }}
+                  </span>
+                  <input type="file" accept="image/*" style="display:none;" (change)="onImageFileSelected($event)" />
+                </label>
+                <!-- OR URL input -->
+                <div style="display:flex;align-items:center;gap:0.5rem;">
+                  <div style="flex:1;height:1px;background:#e8e0d6;"></div>
+                  <span style="font-family:'Jost',sans-serif;font-size:0.65rem;color:#b0a898;letter-spacing:0.1em;">OR PASTE URL</span>
+                  <div style="flex:1;height:1px;background:#e8e0d6;"></div>
+                </div>
+                <input class="field-input" [(ngModel)]="form.imageUrl" type="url" placeholder="https://..." (ngModelChange)="onUrlChange()" />
+                <!-- Preview -->
+                @if (form.imageUrl) {
+                  <div style="display:flex;align-items:center;gap:0.75rem;padding:0.5rem;background:#f5f0e8;border:1px solid #e8e0d6;">
+                    <img [src]="form.imageUrl" style="width:48px;height:48px;object-fit:cover;background:#e8e0d6;" alt="preview" />
+                    <span style="font-family:'Jost',sans-serif;font-size:0.72rem;color:#9e9890;flex:1;">Preview</span>
+                    <button type="button" (click)="clearImage()" style="background:none;border:none;cursor:pointer;color:#dc2626;font-size:0.72rem;font-family:'Jost',sans-serif;">✕ Remove</button>
+                  </div>
+                }
+              </div>
             </div>
             @if (formError()) {
               <div class="form-error">{{ formError() }}</div>
@@ -245,7 +273,33 @@ export class SellerProductsComponent implements OnInit {
   showModal     = signal(false);
   editingProduct = signal<Product | null>(null);
   formError     = signal('');
+  imageFileName = '';
   form = { name:'', description:'', originalPrice:0, sellerPrice:0, category:'', stock:20, imageUrl:'' };
+
+  onImageFileSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    const file  = input.files?.[0];
+    if (!file) return;
+    if (file.size > 2 * 1024 * 1024) {
+      this.formError.set('Image too large — max 2MB.'); return;
+    }
+    this.imageFileName = file.name;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      this.form.imageUrl = e.target?.result as string; // base64 data URL
+    };
+    reader.readAsDataURL(file);
+  }
+
+  onUrlChange() {
+    // If user types a URL, clear the file name
+    this.imageFileName = '';
+  }
+
+  clearImage() {
+    this.form.imageUrl  = '';
+    this.imageFileName  = '';
+  }
 
   filteredProducts() {
     if (!this.searchQuery) return this.products();
@@ -258,14 +312,16 @@ export class SellerProductsComponent implements OnInit {
   openAddModal() {
     this.editingProduct.set(null);
     this.form = { name:'', description:'', originalPrice:0, sellerPrice:0, category:'', stock:20, imageUrl:'' };
+    this.imageFileName = '';
     this.formError.set(''); this.showModal.set(true);
   }
   openEditModal(p: Product) {
     this.editingProduct.set(p);
     this.form = { name:p.name, description:p.description, originalPrice:p.originalPrice, sellerPrice:p.sellerPrice, category:p.category, stock:p.stock, imageUrl:p.images[0]||'' };
+    this.imageFileName = '';
     this.formError.set(''); this.showModal.set(true);
   }
-  closeModal() { this.showModal.set(false); this.editingProduct.set(null); }
+  closeModal() { this.showModal.set(false); this.editingProduct.set(null); this.imageFileName = ''; }
 
   saveProduct() {
     if (!this.form.name || !this.form.description || !this.form.category || !this.form.sellerPrice) {
