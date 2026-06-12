@@ -87,7 +87,7 @@ export class ProductService {
   // ── Seller methods ────────────────────────────────────────────────────────
 
   addProduct(product: Omit<Product, 'id' | 'createdAt' | 'updatedAt'>): Observable<Product> {
-    return this.http.post<Product>(`${this.apiUrl}/products`, product);
+    return this.http.post<Product>(`${this.apiUrl}/products/`, product);
   }
 
   updateProduct(id: string, product: Partial<Product>): Observable<Product> {
