@@ -1,6 +1,7 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
 import { ProductService } from '../../../services/product.service';
 import { Product } from '../../../models/product.model';
 
@@ -280,6 +281,7 @@ import { Product } from '../../../models/product.model';
 })
 export class SellerProductsComponent implements OnInit {
   private productService = inject(ProductService);
+  private http           = inject(HttpClient);
   products      = signal<Product[]>([]);
   searchQuery   = '';
   showModal     = signal(false);
@@ -292,24 +294,27 @@ export class SellerProductsComponent implements OnInit {
     const input = event.target as HTMLInputElement;
     const file  = input.files?.[0];
     if (!file) return;
-    if (file.size > 5 * 1024 * 1024) {
-      this.formError.set('Image too large — max 5MB.'); return;
+    if (file.size > 10 * 1024 * 1024) {
+      this.formError.set('Image too large — max 10MB.'); return;
     }
-    this.imageFileName = file.name;
+    this.imageFileName = 'Processing...';
     this.formError.set('');
+    this._compressToBase64(file);
+  }
 
-    // Compress image to max 600px wide and JPEG 80% quality
+  private _compressToBase64(file: File) {
     const img = new Image();
     const objectUrl = URL.createObjectURL(file);
     img.onload = () => {
       const canvas = document.createElement('canvas');
-      const maxW = 600;
+      // Resize to max 300px wide — keeps base64 under 50KB, well within Railway limit
+      const maxW = 300;
       const scale = img.width > maxW ? maxW / img.width : 1;
-      canvas.width  = img.width  * scale;
-      canvas.height = img.height * scale;
-      const ctx = canvas.getContext('2d')!;
-      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-      this.form.imageUrl = canvas.toDataURL('image/jpeg', 0.8);
+      canvas.width  = Math.round(img.width  * scale);
+      canvas.height = Math.round(img.height * scale);
+      canvas.getContext('2d')!.drawImage(img, 0, 0, canvas.width, canvas.height);
+      this.form.imageUrl = canvas.toDataURL('image/jpeg', 0.75);
+      this.imageFileName = file.name;
       URL.revokeObjectURL(objectUrl);
     };
     img.src = objectUrl;
