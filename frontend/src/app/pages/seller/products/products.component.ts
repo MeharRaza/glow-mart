@@ -209,8 +209,20 @@ import { Product } from '../../../models/product.model';
                 <label class="field-label">Category *</label>
                 <select class="field-input" [(ngModel)]="form.category">
                   <option value="">Select...</option>
-                  <option>Skincare</option><option>Makeup</option>
-                  <option>Fragrance</option><option>Haircare</option><option>Body</option>
+                  <option>Skincare</option>
+                  <option>Makeup</option>
+                  <option>Fragrance</option>
+                  <option>Haircare</option>
+                  <option>Body</option>
+                  <option>Clothing</option>
+                  <option>Jewellery</option>
+                  <option>Accessories</option>
+                  <option>Bags</option>
+                  <option>Shoes</option>
+                  <option>Kids</option>
+                  <option>Home & Living</option>
+                  <option>Health & Wellness</option>
+                  <option>Other</option>
                 </select>
               </div>
               <div>
@@ -280,15 +292,27 @@ export class SellerProductsComponent implements OnInit {
     const input = event.target as HTMLInputElement;
     const file  = input.files?.[0];
     if (!file) return;
-    if (file.size > 2 * 1024 * 1024) {
-      this.formError.set('Image too large — max 2MB.'); return;
+    if (file.size > 5 * 1024 * 1024) {
+      this.formError.set('Image too large — max 5MB.'); return;
     }
     this.imageFileName = file.name;
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      this.form.imageUrl = e.target?.result as string; // base64 data URL
+    this.formError.set('');
+
+    // Compress image to max 600px wide and JPEG 80% quality
+    const img = new Image();
+    const objectUrl = URL.createObjectURL(file);
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      const maxW = 600;
+      const scale = img.width > maxW ? maxW / img.width : 1;
+      canvas.width  = img.width  * scale;
+      canvas.height = img.height * scale;
+      const ctx = canvas.getContext('2d')!;
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      this.form.imageUrl = canvas.toDataURL('image/jpeg', 0.8);
+      URL.revokeObjectURL(objectUrl);
     };
-    reader.readAsDataURL(file);
+    img.src = objectUrl;
   }
 
   onUrlChange() {
@@ -332,12 +356,18 @@ export class SellerProductsComponent implements OnInit {
     if (editing) {
       this.productService.updateProduct(editing.id, data).subscribe({
         next: (u) => { this.products.update(l => l.map(p => p.id === u.id ? u : p)); this.closeModal(); },
-        error: ()  => { this.products.update(l => l.map(p => p.id === editing.id ? { ...p, ...data } : p)); this.closeModal(); }
+        error: (err) => {
+          const msg = err?.error?.detail || err?.message || 'Update failed.';
+          this.formError.set(msg);
+        }
       });
     } else {
       this.productService.addProduct(data).subscribe({
         next: (c) => { this.products.update(l => [...l, c]); this.closeModal(); },
-        error: ()  => { this.products.update(l => [...l, { id:Date.now().toString(), ...data, createdAt:new Date(), updatedAt:new Date() }]); this.closeModal(); }
+        error: (err) => {
+          const msg = err?.error?.detail || err?.message || 'Failed to add product. Check your connection.';
+          this.formError.set(msg);
+        }
       });
     }
   }
