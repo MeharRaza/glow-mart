@@ -18,8 +18,10 @@ import { RouterLink } from '@angular/router';
       grid-template-columns: 2fr 1fr 1fr 1fr;
       gap: 3rem;
     }
-    @media (max-width: 900px) { .footer-top { grid-template-columns: 1fr 1fr; } }
-    @media (max-width: 480px) { .footer-top { grid-template-columns: 1fr; } }
+    @media (max-width: 900px) { .footer-top { grid-template-columns: 1fr 1fr; padding: 3rem 1.5rem 2rem; } }
+    @media (max-width: 480px) { .footer-top { grid-template-columns: 1fr; padding: 2rem 1rem; gap: 2rem; }
+      .footer-bottom { padding: 1rem; flex-direction: column; text-align: center; }
+    }
 
     .footer-logo-wordmark { font-family: 'Playfair Display', Georgia, serif; font-size: 26px; font-weight: 700; letter-spacing: 5px; line-height: 1; margin-bottom: 3px; }
     .footer-logo-wordmark .shop { color: #faf7f4; }

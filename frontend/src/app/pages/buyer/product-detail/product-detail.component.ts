@@ -15,6 +15,13 @@ import { Review } from '../../../models/order.model';
   styles: [`
     .page { max-width: 1280px; margin: 0 auto; padding: 3rem 2rem 5rem; }
 
+    @media (max-width: 600px) {
+      .page { padding: 1.5rem 1rem 3rem; }
+      .breadcrumb { margin-bottom: 1.5rem; flex-wrap: wrap; }
+      .product-grid { gap: 1.5rem !important; margin-bottom: 2.5rem; }
+      .price-block { flex-direction: column; align-items: flex-start; gap: 0.75rem; }
+    }
+
     .breadcrumb {
       display: flex; align-items: center; gap: 0.5rem;
       font-family: 'Inter', sans-serif; font-size: 0.75rem;

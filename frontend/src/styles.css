@@ -203,3 +203,29 @@ body {
 /* ── Misc ───────────────────────────────────────────────────── */
 .scroll-x { overflow-x: auto; scrollbar-width: none; }
 .scroll-x::-webkit-scrollbar { display: none; }
+
+/* ── Mobile Global ─────────────────────────────────────────── */
+@media (max-width: 768px) {
+  /* Reduce topbar height on mobile */
+  main { padding-top: 90px !important; }
+
+  /* Section padding reduction */
+  section[style*="padding:6rem"] { padding: 3rem 1.25rem !important; }
+  section[style*="padding:5rem"] { padding: 3rem 1.25rem !important; }
+  section[style*="padding:4rem"] { padding: 2.5rem 1.25rem !important; }
+
+  /* CTA banner */
+  .cta-banner { padding: 3rem 1.25rem !important; }
+  .cta-title { font-size: clamp(1.75rem, 6vw, 2.5rem) !important; }
+
+  /* Trust strip grid */
+  div[style*="grid-template-columns:repeat(auto-fit"] { grid-template-columns: repeat(2,1fr) !important; }
+
+  /* Buttons full width on small screens */
+  .btn-primary, .btn-outline, .btn-gold { padding: 0.75rem 1.5rem; font-size: 0.75rem; }
+}
+
+@media (max-width: 480px) {
+  main { padding-top: 84px !important; }
+  div[style*="grid-template-columns:repeat(auto-fit"] { grid-template-columns: repeat(2,1fr) !important; }
+}

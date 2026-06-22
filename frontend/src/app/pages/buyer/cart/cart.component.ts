@@ -10,6 +10,16 @@ import { CartService } from '../../../services/cart.service';
   styles: [`
     .page { max-width: 900px; margin: 0 auto; padding: 4rem 2rem; }
 
+    @media (max-width: 600px) {
+      .page { padding: 2rem 1rem; }
+      .page-title { font-size: 1.75rem; }
+      .cart-item { flex-wrap: wrap; gap: 1rem; }
+      .item-img { width: 70px; height: 70px; }
+      .item-total { min-width: unset; text-align: left; width: 100%; }
+      .qty-ctrl { margin-left: auto; }
+      .summary { padding: 1.25rem; }
+    }
+
     .page-title {
       font-family: 'DM Serif Display', Georgia, serif;
       font-size: 2.5rem; font-weight: 400; color: #1a1410;

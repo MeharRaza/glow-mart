@@ -8,7 +8,12 @@ import { FormsModule } from '@angular/forms';
   standalone: true,
   imports: [RouterLink, CommonModule, FormsModule],
   styles: [`
-    .page { max-width: 520px; margin: 0 auto; padding: 5rem 1.5rem; text-align: center; }
+    .page { max-width: 520px; margin: 0 auto; padding: 3rem 1.25rem; text-align: center; }
+    @media (max-width: 480px) {
+      .page { padding: 2rem 1rem; }
+      .page-title { font-size: 1.75rem; }
+      .order-id-box { padding: 0.75rem 1.25rem; }
+    }
 
     .success-ring {
       position: relative;

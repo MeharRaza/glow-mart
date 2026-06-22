@@ -24,6 +24,10 @@ import { OrderService } from '../../../services/order.service';
       .page { grid-template-columns: 1fr; }
       .summary-col { order: -1; }
     }
+    @media (max-width: 600px) {
+      .page { padding: 1.5rem 1rem; gap: 1.5rem; }
+      .page-title { font-size: 1.75rem; }
+    }
 
     /* ── Left: Form ── */
     .page-eyebrow {

@@ -162,8 +162,13 @@ import { CartService } from '../../services/cart.service';
     @media (max-width: 768px) {
       .nav-links { display: none; }
       .hamburger { display: flex; }
-      .nav-inner { padding: 0 1.25rem; }
+      .nav-inner { padding: 0 1rem; }
       .mega-menu { width: 100vw; left: 0; transform: none; }
+      .logo-wordmark { font-size: 20px; letter-spacing: 3px; }
+      .logo-inner { gap: 8px; }
+      .logo-inner svg { width: 32px; height: 36px; }
+      .topbar { font-size: 0.65rem; padding: 0.4rem 0.75rem; }
+      .cart-btn { padding: 0.5rem 0.875rem; font-size: 0.7rem; }
     }
   `],
   template: `

@@ -26,6 +26,14 @@ import { Product } from '../../../models/product.model';
       .hero { grid-template-columns: 1fr; height: auto; max-height: none; }
       .hero-carousel-side { display: none; }
     }
+    @media (max-width: 768px) {
+      .hero { padding-top: 1rem; padding-bottom: 1rem; }
+      .hero-content { padding: 2rem 1.25rem 1.5rem 1.25rem !important; }
+      .hero-btns { flex-direction: column; }
+      .hero-btns a, .hero-btns button { width: 100%; justify-content: center; }
+      .hero-stats { gap: 1.25rem; flex-wrap: wrap; }
+      .stat-item { padding-right: 1.25rem; margin-right: 1.25rem; }
+    }
 
     /* Left content */
     .hero-content {
@@ -236,7 +244,7 @@ import { Product } from '../../../models/product.model';
       display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.25rem;
     }
     @media (max-width: 1024px) { .cat-grid { grid-template-columns: repeat(3,1fr); } }
-    @media (max-width: 768px)  { .cat-grid { grid-template-columns: repeat(2,1fr); gap: 1rem; } }
+    @media (max-width: 768px)  { .cat-grid { grid-template-columns: repeat(2,1fr); gap: 0.75rem; } }
 
     .cat-card { position: relative; overflow: hidden; cursor: pointer; text-decoration: none; display: block; }
     .cat-img { aspect-ratio: 4/5; overflow: hidden; position: relative; }
@@ -251,8 +259,8 @@ import { Product } from '../../../models/product.model';
 
     /* ── Products grid ────────────────────────────────────── */
     .products-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 2rem; }
-    @media (max-width: 900px) { .products-grid { grid-template-columns: repeat(2,1fr); gap: 1.5rem; } }
-    @media (max-width: 480px) { .products-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 900px) { .products-grid { grid-template-columns: repeat(2,1fr); gap: 1.25rem; } }
+    @media (max-width: 480px) { .products-grid { grid-template-columns: repeat(2,1fr); gap: 0.75rem; } }
 
     /* ── How it works ─────────────────────────────────────── */
     .hiw-section { background: #f5f0e8; padding: 7rem 2rem; position: relative; overflow: hidden; border-top: 1px solid #e8e0d6; border-bottom: 1px solid #e8e0d6; }
@@ -279,7 +287,10 @@ import { Product } from '../../../models/product.model';
       text-align: center; margin-bottom: 4rem; max-width: 440px; margin-left: auto; margin-right: auto;
     }
     .hiw-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.5px; max-width: 1100px; margin: 0 auto; }
-    @media (max-width: 768px) { .hiw-grid { grid-template-columns: 1fr; gap: 1.5px; } }
+    @media (max-width: 768px) { .hiw-grid { grid-template-columns: 1fr; gap: 1.5px; }
+      .hiw-section { padding: 4rem 1.25rem; }
+      .hiw-card { padding: 2rem 1.5rem; }
+    }
 
     .hiw-card {
       position: relative;
@@ -416,7 +427,7 @@ import { Product } from '../../../models/product.model';
     </div>
 
     <!-- ══════════════════════════════════════════ CATEGORIES ══ -->
-    <section id="categories" style="padding:6rem 2rem;max-width:1280px;margin:0 auto;">
+    <section id="categories" style="padding:4rem 1.5rem;max-width:1280px;margin:0 auto;">
       <div class="section-header">
         <div class="section-eyebrow">Browse</div>
         <h2 class="section-title">Shop by <em>Category</em></h2>
@@ -442,7 +453,7 @@ import { Product } from '../../../models/product.model';
     </section>
 
     <!-- ══════════════════════════════════════════ PRODUCTS ══ -->
-    <section style="padding:6rem 2rem;max-width:1280px;margin:0 auto;">
+    <section style="padding:4rem 1.5rem;max-width:1280px;margin:0 auto;">
       <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:3.5rem;flex-wrap:wrap;gap:1rem;">
         <div>
           <div class="section-eyebrow" style="text-align:left;">Curated Selection</div>

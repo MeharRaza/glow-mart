@@ -50,6 +50,17 @@ import { Product } from '../../../models/product.model';
     /* ── Page ── */
     .page { max-width: 1280px; margin: 0 auto; padding: 3rem 2rem; }
 
+    @media (max-width: 600px) {
+      .page { padding: 1.5rem 1rem; }
+      .page-header { flex-direction: column; gap: 1rem; }
+      .page-title { font-size: 1.75rem; }
+      .header-right { width: 100%; flex-direction: column; gap: 0.75rem; }
+      .search-input { width: 100%; }
+      .sort-select { width: 100%; }
+      .sub-cols { grid-template-columns: 1fr !important; }
+      .cat-nav-inner { padding: 0 1rem; }
+    }
+
     /* ── Header: title left, controls right ── */
     .page-header {
       display: flex; align-items: flex-start; justify-content: space-between;
