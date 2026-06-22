@@ -10,18 +10,18 @@ import { OrderService } from '../../../services/order.service';
   imports: [CommonModule, RouterLink],
   styles: [`
     .page-eyebrow {
-      font-family: 'Jost', sans-serif;
+      font-family: 'Inter', sans-serif;
       font-size: 0.65rem; font-weight: 500;
       letter-spacing: 0.25em; text-transform: uppercase;
       color: #c9a96e; margin-bottom: 0.5rem;
     }
     .page-title {
-      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-family: 'DM Serif Display', Georgia, serif;
       font-size: 2.25rem; font-weight: 400; color: #1a1410;
       margin-bottom: 0.25rem; line-height: 1.1;
     }
     .page-sub {
-      font-family: 'Jost', sans-serif;
+      font-family: 'Inter', sans-serif;
       font-size: 0.82rem; color: #9e9890;
       margin-bottom: 2.5rem;
     }
@@ -59,25 +59,25 @@ import { OrderService } from '../../../services/order.service';
       margin-bottom: 1.25rem;
     }
     .stat-value {
-      font-family: 'Cormorant Garamond', serif;
+      font-family: 'DM Serif Display', serif;
       font-size: 2.25rem; font-weight: 600;
       color: #1a1410; line-height: 1;
       margin-bottom: 0.375rem;
     }
     .stat-label {
-      font-family: 'Jost', sans-serif;
+      font-family: 'Inter', sans-serif;
       font-size: 0.72rem; font-weight: 500;
       letter-spacing: 0.08em; text-transform: uppercase;
       color: #9e9890; margin-bottom: 0.25rem;
     }
     .stat-change {
-      font-family: 'Jost', sans-serif;
+      font-family: 'Inter', sans-serif;
       font-size: 0.72rem; color: #b0a898;
     }
 
     /* ── Section heading ── */
     .section-heading {
-      font-family: 'Jost', sans-serif;
+      font-family: 'Inter', sans-serif;
       font-size: 0.62rem; font-weight: 600;
       letter-spacing: 0.2em; text-transform: uppercase;
       color: #9e9890; margin-bottom: 1rem;
@@ -115,12 +115,12 @@ import { OrderService } from '../../../services/order.service';
     .action-card:hover .action-icon { border-color: #c9a96e; }
 
     .action-title {
-      font-family: 'Cormorant Garamond', serif;
+      font-family: 'DM Serif Display', serif;
       font-size: 1.05rem; font-weight: 500;
       color: #1a1410; margin-bottom: 0.125rem;
     }
     .action-sub {
-      font-family: 'Jost', sans-serif;
+      font-family: 'Inter', sans-serif;
       font-size: 0.75rem; color: #9e9890;
     }
 
@@ -138,7 +138,7 @@ import { OrderService } from '../../../services/order.service';
       border-bottom: 1px solid #e8e0d6;
     }
     .orders-head span {
-      font-family: 'Jost', sans-serif;
+      font-family: 'Inter', sans-serif;
       font-size: 0.6rem; font-weight: 600;
       letter-spacing: 0.18em; text-transform: uppercase;
       color: #9e9890;
@@ -159,22 +159,22 @@ import { OrderService } from '../../../services/order.service';
       font-size: 0.72rem; color: #b0a898;
     }
     .order-name {
-      font-family: 'Jost', sans-serif;
+      font-family: 'Inter', sans-serif;
       font-size: 0.85rem; font-weight: 500; color: #1a1410;
     }
     .order-city {
-      font-family: 'Jost', sans-serif;
+      font-family: 'Inter', sans-serif;
       font-size: 0.8rem; color: #9e9890;
     }
     .order-amount {
-      font-family: 'Cormorant Garamond', serif;
+      font-family: 'DM Serif Display', serif;
       font-size: 1.05rem; font-weight: 600; color: #1a1410;
     }
 
     .status-pill {
       display: inline-flex;
       padding: 0.2rem 0.625rem;
-      font-family: 'Jost', sans-serif;
+      font-family: 'Inter', sans-serif;
       font-size: 0.62rem; font-weight: 600;
       letter-spacing: 0.06em; text-transform: uppercase;
     }

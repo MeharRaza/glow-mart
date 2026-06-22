@@ -9,9 +9,9 @@ import { Order } from '../../../models/order.model';
   standalone: true,
   imports: [CommonModule, FormsModule],
   styles: [`
-    .page-eyebrow { font-family:'Jost',sans-serif; font-size:0.65rem; font-weight:600; letter-spacing:0.25em; text-transform:uppercase; color:#c9a96e; margin-bottom:0.5rem; }
-    .page-title   { font-family:'Cormorant Garamond',Georgia,serif; font-size:2.25rem; font-weight:400; color:#1a1410; margin-bottom:0.25rem; }
-    .page-sub     { font-family:'Jost',sans-serif; font-size:0.82rem; color:#9e9890; margin-bottom:2rem; }
+    .page-eyebrow { font-family:'Inter', sans-serif; font-size:0.65rem; font-weight:600; letter-spacing:0.25em; text-transform:uppercase; color:#c9a96e; margin-bottom:0.5rem; }
+    .page-title   { font-family:'DM Serif Display', Georgia, serif; font-size:2.25rem; font-weight:400; color:#1a1410; margin-bottom:0.25rem; }
+    .page-sub     { font-family:'Inter', sans-serif; font-size:0.82rem; color:#9e9890; margin-bottom:2rem; }
     .gold-line    { height:1px; background:linear-gradient(90deg,#c9a96e,transparent); width:40px; margin-bottom:2rem; }
 
     /* ── Toolbar ── */
@@ -21,7 +21,7 @@ import { Order } from '../../../models/order.model';
       display:flex; align-items:center; gap:0.5rem;
       padding:0.375rem 0.875rem;
       background:rgba(201,169,110,0.08); border:1px solid rgba(201,169,110,0.25);
-      font-family:'Jost',sans-serif; font-size:0.75rem; color:#c9a96e;
+      font-family:'Inter', sans-serif; font-size:0.75rem; color:#c9a96e;
       animation: pulse-border 2s ease-in-out infinite;
     }
     @keyframes pulse-border { 0%,100%{border-color:rgba(201,169,110,0.25)} 50%{border-color:rgba(201,169,110,0.6)} }
@@ -29,13 +29,13 @@ import { Order } from '../../../models/order.model';
     .pending-pill {
       padding:0.3rem 0.875rem;
       background:rgba(217,119,6,0.08); border:1px solid rgba(217,119,6,0.25);
-      font-family:'Jost',sans-serif; font-size:0.72rem; font-weight:600; color:#d97706;
+      font-family:'Inter', sans-serif; font-size:0.72rem; font-weight:600; color:#d97706;
     }
     .refresh-btn {
       display:flex; align-items:center; gap:0.375rem;
       padding:0.375rem 0.875rem;
       background:#fff; border:1px solid #ddd8d0;
-      font-family:'Jost',sans-serif; font-size:0.75rem; color:#6b6560;
+      font-family:'Inter', sans-serif; font-size:0.75rem; color:#6b6560;
       cursor:pointer; transition:all 0.2s;
     }
     .refresh-btn:hover { border-color:#c9a96e; color:#1a1410; }
@@ -44,7 +44,7 @@ import { Order } from '../../../models/order.model';
     .filter-tabs { display:flex; gap:0; border:1px solid #e8e0d6; background:#fff; margin-bottom:1.5rem; overflow-x:auto; }
     .filter-tab {
       padding:0.5rem 1.125rem;
-      font-family:'Jost',sans-serif; font-size:0.75rem; font-weight:500;
+      font-family:'Inter', sans-serif; font-size:0.75rem; font-weight:500;
       color:#9e9890; background:none; border:none; border-right:1px solid #e8e0d6;
       cursor:pointer; transition:all 0.2s; white-space:nowrap;
     }
@@ -56,7 +56,7 @@ import { Order } from '../../../models/order.model';
     /* ── Empty ── */
     .empty-state { padding:4rem 2rem; text-align:center; background:#fff; border:1px solid #e8e0d6; }
     .empty-icon  { display:flex; justify-content:center; margin-bottom:1rem; }
-    .empty-text  { font-family:'Cormorant Garamond',serif; font-size:1.25rem; color:#9e9890; }
+    .empty-text  { font-family:'DM Serif Display', serif; font-size:1.25rem; color:#9e9890; }
 
     /* ── Order card ── */
     .order-card {
@@ -72,7 +72,7 @@ import { Order } from '../../../models/order.model';
       display:inline-flex; align-items:center; gap:0.375rem;
       padding:0.2rem 0.625rem;
       background:rgba(201,169,110,0.1); border:1px solid rgba(201,169,110,0.3);
-      font-family:'Jost',sans-serif; font-size:0.62rem; font-weight:700;
+      font-family:'Inter', sans-serif; font-size:0.62rem; font-weight:700;
       letter-spacing:0.12em; text-transform:uppercase; color:#c9a96e;
       margin-bottom:0.875rem;
     }
@@ -84,33 +84,33 @@ import { Order } from '../../../models/order.model';
     .order-meta { display:flex; align-items:center; gap:0.75rem; margin-bottom:0.5rem; flex-wrap:wrap; }
     .order-id { font-family:'JetBrains Mono','Courier New',monospace; font-size:0.72rem; color:#b0a898; }
 
-    .status-pill { display:inline-flex; padding:0.2rem 0.625rem; font-family:'Jost',sans-serif; font-size:0.62rem; font-weight:600; letter-spacing:0.06em; text-transform:uppercase; }
+    .status-pill { display:inline-flex; padding:0.2rem 0.625rem; font-family:'Inter', sans-serif; font-size:0.62rem; font-weight:600; letter-spacing:0.06em; text-transform:uppercase; }
     .s-pending   { background:rgba(217,119,6,0.08);  border:1px solid rgba(217,119,6,0.25);  color:#b45309; }
     .s-confirmed { background:rgba(59,130,246,0.08); border:1px solid rgba(59,130,246,0.25); color:#2563eb; }
     .s-shipped   { background:rgba(139,92,246,0.08); border:1px solid rgba(139,92,246,0.25); color:#7c3aed; }
     .s-delivered { background:rgba(22,163,74,0.08);  border:1px solid rgba(22,163,74,0.25);  color:#16a34a; }
     .s-cancelled { background:rgba(220,38,38,0.08);  border:1px solid rgba(220,38,38,0.25);  color:#dc2626; }
 
-    .buyer-name { font-family:'Cormorant Garamond',serif; font-size:1.2rem; font-weight:500; color:#1a1410; margin-bottom:0.25rem; }
-    .buyer-info { font-family:'Jost',sans-serif; font-size:0.78rem; color:#9e9890; display:flex; align-items:center; gap:0.375rem; margin-bottom:0.125rem; }
-    .buyer-note { font-family:'Jost',sans-serif; font-size:0.75rem; color:#b0a898; font-style:italic; margin-top:0.25rem; }
+    .buyer-name { font-family:'DM Serif Display', serif; font-size:1.2rem; font-weight:500; color:#1a1410; margin-bottom:0.25rem; }
+    .buyer-info { font-family:'Inter', sans-serif; font-size:0.78rem; color:#9e9890; display:flex; align-items:center; gap:0.375rem; margin-bottom:0.125rem; }
+    .buyer-note { font-family:'Inter', sans-serif; font-size:0.75rem; color:#b0a898; font-style:italic; margin-top:0.25rem; }
 
     .order-items { margin-top:0.875rem; display:flex; flex-direction:column; gap:0.375rem; }
     .order-item  { display:flex; align-items:center; gap:0.625rem; }
     .item-img    { width:32px; height:32px; object-fit:cover; background:#f5f0e8; flex-shrink:0; }
-    .item-name   { font-family:'Jost',sans-serif; font-size:0.78rem; color:#6b6560; flex:1; min-width:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-    .item-qty    { font-family:'Jost',sans-serif; font-size:0.72rem; color:#b0a898; }
-    .item-price  { font-family:'Jost',sans-serif; font-size:0.78rem; font-weight:500; color:#1a1410; }
+    .item-name   { font-family:'Inter', sans-serif; font-size:0.78rem; color:#6b6560; flex:1; min-width:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .item-qty    { font-family:'Inter', sans-serif; font-size:0.72rem; color:#b0a898; }
+    .item-price  { font-family:'Inter', sans-serif; font-size:0.78rem; font-weight:500; color:#1a1410; }
 
-    .order-total { font-family:'Cormorant Garamond',serif; font-size:1.5rem; font-weight:600; color:#1a1410; }
-    .order-cod   { font-family:'Jost',sans-serif; font-size:0.7rem; color:#9e9890; margin-top:0.125rem; }
+    .order-total { font-family:'DM Serif Display', serif; font-size:1.5rem; font-weight:600; color:#1a1410; }
+    .order-cod   { font-family:'Inter', sans-serif; font-size:0.7rem; color:#9e9890; margin-top:0.125rem; }
 
     /* ── Action buttons ── */
     .actions { display:flex; flex-wrap:wrap; gap:0.5rem; justify-content:flex-end; margin-top:0.875rem; }
     .btn-action {
       display:flex; align-items:center; gap:0.375rem;
       padding:0.4rem 0.875rem;
-      font-family:'Jost',sans-serif; font-size:0.72rem; font-weight:500;
+      font-family:'Inter', sans-serif; font-size:0.72rem; font-weight:500;
       border:1px solid; cursor:pointer; transition:all 0.2s;
     }
     .btn-confirm  { background:rgba(37,99,235,0.06); border-color:rgba(37,99,235,0.25); color:#2563eb; }
@@ -126,13 +126,13 @@ import { Order } from '../../../models/order.model';
     .tracking-input {
       padding:0.375rem 0.75rem;
       background:#fff; border:1px solid #ddd8d0;
-      font-family:'Jost',sans-serif; font-size:0.75rem; color:#1a1410;
+      font-family:'Inter', sans-serif; font-size:0.75rem; color:#1a1410;
       outline:none; width:160px;
     }
     .tracking-input:focus { border-color:#c9a96e; }
-    .tracking-info { display:flex; align-items:center; gap:0.375rem; font-family:'Jost',sans-serif; font-size:0.72rem; color:#9e9890; }
+    .tracking-info { display:flex; align-items:center; gap:0.375rem; font-family:'Inter', sans-serif; font-size:0.72rem; color:#9e9890; }
     .tracking-id   { font-family:'JetBrains Mono',monospace; font-size:0.72rem; color:#7c3aed; }
-    .delivered-tag { display:flex; align-items:center; gap:0.375rem; font-family:'Jost',sans-serif; font-size:0.72rem; color:#16a34a; }
+    .delivered-tag { display:flex; align-items:center; gap:0.375rem; font-family:'Inter', sans-serif; font-size:0.72rem; color:#16a34a; }
   `],
   template: `
     <div>
@@ -174,7 +174,7 @@ import { Order } from '../../../models/order.model';
 
       <!-- Loading -->
       @if (loading()) {
-        <div style="padding:3rem;text-align:center;font-family:'Jost',sans-serif;font-size:0.85rem;color:#9e9890;">
+        <div style="padding:3rem;text-align:center;font-family:'Inter', sans-serif;font-size:0.85rem;color:#9e9890;">
           Loading orders...
         </div>
       }

@@ -35,16 +35,16 @@ import { FormsModule } from '@angular/forms';
     }
 
     .page-title {
-      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-family: 'DM Serif Display', Georgia, serif;
       font-size: 2.5rem; font-weight: 400; color: #1a1410;
       margin-bottom: 0.75rem;
     }
     .page-sub {
-      font-family: 'Jost', sans-serif; font-size: 1rem;
+      font-family: 'Inter', sans-serif; font-size: 1rem;
       color: #6b6560; margin-bottom: 0.375rem;
     }
     .page-note {
-      font-family: 'Jost', sans-serif; font-size: 0.85rem;
+      font-family: 'Inter', sans-serif; font-size: 0.85rem;
       color: #9e9890; margin-bottom: 0.375rem;
     }
 
@@ -53,7 +53,7 @@ import { FormsModule } from '@angular/forms';
       padding: 0.5rem 1.25rem;
       background: rgba(22,163,74,0.06);
       border: 1px solid rgba(22,163,74,0.2);
-      font-family: 'Jost', sans-serif; font-size: 0.8rem;
+      font-family: 'Inter', sans-serif; font-size: 0.8rem;
       color: #16a34a; letter-spacing: 0.05em;
       margin-bottom: 2.5rem;
     }
@@ -66,12 +66,12 @@ import { FormsModule } from '@angular/forms';
       margin-bottom: 2rem;
     }
     .order-id-label {
-      font-family: 'Jost', sans-serif; font-size: 0.65rem;
+      font-family: 'Inter', sans-serif; font-size: 0.65rem;
       letter-spacing: 0.2em; text-transform: uppercase;
       color: #9e9890; margin-bottom: 0.375rem;
     }
     .order-id-value {
-      font-family: 'Cormorant Garamond', serif;
+      font-family: 'DM Serif Display', serif;
       font-size: 1.25rem; font-weight: 600; color: #c9a96e;
       letter-spacing: 0.05em;
     }
@@ -84,7 +84,7 @@ import { FormsModule } from '@angular/forms';
       text-align: left;
     }
     .steps-title {
-      font-family: 'Cormorant Garamond', serif;
+      font-family: 'DM Serif Display', serif;
       font-size: 1.1rem; font-weight: 500; color: #1a1410;
       text-align: center; margin-bottom: 1.25rem;
     }
@@ -98,15 +98,15 @@ import { FormsModule } from '@angular/forms';
       background: #1a1410;
       display: flex; align-items: center; justify-content: center;
       flex-shrink: 0; margin-top: 1px;
-      font-family: 'Jost', sans-serif; font-size: 0.65rem;
+      font-family: 'Inter', sans-serif; font-size: 0.65rem;
       font-weight: 600; color: #faf7f4;
     }
     .step-title-text {
-      font-family: 'Jost', sans-serif; font-size: 0.875rem;
+      font-family: 'Inter', sans-serif; font-size: 0.875rem;
       font-weight: 500; color: #1a1410;
     }
     .step-desc-text {
-      font-family: 'Jost', sans-serif; font-size: 0.78rem;
+      font-family: 'Inter', sans-serif; font-size: 0.78rem;
       color: #9e9890; margin-top: 0.125rem;
     }
 
@@ -119,7 +119,7 @@ import { FormsModule } from '@angular/forms';
       text-align: left;
     }
     .review-note-text {
-      font-family: 'Jost', sans-serif; font-size: 0.8rem;
+      font-family: 'Inter', sans-serif; font-size: 0.8rem;
       color: #6b6560; line-height: 1.6;
     }
   `],

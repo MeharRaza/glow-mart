@@ -11,12 +11,12 @@ import { CartService } from '../../../services/cart.service';
     .page { max-width: 900px; margin: 0 auto; padding: 4rem 2rem; }
 
     .page-title {
-      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-family: 'DM Serif Display', Georgia, serif;
       font-size: 2.5rem; font-weight: 400; color: #1a1410;
       margin-bottom: 0.375rem;
     }
     .page-sub {
-      font-family: 'Jost', sans-serif; font-size: 0.8rem;
+      font-family: 'Inter', sans-serif; font-size: 0.8rem;
       color: #9e9890; letter-spacing: 0.05em; margin-bottom: 2.5rem;
     }
 
@@ -28,7 +28,7 @@ import { CartService } from '../../../services/cart.service';
     }
     .empty-icon { display:flex; justify-content:center; margin-bottom: 1rem; }
     .empty-text {
-      font-family: 'Cormorant Garamond', serif;
+      font-family: 'DM Serif Display', serif;
       font-size: 1.5rem; color: #6b6560; margin-bottom: 1.5rem;
     }
 
@@ -46,12 +46,12 @@ import { CartService } from '../../../services/cart.service';
       background: #f5f0e8;
     }
     .item-name {
-      font-family: 'Cormorant Garamond', serif;
+      font-family: 'DM Serif Display', serif;
       font-size: 1.1rem; font-weight: 500; color: #1a1410;
       margin-bottom: 0.25rem;
     }
     .item-price {
-      font-family: 'Jost', sans-serif;
+      font-family: 'Inter', sans-serif;
       font-size: 0.85rem; color: #9e9890;
     }
 
@@ -69,11 +69,11 @@ import { CartService } from '../../../services/cart.service';
     .qty-btn:hover { background: #f5f0e8; color: #1a1410; }
     .qty-num {
       width: 36px; text-align: center;
-      font-family: 'Jost', sans-serif; font-size: 0.875rem; color: #1a1410;
+      font-family: 'Inter', sans-serif; font-size: 0.875rem; color: #1a1410;
     }
 
     .item-total {
-      font-family: 'Cormorant Garamond', serif;
+      font-family: 'DM Serif Display', serif;
       font-size: 1.1rem; font-weight: 600; color: #1a1410;
       min-width: 100px; text-align: right;
     }
@@ -92,7 +92,7 @@ import { CartService } from '../../../services/cart.service';
     }
     .summary-row {
       display: flex; justify-content: space-between;
-      font-family: 'Jost', sans-serif; font-size: 0.875rem;
+      font-family: 'Inter', sans-serif; font-size: 0.875rem;
       color: #6b6560; margin-bottom: 0.875rem;
     }
     .summary-total {
@@ -100,11 +100,11 @@ import { CartService } from '../../../services/cart.service';
       padding-top: 1rem; border-top: 1px solid #e8e0d6; margin-top: 0.5rem;
     }
     .total-label {
-      font-family: 'Cormorant Garamond', serif;
+      font-family: 'DM Serif Display', serif;
       font-size: 1.25rem; font-weight: 500; color: #1a1410;
     }
     .total-amount {
-      font-family: 'Cormorant Garamond', serif;
+      font-family: 'DM Serif Display', serif;
       font-size: 1.75rem; font-weight: 600; color: #1a1410;
     }
     .checkout-btn {
@@ -112,7 +112,7 @@ import { CartService } from '../../../services/cart.service';
       margin-top: 1.5rem;
       padding: 1rem;
       background: #1a1410; color: #faf7f4;
-      font-family: 'Jost', sans-serif; font-size: 0.8rem;
+      font-family: 'Inter', sans-serif; font-size: 0.8rem;
       font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase;
       text-align: center; text-decoration: none;
       transition: background 0.2s;

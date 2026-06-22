@@ -21,7 +21,7 @@ import { CartService } from '../../services/cart.service';
       color: #c9a96e;
       text-align: center;
       padding: 0.5rem 1rem;
-      font-family: 'Jost', sans-serif;
+      font-family: 'Inter', sans-serif;
       font-size: 0.75rem;
       letter-spacing: 0.1em;
     }
@@ -49,14 +49,28 @@ import { CartService } from '../../services/cart.service';
       justify-content: space-between;
     }
 
-    .logo { display: flex; flex-direction: column; align-items: center; text-decoration: none; line-height: 1; cursor: pointer; }
-    .logo-main { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 1.6rem; font-weight: 600; color: #1a1410; letter-spacing: 0.08em; }
-    .logo-sub { font-family: 'Jost', sans-serif; font-size: 0.55rem; letter-spacing: 0.25em; color: #c9a96e; text-transform: uppercase; margin-top: -2px; }
+    .logo { display: flex; align-items: center; text-decoration: none; cursor: pointer; }
+    .logo-inner { display: flex; align-items: center; gap: 14px; animation: shakeLoop 3s ease-in-out infinite; }
+    @keyframes shakeLoop {
+      0%, 100% { transform: rotate(0deg) translateX(0); }
+      10% { transform: rotate(-3deg) translateX(-4px); }
+      20% { transform: rotate(3deg) translateX(4px); }
+      30% { transform: rotate(-2deg) translateX(-3px); }
+      40% { transform: rotate(2deg) translateX(3px); }
+      50% { transform: rotate(-1deg) translateX(-2px); }
+      60% { transform: rotate(1deg) translateX(2px); }
+      70% { transform: rotate(0deg) translateX(0); }
+    }
+    .logo-text-block { display: flex; flex-direction: column; align-items: flex-start; }
+    .logo-wordmark { font-family: 'Playfair Display', Georgia, serif; font-size: 28px; font-weight: 700; letter-spacing: 5px; line-height: 1; margin-bottom: 3px; }
+    .logo-wordmark .shop { color: #0a0a0a; }
+    .logo-wordmark .zee { background: linear-gradient(135deg, #8b6010 0%, #c8920a 45%, #7a5008 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .logo-tagline { font-family: 'Montserrat', 'Inter', sans-serif; font-size: 5px; font-weight: 600; letter-spacing: 2.5px; color: #0a0a0a; text-transform: uppercase; }
 
     .nav-links { display: flex; align-items: center; gap: 2.5rem; }
 
     .nav-link {
-      font-family: 'Jost', sans-serif; font-size: 0.8rem; font-weight: 500;
+      font-family: 'Inter', sans-serif; font-size: 0.8rem; font-weight: 500;
       letter-spacing: 0.12em; text-transform: uppercase; color: #6b6560;
       text-decoration: none; transition: color 0.2s; position: relative; padding-bottom: 2px;
       background: none; border: none; cursor: pointer;
@@ -91,7 +105,7 @@ import { CartService } from '../../services/cart.service';
       padding: 0 1.5rem;
     }
     .mega-tab {
-      font-family: 'Jost', sans-serif; font-size: 0.78rem; font-weight: 500;
+      font-family: 'Inter', sans-serif; font-size: 0.78rem; font-weight: 500;
       letter-spacing: 0.08em; text-transform: capitalize; color: #6b6560;
       padding: 0.9rem 1rem; cursor: pointer;
       border-bottom: 2px solid transparent; margin-bottom: -1px;
@@ -105,18 +119,18 @@ import { CartService } from '../../services/cart.service';
 
     .all-link {
       display: inline-flex; align-items: center; gap: 0.3rem;
-      font-family: 'Jost', sans-serif; font-size: 0.78rem; font-weight: 600;
+      font-family: 'Inter', sans-serif; font-size: 0.78rem; font-weight: 600;
       letter-spacing: 0.06em; color: #1a1410; text-decoration: none; margin-bottom: 1.25rem;
     }
     .all-link:hover { color: #c9a96e; }
 
     .mega-cols { display: grid; grid-template-columns: repeat(3,1fr); gap: 0 2rem; }
     .mega-col-title {
-      font-family: 'Jost', sans-serif; font-size: 0.65rem; font-weight: 600;
+      font-family: 'Inter', sans-serif; font-size: 0.65rem; font-weight: 600;
       letter-spacing: 0.18em; text-transform: uppercase; color: #1a1410; margin-bottom: 0.75rem;
     }
     .mega-col ul { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.45rem; }
-    .mega-col ul li a { font-family: 'Jost', sans-serif; font-size: 0.82rem; color: #6b6560; text-decoration: none; transition: color 0.2s; }
+    .mega-col ul li a { font-family: 'Inter', sans-serif; font-size: 0.82rem; color: #6b6560; text-decoration: none; transition: color 0.2s; }
     .mega-col ul li a:hover { color: #1a1410; }
 
     .nav-actions { display: flex; align-items: center; gap: 1rem; }
@@ -124,7 +138,7 @@ import { CartService } from '../../services/cart.service';
     .cart-btn {
       display: flex; align-items: center; gap: 0.5rem;
       padding: 0.5rem 1.25rem; background: #1a1410; color: #faf7f4;
-      font-family: 'Jost', sans-serif; font-size: 0.75rem; font-weight: 500;
+      font-family: 'Inter', sans-serif; font-size: 0.75rem; font-weight: 500;
       letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none; transition: background 0.2s;
     }
     .cart-btn:hover { background: #2d2520; }
@@ -140,7 +154,7 @@ import { CartService } from '../../services/cart.service';
     .mobile-menu { background: #faf7f4; border-top: 1px solid #e8e0d6; padding: 1.5rem 2rem; }
     .mobile-link {
       display: block; padding: 0.875rem 0; border-bottom: 1px solid #f0ebe4;
-      font-family: 'Jost', sans-serif; font-size: 0.85rem; font-weight: 500;
+      font-family: 'Inter', sans-serif; font-size: 0.85rem; font-weight: 500;
       letter-spacing: 0.1em; text-transform: uppercase; color: #6b6560; text-decoration: none; transition: color 0.2s;
     }
     .mobile-link:hover { color: #1a1410; }
@@ -162,17 +176,24 @@ import { CartService } from '../../services/cart.service';
       <div class="nav-inner">
 
         <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}" class="logo">
-          <span class="logo-main">Shopzee</span>
-          <span class="logo-sub">Premium Beauty</span>
+          <div class="logo-inner">
+            <svg width="44" height="50" viewBox="0 0 84 96" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="6" y="30" width="72" height="58" rx="8" fill="#0a0a0a"/>
+              <path d="M28 30 C28 14 56 14 56 30" stroke="#c8960c" stroke-width="5.5" stroke-linecap="round" fill="none"/>
+              <rect x="6" y="30" width="72" height="8" rx="4" fill="#c8960c"/>
+              <text x="35" y="74" font-family="Georgia, serif" font-size="28" font-weight="700" fill="#f5d160" text-anchor="middle">S</text>
+              <text x="51" y="74" font-family="Georgia, serif" font-size="28" font-weight="700" fill="#ffffff" text-anchor="middle">Z</text>
+            </svg>
+            <div class="logo-text-block">
+              <div class="logo-wordmark"><span class="shop">SHOP</span><span class="zee">ZEE</span></div>
+              <div class="logo-tagline">Premium · Style · Delivered</div>
+            </div>
+          </div>
         </a>
 
         <div class="nav-links">
           <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}" class="nav-link">Home</a>
-
           <a routerLink="/products" routerLinkActive="active" class="nav-link">Shop</a>
-
-          <a routerLink="/signup" class="nav-link">Sign Up</a>
-          <a routerLink="/seller/login" class="nav-link">Seller</a>
         </div>
 
         <div class="nav-actions">
@@ -201,11 +222,9 @@ import { CartService } from '../../services/cart.service';
           @for (cat of shopCategories; track cat.name) {
             <a routerLink="/products" [queryParams]="{category: cat.name}" (click)="mobileOpen.set(false)" class="mobile-link">{{ cat.name }}</a>
           }
-          <a routerLink="/signup" (click)="mobileOpen.set(false)" class="mobile-link">Sign Up</a>
           <a routerLink="/cart" (click)="mobileOpen.set(false)" class="mobile-link">
             Bag @if (cart.totalItems() > 0) { ({{ cart.totalItems() }}) }
           </a>
-          <a routerLink="/seller/login" (click)="mobileOpen.set(false)" class="mobile-link">Seller Login</a>
         </div>
       }
     </nav>

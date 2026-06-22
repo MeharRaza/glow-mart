@@ -27,18 +27,18 @@ import { OrderService } from '../../../services/order.service';
 
     /* ── Left: Form ── */
     .page-eyebrow {
-      font-family: 'Jost', sans-serif;
+      font-family: 'Inter', sans-serif;
       font-size: 0.65rem; font-weight: 600;
       letter-spacing: 0.25em; text-transform: uppercase;
       color: #c9a96e; margin-bottom: 0.5rem;
     }
     .page-title {
-      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-family: 'DM Serif Display', Georgia, serif;
       font-size: 2.25rem; font-weight: 400; color: #1a1410;
       margin-bottom: 0.25rem;
     }
     .page-sub {
-      font-family: 'Jost', sans-serif;
+      font-family: 'Inter', sans-serif;
       font-size: 0.82rem; color: #9e9890;
       margin-bottom: 2.5rem;
     }
@@ -59,7 +59,7 @@ import { OrderService } from '../../../services/order.service';
     .field.full { grid-column: 1 / -1; }
 
     .field-label {
-      font-family: 'Jost', sans-serif;
+      font-family: 'Inter', sans-serif;
       font-size: 0.62rem; font-weight: 600;
       letter-spacing: 0.15em; text-transform: uppercase;
       color: #9e9890; margin-bottom: 0.5rem;
@@ -68,7 +68,7 @@ import { OrderService } from '../../../services/order.service';
       background: #fff;
       border: 1px solid #ddd8d0;
       padding: 0.75rem 1rem;
-      font-family: 'Jost', sans-serif;
+      font-family: 'Inter', sans-serif;
       font-size: 0.875rem; color: #1a1410;
       outline: none; transition: border-color 0.2s;
       width: 100%;
@@ -87,7 +87,7 @@ import { OrderService } from '../../../services/order.service';
       margin: 1.5rem 0;
     }
     .cod-text {
-      font-family: 'Jost', sans-serif;
+      font-family: 'Inter', sans-serif;
       font-size: 0.82rem; color: #6b6560;
     }
     .cod-text strong { color: #1a1410; font-weight: 500; }
@@ -96,7 +96,7 @@ import { OrderService } from '../../../services/order.service';
       padding: 0.875rem 1rem;
       background: rgba(220,38,38,0.06);
       border: 1px solid rgba(220,38,38,0.2);
-      font-family: 'Jost', sans-serif;
+      font-family: 'Inter', sans-serif;
       font-size: 0.82rem; color: #dc2626;
       margin-bottom: 1.25rem;
       display: flex; align-items: center; gap: 0.5rem;
@@ -107,7 +107,7 @@ import { OrderService } from '../../../services/order.service';
       padding: 1rem;
       background: #1a1410;
       color: #faf7f4;
-      font-family: 'Jost', sans-serif;
+      font-family: 'Inter', sans-serif;
       font-size: 0.8rem; font-weight: 500;
       letter-spacing: 0.15em; text-transform: uppercase;
       border: none; cursor: pointer;
@@ -132,7 +132,7 @@ import { OrderService } from '../../../services/order.service';
       background: #f5f0e8;
     }
     .summary-title {
-      font-family: 'Cormorant Garamond', serif;
+      font-family: 'DM Serif Display', serif;
       font-size: 1.1rem; font-weight: 500; color: #1a1410;
     }
     .summary-body { padding: 1.25rem 1.5rem; }
@@ -152,17 +152,17 @@ import { OrderService } from '../../../services/order.service';
       flex-shrink: 0;
     }
     .item-name {
-      font-family: 'Jost', sans-serif;
+      font-family: 'Inter', sans-serif;
       font-size: 0.82rem; font-weight: 500; color: #1a1410;
       flex: 1; min-width: 0;
       white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     }
     .item-qty {
-      font-family: 'Jost', sans-serif;
+      font-family: 'Inter', sans-serif;
       font-size: 0.72rem; color: #9e9890;
     }
     .item-price {
-      font-family: 'Cormorant Garamond', serif;
+      font-family: 'DM Serif Display', serif;
       font-size: 1rem; font-weight: 600; color: #1a1410;
       white-space: nowrap;
     }
@@ -174,7 +174,7 @@ import { OrderService } from '../../../services/order.service';
     }
     .summary-row {
       display: flex; justify-content: space-between;
-      font-family: 'Jost', sans-serif;
+      font-family: 'Inter', sans-serif;
       font-size: 0.82rem; color: #9e9890;
       margin-bottom: 0.5rem;
     }
@@ -185,11 +185,11 @@ import { OrderService } from '../../../services/order.service';
       margin-top: 0.25rem;
     }
     .total-label {
-      font-family: 'Cormorant Garamond', serif;
+      font-family: 'DM Serif Display', serif;
       font-size: 1.1rem; font-weight: 500; color: #1a1410;
     }
     .total-amount {
-      font-family: 'Cormorant Garamond', serif;
+      font-family: 'DM Serif Display', serif;
       font-size: 1.5rem; font-weight: 600; color: #1a1410;
     }
 

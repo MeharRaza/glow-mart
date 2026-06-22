@@ -52,7 +52,7 @@ import { CartService } from '../../services/cart.service';
       padding: 0.75rem;
       background: #faf7f4;
       color: #1a1410;
-      font-family: 'Jost', sans-serif;
+      font-family: 'Inter', sans-serif;
       font-size: 0.72rem;
       font-weight: 500;
       letter-spacing: 0.15em;
@@ -72,7 +72,7 @@ import { CartService } from '../../services/cart.service';
       top: 0.75rem;
       left: 0.75rem;
       background: rgba(250,247,244,0.92);
-      font-family: 'Jost', sans-serif;
+      font-family: 'Inter', sans-serif;
       font-size: 0.62rem;
       font-weight: 500;
       letter-spacing: 0.12em;
@@ -86,7 +86,7 @@ import { CartService } from '../../services/cart.service';
       right: 0.75rem;
       background: #1a1410;
       color: #c9a96e;
-      font-family: 'Jost', sans-serif;
+      font-family: 'Inter', sans-serif;
       font-size: 0.62rem;
       font-weight: 600;
       letter-spacing: 0.08em;
@@ -96,7 +96,7 @@ import { CartService } from '../../services/cart.service';
     .info { padding: 1.25rem; flex: 1; display: flex; flex-direction: column; gap: 0.5rem; }
 
     .product-name {
-      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-family: 'DM Serif Display', Georgia, serif;
       font-size: 1.05rem;
       font-weight: 500;
       color: #1a1410;
@@ -110,7 +110,7 @@ import { CartService } from '../../services/cart.service';
     .product-name:hover { color: #8b6914; }
 
     .product-desc {
-      font-family: 'Jost', sans-serif;
+      font-family: 'Inter', sans-serif;
       font-size: 0.78rem;
       color: #9e9890;
       line-height: 1.6;
@@ -136,13 +136,13 @@ import { CartService } from '../../services/cart.service';
       border-top: 1px solid #f0ebe4;
     }
     .price-main {
-      font-family: 'Cormorant Garamond', serif;
+      font-family: 'DM Serif Display', serif;
       font-size: 1.3rem;
       font-weight: 600;
       color: #1a1410;
     }
     .price-orig {
-      font-family: 'Jost', sans-serif;
+      font-family: 'Inter', sans-serif;
       font-size: 0.78rem;
       color: #b0a898;
       text-decoration: line-through;
@@ -154,7 +154,7 @@ import { CartService } from '../../services/cart.service';
       padding: 0.4rem 0.875rem;
       background: #1a1410;
       color: #faf7f4;
-      font-family: 'Jost', sans-serif;
+      font-family: 'Inter', sans-serif;
       font-size: 0.7rem;
       font-weight: 500;
       letter-spacing: 0.1em;
@@ -209,13 +209,13 @@ import { CartService } from '../../services/cart.service';
         <div class="stock-row">
           @if (product.stock > 10) {
             <span class="stock-dot" style="background:#16a34a;"></span>
-            <span style="font-family:'Jost',sans-serif;font-size:0.72rem;color:#16a34a;letter-spacing:0.05em;">In Stock</span>
+            <span style="font-family:'Inter', sans-serif;font-size:0.72rem;color:#16a34a;letter-spacing:0.05em;">In Stock</span>
           } @else if (product.stock > 0) {
             <span class="stock-dot" style="background:#d97706;"></span>
-            <span style="font-family:'Jost',sans-serif;font-size:0.72rem;color:#d97706;letter-spacing:0.05em;">Only {{ product.stock }} left</span>
+            <span style="font-family:'Inter', sans-serif;font-size:0.72rem;color:#d97706;letter-spacing:0.05em;">Only {{ product.stock }} left</span>
           } @else {
             <span class="stock-dot" style="background:#dc2626;"></span>
-            <span style="font-family:'Jost',sans-serif;font-size:0.72rem;color:#dc2626;letter-spacing:0.05em;">Out of Stock</span>
+            <span style="font-family:'Inter', sans-serif;font-size:0.72rem;color:#dc2626;letter-spacing:0.05em;">Out of Stock</span>
           }
         </div>
 

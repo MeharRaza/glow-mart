@@ -10,9 +10,9 @@ import { Product } from '../../../models/product.model';
   standalone: true,
   imports: [CommonModule, FormsModule],
   styles: [`
-    .page-eyebrow { font-family:'Jost',sans-serif; font-size:0.65rem; font-weight:600; letter-spacing:0.25em; text-transform:uppercase; color:#c9a96e; margin-bottom:0.5rem; }
-    .page-title   { font-family:'Cormorant Garamond',Georgia,serif; font-size:2.25rem; font-weight:400; color:#1a1410; margin-bottom:0.25rem; }
-    .page-sub     { font-family:'Jost',sans-serif; font-size:0.82rem; color:#9e9890; margin-bottom:2rem; }
+    .page-eyebrow { font-family:'Inter', sans-serif; font-size:0.65rem; font-weight:600; letter-spacing:0.25em; text-transform:uppercase; color:#c9a96e; margin-bottom:0.5rem; }
+    .page-title   { font-family:'DM Serif Display', Georgia, serif; font-size:2.25rem; font-weight:400; color:#1a1410; margin-bottom:0.25rem; }
+    .page-sub     { font-family:'Inter', sans-serif; font-size:0.82rem; color:#9e9890; margin-bottom:2rem; }
     .gold-line    { height:1px; background:linear-gradient(90deg,#c9a96e,transparent); width:40px; margin-bottom:2rem; }
 
     .toolbar { display:flex; align-items:center; justify-content:space-between; gap:1rem; flex-wrap:wrap; margin-bottom:1.5rem; }
@@ -20,7 +20,7 @@ import { Product } from '../../../models/product.model';
     .search-input {
       padding:0.5rem 0.875rem;
       background:#fff; border:1px solid #ddd8d0;
-      font-family:'Jost',sans-serif; font-size:0.82rem; color:#1a1410;
+      font-family:'Inter', sans-serif; font-size:0.82rem; color:#1a1410;
       outline:none; width:260px; transition:border-color 0.2s;
     }
     .search-input::placeholder { color:#b0a898; }
@@ -30,7 +30,7 @@ import { Product } from '../../../models/product.model';
       display:flex; align-items:center; gap:0.5rem;
       padding:0.5rem 1.25rem;
       background:#1a1410; color:#faf7f4;
-      font-family:'Jost',sans-serif; font-size:0.75rem; font-weight:500;
+      font-family:'Inter', sans-serif; font-size:0.75rem; font-weight:500;
       letter-spacing:0.1em; text-transform:uppercase;
       border:none; cursor:pointer; transition:background 0.2s;
     }
@@ -44,7 +44,7 @@ import { Product } from '../../../models/product.model';
       background:#f5f0e8; border-bottom:1px solid #e8e0d6;
     }
     .table-head span {
-      font-family:'Jost',sans-serif; font-size:0.6rem; font-weight:600;
+      font-family:'Inter', sans-serif; font-size:0.6rem; font-weight:600;
       letter-spacing:0.18em; text-transform:uppercase; color:#9e9890;
     }
     .table-row {
@@ -57,26 +57,26 @@ import { Product } from '../../../models/product.model';
 
     .prod-cell { display:flex; align-items:center; gap:0.75rem; }
     .prod-img  { width:40px; height:40px; object-fit:cover; background:#f5f0e8; flex-shrink:0; }
-    .prod-name { font-family:'Jost',sans-serif; font-size:0.82rem; font-weight:500; color:#1a1410; }
-    .prod-cat  { font-family:'Jost',sans-serif; font-size:0.7rem; color:#9e9890; margin-top:1px; }
+    .prod-name { font-family:'Inter', sans-serif; font-size:0.82rem; font-weight:500; color:#1a1410; }
+    .prod-cat  { font-family:'Inter', sans-serif; font-size:0.7rem; color:#9e9890; margin-top:1px; }
 
-    .cell-text  { font-family:'Jost',sans-serif; font-size:0.8rem; color:#6b6560; }
-    .cell-price { font-family:'Cormorant Garamond',serif; font-size:1rem; font-weight:600; color:#1a1410; }
-    .cell-orig  { font-family:'Jost',sans-serif; font-size:0.78rem; color:#b0a898; text-decoration:line-through; }
+    .cell-text  { font-family:'Inter', sans-serif; font-size:0.8rem; color:#6b6560; }
+    .cell-price { font-family:'DM Serif Display', serif; font-size:1rem; font-weight:600; color:#1a1410; }
+    .cell-orig  { font-family:'Inter', sans-serif; font-size:0.78rem; color:#b0a898; text-decoration:line-through; }
 
-    .stock-ok   { font-family:'Jost',sans-serif; font-size:0.78rem; color:#16a34a; }
-    .stock-low  { font-family:'Jost',sans-serif; font-size:0.78rem; color:#d97706; }
-    .stock-out  { font-family:'Jost',sans-serif; font-size:0.78rem; color:#dc2626; }
+    .stock-ok   { font-family:'Inter', sans-serif; font-size:0.78rem; color:#16a34a; }
+    .stock-low  { font-family:'Inter', sans-serif; font-size:0.78rem; color:#d97706; }
+    .stock-out  { font-family:'Inter', sans-serif; font-size:0.78rem; color:#dc2626; }
 
-    .status-active { display:inline-flex; padding:0.2rem 0.625rem; font-family:'Jost',sans-serif; font-size:0.62rem; font-weight:600; letter-spacing:0.06em; text-transform:uppercase; background:rgba(22,163,74,0.08); border:1px solid rgba(22,163,74,0.25); color:#16a34a; }
-    .status-hidden { display:inline-flex; padding:0.2rem 0.625rem; font-family:'Jost',sans-serif; font-size:0.62rem; font-weight:600; letter-spacing:0.06em; text-transform:uppercase; background:rgba(107,101,96,0.08); border:1px solid rgba(107,101,96,0.2); color:#9e9890; }
+    .status-active { display:inline-flex; padding:0.2rem 0.625rem; font-family:'Inter', sans-serif; font-size:0.62rem; font-weight:600; letter-spacing:0.06em; text-transform:uppercase; background:rgba(22,163,74,0.08); border:1px solid rgba(22,163,74,0.25); color:#16a34a; }
+    .status-hidden { display:inline-flex; padding:0.2rem 0.625rem; font-family:'Inter', sans-serif; font-size:0.62rem; font-weight:600; letter-spacing:0.06em; text-transform:uppercase; background:rgba(107,101,96,0.08); border:1px solid rgba(107,101,96,0.2); color:#9e9890; }
 
-    .btn-edit   { padding:0.3rem 0.75rem; background:rgba(37,99,235,0.06); border:1px solid rgba(37,99,235,0.2); font-family:'Jost',sans-serif; font-size:0.7rem; color:#2563eb; cursor:pointer; transition:all 0.2s; }
+    .btn-edit   { padding:0.3rem 0.75rem; background:rgba(37,99,235,0.06); border:1px solid rgba(37,99,235,0.2); font-family:'Inter', sans-serif; font-size:0.7rem; color:#2563eb; cursor:pointer; transition:all 0.2s; }
     .btn-edit:hover   { background:rgba(37,99,235,0.12); }
-    .btn-delete { padding:0.3rem 0.75rem; background:rgba(220,38,38,0.06); border:1px solid rgba(220,38,38,0.2); font-family:'Jost',sans-serif; font-size:0.7rem; color:#dc2626; cursor:pointer; transition:all 0.2s; margin-left:0.375rem; }
+    .btn-delete { padding:0.3rem 0.75rem; background:rgba(220,38,38,0.06); border:1px solid rgba(220,38,38,0.2); font-family:'Inter', sans-serif; font-size:0.7rem; color:#dc2626; cursor:pointer; transition:all 0.2s; margin-left:0.375rem; }
     .btn-delete:hover { background:rgba(220,38,38,0.12); }
 
-    .empty-state { padding:4rem; text-align:center; font-family:'Cormorant Garamond',serif; font-size:1.25rem; color:#9e9890; }
+    .empty-state { padding:4rem; text-align:center; font-family:'DM Serif Display', serif; font-size:1.25rem; color:#9e9890; }
 
     /* ── Modal ── */
     .modal-backdrop {
@@ -94,28 +94,28 @@ import { Product } from '../../../models/product.model';
       display:flex; align-items:center; justify-content:space-between;
       padding:1.25rem 1.5rem; border-bottom:1px solid #e8e0d6;
     }
-    .modal-title { font-family:'Cormorant Garamond',serif; font-size:1.4rem; font-weight:400; color:#1a1410; }
+    .modal-title { font-family:'DM Serif Display', serif; font-size:1.4rem; font-weight:400; color:#1a1410; }
     .modal-close { background:none; border:none; cursor:pointer; color:#9e9890; padding:0.25rem; transition:color 0.2s; }
     .modal-close:hover { color:#1a1410; }
     .modal-body { padding:1.5rem; display:flex; flex-direction:column; gap:1rem; }
     .modal-footer { padding:1rem 1.5rem; border-top:1px solid #e8e0d6; display:flex; gap:0.75rem; }
 
-    .field-label { display:block; font-family:'Jost',sans-serif; font-size:0.62rem; font-weight:600; letter-spacing:0.15em; text-transform:uppercase; color:#9e9890; margin-bottom:0.375rem; }
+    .field-label { display:block; font-family:'Inter', sans-serif; font-size:0.62rem; font-weight:600; letter-spacing:0.15em; text-transform:uppercase; color:#9e9890; margin-bottom:0.375rem; }
     .field-input {
       width:100%; background:#fff; border:1px solid #ddd8d0;
       padding:0.625rem 0.875rem;
-      font-family:'Jost',sans-serif; font-size:0.875rem; color:#1a1410;
+      font-family:'Inter', sans-serif; font-size:0.875rem; color:#1a1410;
       outline:none; transition:border-color 0.2s;
     }
     .field-input::placeholder { color:#b0a898; }
     .field-input:focus { border-color:#c9a96e; }
     .field-grid { display:grid; grid-template-columns:1fr 1fr; gap:0.875rem; }
 
-    .form-error { font-family:'Jost',sans-serif; font-size:0.78rem; color:#dc2626; padding:0.5rem 0.875rem; background:rgba(220,38,38,0.06); border:1px solid rgba(220,38,38,0.2); }
+    .form-error { font-family:'Inter', sans-serif; font-size:0.78rem; color:#dc2626; padding:0.5rem 0.875rem; background:rgba(220,38,38,0.06); border:1px solid rgba(220,38,38,0.2); }
 
-    .btn-cancel-modal { flex:1; padding:0.625rem; background:#fff; border:1px solid #ddd8d0; font-family:'Jost',sans-serif; font-size:0.78rem; color:#6b6560; cursor:pointer; transition:all 0.2s; }
+    .btn-cancel-modal { flex:1; padding:0.625rem; background:#fff; border:1px solid #ddd8d0; font-family:'Inter', sans-serif; font-size:0.78rem; color:#6b6560; cursor:pointer; transition:all 0.2s; }
     .btn-cancel-modal:hover { border-color:#1a1410; color:#1a1410; }
-    .btn-save { flex:1; padding:0.625rem; background:#1a1410; border:none; font-family:'Jost',sans-serif; font-size:0.78rem; font-weight:500; letter-spacing:0.1em; text-transform:uppercase; color:#faf7f4; cursor:pointer; transition:background 0.2s; }
+    .btn-save { flex:1; padding:0.625rem; background:#1a1410; border:none; font-family:'Inter', sans-serif; font-size:0.78rem; font-weight:500; letter-spacing:0.1em; text-transform:uppercase; color:#faf7f4; cursor:pointer; transition:background 0.2s; }
     .btn-save:hover { background:#2d2520; }
   `],
   template: `
@@ -241,7 +241,7 @@ import { Product } from '../../../models/product.model';
                     <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
                     <polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
                   </svg>
-                  <span style="font-family:'Jost',sans-serif;font-size:0.78rem;color:#9e9890;">
+                  <span style="font-family:'Inter', sans-serif;font-size:0.78rem;color:#9e9890;">
                     {{ imageFileName || 'Click to upload image from PC' }}
                   </span>
                   <input type="file" accept="image/*" style="display:none;" (change)="onImageFileSelected($event)" />
@@ -249,7 +249,7 @@ import { Product } from '../../../models/product.model';
                 <!-- OR URL input -->
                 <div style="display:flex;align-items:center;gap:0.5rem;">
                   <div style="flex:1;height:1px;background:#e8e0d6;"></div>
-                  <span style="font-family:'Jost',sans-serif;font-size:0.65rem;color:#b0a898;letter-spacing:0.1em;">OR PASTE URL</span>
+                  <span style="font-family:'Inter', sans-serif;font-size:0.65rem;color:#b0a898;letter-spacing:0.1em;">OR PASTE URL</span>
                   <div style="flex:1;height:1px;background:#e8e0d6;"></div>
                 </div>
                 <input class="field-input" [(ngModel)]="form.imageUrl" type="url" placeholder="https://..." (ngModelChange)="onUrlChange()" />
@@ -257,8 +257,8 @@ import { Product } from '../../../models/product.model';
                 @if (form.imageUrl) {
                   <div style="display:flex;align-items:center;gap:0.75rem;padding:0.5rem;background:#f5f0e8;border:1px solid #e8e0d6;">
                     <img [src]="form.imageUrl" style="width:48px;height:48px;object-fit:cover;background:#e8e0d6;" alt="preview" />
-                    <span style="font-family:'Jost',sans-serif;font-size:0.72rem;color:#9e9890;flex:1;">Preview</span>
-                    <button type="button" (click)="clearImage()" style="background:none;border:none;cursor:pointer;color:#dc2626;font-size:0.72rem;font-family:'Jost',sans-serif;">✕ Remove</button>
+                    <span style="font-family:'Inter', sans-serif;font-size:0.72rem;color:#9e9890;flex:1;">Preview</span>
+                    <button type="button" (click)="clearImage()" style="background:none;border:none;cursor:pointer;color:#dc2626;font-size:0.72rem;font-family:'Inter', sans-serif;">✕ Remove</button>
                   </div>
                 }
               </div>

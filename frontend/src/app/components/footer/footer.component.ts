@@ -21,24 +21,12 @@ import { RouterLink } from '@angular/router';
     @media (max-width: 900px) { .footer-top { grid-template-columns: 1fr 1fr; } }
     @media (max-width: 480px) { .footer-top { grid-template-columns: 1fr; } }
 
-    .brand-name {
-      font-family: 'Cormorant Garamond', Georgia, serif;
-      font-size: 1.75rem;
-      font-weight: 400;
-      color: #faf7f4;
-      letter-spacing: 0.06em;
-      margin-bottom: 0.25rem;
-    }
-    .brand-tagline {
-      font-family: 'Jost', sans-serif;
-      font-size: 0.65rem;
-      letter-spacing: 0.25em;
-      text-transform: uppercase;
-      color: #c9a96e;
-      margin-bottom: 1.25rem;
-    }
+    .footer-logo-wordmark { font-family: 'Playfair Display', Georgia, serif; font-size: 26px; font-weight: 700; letter-spacing: 5px; line-height: 1; margin-bottom: 3px; }
+    .footer-logo-wordmark .shop { color: #faf7f4; }
+    .footer-logo-wordmark .zee { background: linear-gradient(135deg, #8b6010 0%, #c8920a 45%, #7a5008 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .footer-logo-tagline { font-family: 'Montserrat', 'Inter', sans-serif; font-size: 5px; font-weight: 600; letter-spacing: 2.5px; color: #c9a96e; text-transform: uppercase; margin-bottom: 1.25rem; }
     .brand-desc {
-      font-family: 'Jost', sans-serif;
+      font-family: 'Inter', sans-serif;
       font-size: 0.85rem;
       line-height: 1.8;
       color: #6b6560;
@@ -50,14 +38,14 @@ import { RouterLink } from '@angular/router';
       display: inline-flex;
       align-items: center;
       gap: 0.5rem;
-      font-family: 'Jost', sans-serif;
+      font-family: 'Inter', sans-serif;
       font-size: 0.75rem;
       color: #6b6560;
     }
     .footer-pill span:first-child { color: #c9a96e; }
 
     .col-title {
-      font-family: 'Jost', sans-serif;
+      font-family: 'Inter', sans-serif;
       font-size: 0.65rem;
       font-weight: 600;
       letter-spacing: 0.2em;
@@ -67,7 +55,7 @@ import { RouterLink } from '@angular/router';
     }
     .col-links { list-style: none; display: flex; flex-direction: column; gap: 0.75rem; }
     .col-links a, .col-links span {
-      font-family: 'Jost', sans-serif;
+      font-family: 'Inter', sans-serif;
       font-size: 0.85rem;
       color: #6b6560;
       text-decoration: none;
@@ -88,7 +76,7 @@ import { RouterLink } from '@angular/router';
       gap: 1rem;
     }
     .footer-copy {
-      font-family: 'Jost', sans-serif;
+      font-family: 'Inter', sans-serif;
       font-size: 0.75rem;
       color: #4a4540;
     }
@@ -104,10 +92,20 @@ import { RouterLink } from '@angular/router';
 
         <!-- Brand -->
         <div>
-          <div class="brand-name">Shopzee</div>
-          <div class="brand-tagline">Premium Beauty</div>
-          <p class="brand-desc">
-            Curated beauty &amp; skincare products delivered to your door. No account needed — just shop and glow.
+          <div style="display:flex;align-items:center;gap:14px;margin-bottom:1.25rem;">
+            <svg width="42" height="48" viewBox="0 0 84 96" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="6" y="30" width="72" height="58" rx="8" fill="#2a2520"/>
+              <path d="M28 30 C28 14 56 14 56 30" stroke="#c8960c" stroke-width="5.5" stroke-linecap="round" fill="none"/>
+              <rect x="6" y="30" width="72" height="8" rx="4" fill="#c8960c"/>
+              <text x="35" y="74" font-family="Georgia, serif" font-size="28" font-weight="700" fill="#f5d160" text-anchor="middle">S</text>
+              <text x="51" y="74" font-family="Georgia, serif" font-size="28" font-weight="700" fill="#ffffff" text-anchor="middle">Z</text>
+            </svg>
+            <div>
+              <div class="footer-logo-wordmark"><span class="shop">SHOP</span><span class="zee">ZEE</span></div>
+              <div class="footer-logo-tagline">Premium · Style · Delivered</div>
+            </div>
+          </div>
+          <p class="brand-desc">            Curated beauty &amp; skincare products delivered to your door. No account needed — just shop and glow.
           </p>
           <div class="footer-pills">
             <div class="footer-pill">
@@ -150,12 +148,12 @@ import { RouterLink } from '@angular/router';
 
         <!-- Seller -->
         <div>
-          <div class="col-title">Seller</div>
+          <div class="col-title">Help</div>
           <ul class="col-links">
-            <li><a routerLink="/seller/login">Seller Login</a></li>
-            <li><a routerLink="/seller/dashboard">Dashboard</a></li>
-            <li><a routerLink="/seller/products">Manage Products</a></li>
-            <li><a routerLink="/seller/orders">View Orders</a></li>
+            <li><span>Cash on Delivery</span></li>
+            <li><span>Easy Returns</span></li>
+            <li><span>WhatsApp Support</span></li>
+            <li><span>Track Your Order</span></li>
           </ul>
         </div>
 

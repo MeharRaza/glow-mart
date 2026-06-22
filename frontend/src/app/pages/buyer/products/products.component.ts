@@ -19,7 +19,7 @@ import { Product } from '../../../models/product.model';
     }
     .cat-nav-inner::-webkit-scrollbar { display: none; }
     .cat-tab {
-      font-family: 'Jost', sans-serif; font-size: 0.82rem; font-weight: 500;
+      font-family: 'Inter', sans-serif; font-size: 0.82rem; font-weight: 500;
       letter-spacing: 0.06em; color: #6b6560; white-space: nowrap;
       padding: 1rem 1.25rem; cursor: pointer;
       border-bottom: 2px solid transparent; margin-bottom: -1px;
@@ -34,17 +34,17 @@ import { Product } from '../../../models/product.model';
     .sub-panel-inner { max-width: 1280px; margin: 0 auto; padding: 1.5rem 2rem 2rem; }
     .all-cat-link {
       display: inline-flex; align-items: center; gap: 0.3rem;
-      font-family: 'Jost', sans-serif; font-size: 0.8rem; font-weight: 600;
+      font-family: 'Inter', sans-serif; font-size: 0.8rem; font-weight: 600;
       color: #1a1410; text-decoration: none; margin-bottom: 1.25rem; cursor: pointer;
     }
     .all-cat-link:hover { color: #c9a96e; }
     .sub-cols { display: grid; grid-template-columns: repeat(3, minmax(0, 200px)); gap: 0 3rem; }
     .sub-col-title {
-      font-family: 'Jost', sans-serif; font-size: 0.65rem; font-weight: 600;
+      font-family: 'Inter', sans-serif; font-size: 0.65rem; font-weight: 600;
       letter-spacing: 0.18em; text-transform: uppercase; color: #1a1410; margin-bottom: 0.75rem;
     }
     .sub-col ul { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.4rem; }
-    .sub-col ul li a { font-family: 'Jost', sans-serif; font-size: 0.82rem; color: #6b6560; text-decoration: none; transition: color 0.2s; cursor: pointer; }
+    .sub-col ul li a { font-family: 'Inter', sans-serif; font-size: 0.82rem; color: #6b6560; text-decoration: none; transition: color 0.2s; cursor: pointer; }
     .sub-col ul li a:hover { color: #1a1410; }
 
     /* ── Page ── */
@@ -56,18 +56,18 @@ import { Product } from '../../../models/product.model';
       gap: 2rem; flex-wrap: wrap;
       margin-bottom: 2.5rem; border-bottom: 1px solid #e8e0d6; padding-bottom: 2rem;
     }
-    .page-title { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 2.5rem; font-weight: 400; color: #1a1410; margin-bottom: 0.375rem; }
-    .page-count { font-family: 'Jost', sans-serif; font-size: 0.8rem; letter-spacing: 0.08em; color: #9e9890; }
+    .page-title { font-family: 'DM Serif Display', Georgia, serif; font-size: 2.5rem; font-weight: 400; color: #1a1410; margin-bottom: 0.375rem; }
+    .page-count { font-family: 'Inter', sans-serif; font-size: 0.8rem; letter-spacing: 0.08em; color: #9e9890; }
 
     .header-right { display: flex; align-items: flex-end; gap: 1.5rem; flex-wrap: wrap; }
     .ctrl-group { display: flex; flex-direction: column; gap: 0.4rem; }
     .ctrl-label {
-      font-family: 'Jost', sans-serif; font-size: 0.65rem; font-weight: 600;
+      font-family: 'Inter', sans-serif; font-size: 0.65rem; font-weight: 600;
       letter-spacing: 0.2em; text-transform: uppercase; color: #1a1410;
     }
     .search-input {
       background: #fff; border: 1px solid #ddd8d0; padding: 0.55rem 0.875rem;
-      font-family: 'Jost', sans-serif; font-size: 0.85rem; color: #1a1410;
+      font-family: 'Inter', sans-serif; font-size: 0.85rem; color: #1a1410;
       outline: none; transition: border-color 0.2s; width: 220px;
     }
     .search-input::placeholder { color: #b0a898; }
@@ -75,7 +75,7 @@ import { Product } from '../../../models/product.model';
 
     .sort-select {
       background: #fff; border: 1px solid #ddd8d0; padding: 0.55rem 0.875rem;
-      font-family: 'Jost', sans-serif; font-size: 0.82rem; color: #1a1410;
+      font-family: 'Inter', sans-serif; font-size: 0.82rem; color: #1a1410;
       outline: none; cursor: pointer;
     }
     .sort-select:focus { border-color: #c9a96e; }
@@ -87,7 +87,7 @@ import { Product } from '../../../models/product.model';
 
     .empty {
       grid-column: 1/-1; text-align: center; padding: 5rem 2rem;
-      font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; color: #b0a898;
+      font-family: 'DM Serif Display', serif; font-size: 1.5rem; color: #b0a898;
     }
   `],
   template: `

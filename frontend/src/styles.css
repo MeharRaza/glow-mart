@@ -18,8 +18,8 @@
   --color-warm-gray:    #6b6560;
   --color-warm-gray-lt: #9e9890;
 
-  --font-display: 'Cormorant Garamond', 'Playfair Display', Georgia, serif;
-  --font-body:    'Jost', 'DM Sans', system-ui, sans-serif;
+  --font-display: 'DM Serif Display', Georgia, serif;
+  --font-body:    'Inter', system-ui, sans-serif;
 
   --animate-fade-up:  fadeUp 0.7s cubic-bezier(0.22,1,0.36,1) both;
   --animate-fade-in:  fadeIn 0.5s ease both;
@@ -51,7 +51,7 @@ html { scroll-behavior: smooth; }
 body {
   background: #faf7f4;
   color: #1a1410;
-  font-family: 'Jost', 'DM Sans', system-ui, sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   line-height: 1.6;
 }
@@ -64,8 +64,8 @@ body {
 :focus-visible { outline: 2px solid rgba(184,134,11,0.5); outline-offset: 2px; }
 
 /* ── Typography ─────────────────────────────────────────────── */
-.font-display { font-family: 'Cormorant Garamond', 'Playfair Display', Georgia, serif; }
-.font-body    { font-family: 'Jost', 'DM Sans', system-ui, sans-serif; }
+.font-display { font-family: 'DM Serif Display', Georgia, serif; }
+.font-body    { font-family: 'Inter', system-ui, sans-serif; }
 
 /* ── Gold gradient text ─────────────────────────────────────── */
 .gradient-text {
@@ -117,7 +117,7 @@ body {
   padding: 0.875rem 2.5rem;
   background: #1a1410;
   color: #faf7f4;
-  font-family: 'Jost', sans-serif; font-weight: 500; font-size: 0.8125rem;
+  font-family: 'Inter', sans-serif; font-weight: 500; font-size: 0.8125rem;
   letter-spacing: 0.12em; text-transform: uppercase;
   border: 1px solid #1a1410; cursor: pointer;
   transition: all 0.3s ease;
@@ -134,7 +134,7 @@ body {
   padding: 0.875rem 2.5rem;
   background: transparent;
   color: #1a1410;
-  font-family: 'Jost', sans-serif; font-weight: 500; font-size: 0.8125rem;
+  font-family: 'Inter', sans-serif; font-weight: 500; font-size: 0.8125rem;
   letter-spacing: 0.12em; text-transform: uppercase;
   border: 1px solid #1a1410; cursor: pointer;
   transition: all 0.3s ease;
@@ -146,7 +146,7 @@ body {
   padding: 0.875rem 2.5rem;
   background: linear-gradient(135deg, #c9a96e, #b8860b);
   color: #fff;
-  font-family: 'Jost', sans-serif; font-weight: 500; font-size: 0.8125rem;
+  font-family: 'Inter', sans-serif; font-weight: 500; font-size: 0.8125rem;
   letter-spacing: 0.12em; text-transform: uppercase;
   border: none; cursor: pointer;
   transition: all 0.3s ease;
@@ -157,7 +157,7 @@ body {
 .input-field {
   width: 100%; background: #fff; border: 1px solid #ddd8d0;
   padding: 0.875rem 1.125rem; color: #1a1410;
-  font-family: 'Jost', sans-serif; font-size: 0.9375rem; outline: none;
+  font-family: 'Inter', sans-serif; font-size: 0.9375rem; outline: none;
   transition: border-color 0.2s;
 }
 .input-field::placeholder { color: #b0a898; }
@@ -167,7 +167,7 @@ body {
 .badge {
   display: inline-flex; align-items: center; gap: 0.25rem;
   padding: 0.2rem 0.75rem;
-  font-size: 0.7rem; font-weight: 500; font-family: 'Jost', sans-serif;
+  font-size: 0.7rem; font-weight: 500; font-family: 'Inter', sans-serif;
   letter-spacing: 0.08em; text-transform: uppercase;
 }
 .badge-gold   { background: rgba(201,169,110,0.12); border: 1px solid rgba(201,169,110,0.4); color: #8b6914; }

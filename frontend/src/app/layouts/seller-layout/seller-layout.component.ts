@@ -37,17 +37,13 @@ import { OrderService } from '../../services/order.service';
       padding: 0 1.5rem;
       border-bottom: 1px solid rgba(255,255,255,0.06);
     }
-    .logo-text {
-      font-family: 'Cormorant Garamond', Georgia, serif;
-      font-size: 1.4rem;
-      font-weight: 500;
-      background: linear-gradient(135deg, #c9a96e, #8b6914);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
+    .logo-text-block { display: flex; flex-direction: column; align-items: flex-start; }
+    .logo-wordmark-s { font-family: 'Playfair Display', Georgia, serif; font-size: 22px; font-weight: 700; letter-spacing: 4px; line-height: 1; margin-bottom: 2px; }
+    .logo-wordmark-s .shop { color: #faf7f4; }
+    .logo-wordmark-s .zee { background: linear-gradient(135deg, #8b6010 0%, #c8920a 45%, #7a5008 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .logo-tagline-s { font-family: 'Montserrat', 'Inter', sans-serif; font-size: 5px; font-weight: 600; letter-spacing: 2.5px; color: #c9a96e; text-transform: uppercase; }
     .logo-badge {
-      font-family: 'Jost', sans-serif;
+      font-family: 'Inter', sans-serif;
       font-size: 0.58rem;
       font-weight: 500;
       letter-spacing: 0.15em;
@@ -67,7 +63,7 @@ import { OrderService } from '../../services/order.service';
     }
 
     .nav-section-label {
-      font-family: 'Jost', sans-serif;
+      font-family: 'Inter', sans-serif;
       font-size: 0.58rem;
       font-weight: 600;
       letter-spacing: 0.2em;
@@ -83,7 +79,7 @@ import { OrderService } from '../../services/order.service';
       align-items: center;
       gap: 0.75rem;
       padding: 0.625rem 0.875rem;
-      font-family: 'Jost', sans-serif;
+      font-family: 'Inter', sans-serif;
       font-size: 0.82rem;
       font-weight: 400;
       color: #6b6560;
@@ -108,7 +104,7 @@ import { OrderService } from '../../services/order.service';
       color: #d97706;
       font-size: 0.62rem;
       font-weight: 700;
-      font-family: 'Jost', sans-serif;
+      font-family: 'Inter', sans-serif;
       padding: 0.1rem 0.45rem;
       border-radius: 99px;
       min-width: 18px;
@@ -127,7 +123,7 @@ import { OrderService } from '../../services/order.service';
       padding: 0.625rem 0.875rem;
       background: none;
       border: 1px solid transparent;
-      font-family: 'Jost', sans-serif;
+      font-family: 'Inter', sans-serif;
       font-size: 0.82rem;
       font-weight: 400;
       color: #6b6560;
@@ -173,7 +169,7 @@ import { OrderService } from '../../services/order.service';
       background: #ddd8d0;
     }
     .topbar-label {
-      font-family: 'Jost', sans-serif;
+      font-family: 'Inter', sans-serif;
       font-size: 0.7rem;
       font-weight: 500;
       letter-spacing: 0.15em;
@@ -181,7 +177,7 @@ import { OrderService } from '../../services/order.service';
       color: #9e9890;
     }
     .topbar-page {
-      font-family: 'Jost', sans-serif;
+      font-family: 'Inter', sans-serif;
       font-size: 0.82rem;
       font-weight: 500;
       color: #1a1410;
@@ -191,7 +187,7 @@ import { OrderService } from '../../services/order.service';
       display: flex;
       align-items: center;
       gap: 0.5rem;
-      font-family: 'Jost', sans-serif;
+      font-family: 'Inter', sans-serif;
       font-size: 0.75rem;
       color: #d97706;
       background: rgba(217,119,6,0.06);
@@ -226,8 +222,17 @@ import { OrderService } from '../../services/order.service';
       <!-- Sidebar -->
       <aside class="sidebar">
         <div class="sidebar-logo">
-          <span class="logo-text">Shopzee</span>
-          <span class="logo-badge">Seller</span>
+          <svg width="34" height="38" viewBox="0 0 84 96" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="6" y="30" width="72" height="58" rx="8" fill="#1a1a1a"/>
+            <path d="M28 30 C28 14 56 14 56 30" stroke="#c8960c" stroke-width="5.5" stroke-linecap="round" fill="none"/>
+            <rect x="6" y="30" width="72" height="8" rx="4" fill="#c8960c"/>
+            <text x="35" y="74" font-family="Georgia, serif" font-size="28" font-weight="700" fill="#f5d160" text-anchor="middle">S</text>
+            <text x="51" y="74" font-family="Georgia, serif" font-size="28" font-weight="700" fill="#ffffff" text-anchor="middle">Z</text>
+          </svg>
+          <div class="logo-text-block">
+            <div class="logo-wordmark-s"><span class="shop">SHOP</span><span class="zee">ZEE</span></div>
+            <div class="logo-tagline-s">Premium · Style · Delivered</div>
+          </div>
         </div>
 
         <nav class="sidebar-nav">
@@ -291,7 +296,6 @@ export class SellerLayoutComponent implements OnInit, OnDestroy {
     { path: '/seller/dashboard', label: 'Dashboard', svg: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6' },
     { path: '/seller/products',  label: 'Products',  svg: 'M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4' },
     { path: '/seller/orders',    label: 'Orders',    svg: 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01' },
-    { path: '/seller/scraper',   label: 'Scraper',   svg: 'M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4' },
   ];
 
   ngOnInit() {

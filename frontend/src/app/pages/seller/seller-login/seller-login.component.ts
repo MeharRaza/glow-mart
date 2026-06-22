@@ -48,7 +48,7 @@ import { AuthService } from '../../../services/auth.service';
       pointer-events: none;
     }
     .brand-name {
-      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-family: 'DM Serif Display', Georgia, serif;
       font-size: 2.5rem;
       font-weight: 400;
       color: #faf7f4;
@@ -57,7 +57,7 @@ import { AuthService } from '../../../services/auth.service';
       position: relative;
     }
     .brand-sub {
-      font-family: 'Jost', sans-serif;
+      font-family: 'Inter', sans-serif;
       font-size: 0.65rem;
       letter-spacing: 0.3em;
       text-transform: uppercase;
@@ -89,7 +89,7 @@ import { AuthService } from '../../../services/auth.service';
       flex-shrink: 0;
     }
     .feature-text {
-      font-family: 'Jost', sans-serif;
+      font-family: 'Inter', sans-serif;
       font-size: 0.82rem;
       color: #6b6560;
       line-height: 1.4;
@@ -114,26 +114,26 @@ import { AuthService } from '../../../services/auth.service';
     }
     .login-header { margin-bottom: 2.5rem; }
     .login-eyebrow {
-      font-family: 'Jost', sans-serif;
+      font-family: 'Inter', sans-serif;
       font-size: 0.65rem; font-weight: 500;
       letter-spacing: 0.25em; text-transform: uppercase;
       color: #c9a96e; margin-bottom: 0.75rem;
     }
     .login-title {
-      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-family: 'DM Serif Display', Georgia, serif;
       font-size: 2rem; font-weight: 400;
       color: #1a1410; line-height: 1.15;
       margin-bottom: 0.375rem;
     }
     .login-sub {
-      font-family: 'Jost', sans-serif;
+      font-family: 'Inter', sans-serif;
       font-size: 0.82rem; color: #9e9890;
     }
 
     .field-group { margin-bottom: 1rem; }
     .field-label {
       display: block;
-      font-family: 'Jost', sans-serif;
+      font-family: 'Inter', sans-serif;
       font-size: 0.65rem; font-weight: 500;
       letter-spacing: 0.15em; text-transform: uppercase;
       color: #6b6560; margin-bottom: 0.5rem;
@@ -153,7 +153,7 @@ import { AuthService } from '../../../services/auth.service';
       background: #fff;
       border: 1px solid #ddd8d0;
       padding: 0.75rem 0.875rem 0.75rem 2.5rem;
-      font-family: 'Jost', sans-serif;
+      font-family: 'Inter', sans-serif;
       font-size: 0.875rem;
       color: #1a1410;
       outline: none;
@@ -166,7 +166,7 @@ import { AuthService } from '../../../services/auth.service';
       padding: 0.625rem 0.875rem;
       background: rgba(239,68,68,0.06);
       border: 1px solid rgba(239,68,68,0.2);
-      font-family: 'Jost', sans-serif;
+      font-family: 'Inter', sans-serif;
       font-size: 0.8rem; color: #dc2626;
       margin-bottom: 1rem;
       display: flex; align-items: center; gap: 0.5rem;
@@ -177,7 +177,7 @@ import { AuthService } from '../../../services/auth.service';
       padding: 0.875rem;
       background: #1a1410;
       color: #faf7f4;
-      font-family: 'Jost', sans-serif;
+      font-family: 'Inter', sans-serif;
       font-size: 0.78rem; font-weight: 500;
       letter-spacing: 0.15em; text-transform: uppercase;
       border: none; cursor: pointer;
@@ -192,7 +192,7 @@ import { AuthService } from '../../../services/auth.service';
       border: 1px solid #e8e0d6;
     }
     .demo-label {
-      font-family: 'Jost', sans-serif;
+      font-family: 'Inter', sans-serif;
       font-size: 0.6rem; font-weight: 600;
       letter-spacing: 0.2em; text-transform: uppercase;
       color: #9e9890; margin-bottom: 0.375rem;
@@ -233,7 +233,7 @@ import { AuthService } from '../../../services/auth.service';
             </div>
             <div class="feature-text">
               <strong>Product Catalogue</strong>
-              Manage your Oriflame product listings
+              Manage your product listings
             </div>
           </div>
           <div class="feature-row">
@@ -309,14 +309,6 @@ import { AuthService } from '../../../services/auth.service';
           <button class="login-btn" (click)="login()">
             Sign In to Dashboard
           </button>
-
-          <div class="demo-box">
-            <div class="demo-label">Demo Credentials</div>
-            <div class="demo-creds">
-              <span>Email:</span> seller&#64;shopzee.pk<br>
-              <span>Password:</span> seller123
-            </div>
-          </div>
 
         </div>
       </div>

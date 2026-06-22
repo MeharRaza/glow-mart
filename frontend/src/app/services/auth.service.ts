@@ -7,7 +7,7 @@ export class AuthService {
   isLoggedIn = this._isLoggedIn.asReadonly();
 
   // Hardcoded seller creds for now — will integrate Firebase Auth
-  private SELLER_EMAIL = 'seller@glowmart.pk';
+  private SELLER_EMAIL = 'seller@shopzee.pk';
   private SELLER_PASSWORD = 'seller123';
 
   constructor(private router: Router) {

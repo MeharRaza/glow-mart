@@ -13,7 +13,9 @@ import { Product } from '../../../models/product.model';
 
     /* ── Hero ─────────────────────────────────────────────── */
     .hero {
-      min-height: 92vh;
+      min-height: 0;
+      height: calc(100vh - 106px);
+      max-height: 570px;
       display: grid;
       grid-template-columns: 1fr 1fr;
       align-items: center;
@@ -21,31 +23,31 @@ import { Product } from '../../../models/product.model';
       overflow: hidden;
     }
     @media (max-width: 900px) {
-      .hero { grid-template-columns: 1fr; }
+      .hero { grid-template-columns: 1fr; height: auto; max-height: none; }
       .hero-carousel-side { display: none; }
     }
 
     /* Left content */
     .hero-content {
-      padding: 6rem 3rem 6rem 8rem;
+      padding: 2rem 3rem 2rem 10rem;
       display: flex; flex-direction: column; justify-content: center;
     }
-    @media (max-width: 1200px) { .hero-content { padding: 4rem 2rem 4rem 4rem; } }
+    @media (max-width: 1200px) { .hero-content { padding: 2rem 2rem 2rem 5rem; } }
 
     .hero-eyebrow {
-      font-family: 'Jost', sans-serif;
+      font-family: 'Inter', sans-serif;
       font-size: 0.7rem; font-weight: 500;
       letter-spacing: 0.3em; text-transform: uppercase;
-      color: #c9a96e; margin-bottom: 1.5rem;
+      color: #c9a96e; margin-bottom: 0.75rem;
       display: flex; align-items: center; gap: 0.75rem;
     }
     .hero-eyebrow::after { content: ''; width: 40px; height: 1px; background: #c9a96e; }
 
     .hero-title {
-      font-family: 'Cormorant Garamond', Georgia, serif;
-      font-size: clamp(3.2rem, 5vw, 5.5rem);
+      font-family: 'DM Serif Display', Georgia, serif;
+      font-size: clamp(2.4rem, 4vw, 4rem);
       font-weight: 300; line-height: 1.05;
-      color: #1a1410; margin-bottom: 1.5rem;
+      color: #1a1410; margin-bottom: 1rem;
     }
     .hero-title em {
       font-style: italic; font-weight: 400;
@@ -54,55 +56,66 @@ import { Product } from '../../../models/product.model';
     }
 
     .hero-desc {
-      font-family: 'Jost', sans-serif;
-      font-size: 0.95rem; color: #6b6560;
-      line-height: 1.8; max-width: 420px; margin-bottom: 2.5rem;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.88rem; color: #6b6560;
+      line-height: 1.7; max-width: 380px; margin-bottom: 1.75rem;
     }
 
-    .hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 3rem; }
+    .hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 2rem; }
 
     .hero-stats {
-      display: flex; gap: 2.5rem;
-      padding-top: 2rem; border-top: 1px solid #ddd8d0;
+      display: flex; gap: 0;
+      padding-top: 1.5rem; border-top: 1px solid #ddd8d0;
     }
+    .stat-item {
+      display: flex; flex-direction: column;
+      padding-right: 2rem; margin-right: 2rem;
+      border-right: 1px solid #e8e0d6;
+    }
+    .stat-item:last-child { border-right: none; padding-right: 0; margin-right: 0; }
     .stat-num {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.75rem; font-weight: 600; color: #1a1410; line-height: 1;
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.75rem; font-weight: 400; line-height: 1;
+      background: linear-gradient(135deg, #c9a96e, #8b6914);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
     }
     .stat-label {
-      font-family: 'Jost', sans-serif; font-size: 0.7rem;
-      letter-spacing: 0.1em; text-transform: uppercase; color: #9e9890; margin-top: 0.25rem;
+      font-family: 'Inter', sans-serif; font-size: 0.6rem;
+      letter-spacing: 0.18em; text-transform: uppercase; color: #9e9890; margin-top: 0.3rem;
     }
 
     /* ── Right: Cross Carousel ───────────────────────────── */
     .hero-carousel-side {
       position: relative;
       height: 100%;
-      min-height: 92vh;
+      min-height: 0;
       display: flex;
       align-items: center;
       justify-content: center;
       overflow: hidden;
+      flex: 1.3;
+      padding-right: 4rem;
     }
 
     .carousel-track {
       position: relative;
-      width: 320px;
+      width: 460px;
       height: 480px;
+      overflow: visible;
     }
 
     .c-card {
       position: absolute;
-      width: 200px;
-      height: 270px;
+      width: 150px;
+      height: 200px;
       border-radius: 4px;
       overflow: hidden;
       cursor: pointer;
       transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1);
       top: 50%;
       left: 50%;
-      margin-top: -135px;
-      margin-left: -100px;
+      margin-top: -100px;
+      margin-left: -75px;
     }
 
     .c-card img {
@@ -114,45 +127,45 @@ import { Product } from '../../../models/product.model';
     /* CENTER — active */
     .c-card.pos-center {
       transform: translate(0, 0) scale(1);
-      z-index: 5;
+      z-index: 10;
       filter: none;
-      box-shadow: 0 28px 70px rgba(26,20,16,0.30);
-      width: 220px;
-      height: 300px;
-      margin-top: -150px;
-      margin-left: -110px;
+      box-shadow: 0 20px 50px rgba(26,20,16,0.25);
+      width: 165px;
+      height: 220px;
+      margin-top: -110px;
+      margin-left: -82px;
     }
 
     /* TOP */
     .c-card.pos-top {
-      transform: translate(0, -230px) scale(0.72);
+      transform: translate(0, -200px) scale(0.6);
       z-index: 3;
-      filter: blur(2.5px) brightness(0.6);
-      box-shadow: 0 8px 24px rgba(26,20,16,0.12);
+      filter: blur(2.5px) brightness(0.5);
+      opacity: 0.75;
     }
 
     /* BOTTOM */
     .c-card.pos-bottom {
-      transform: translate(0, 230px) scale(0.72);
+      transform: translate(0, 200px) scale(0.6);
       z-index: 3;
-      filter: blur(2.5px) brightness(0.6);
-      box-shadow: 0 8px 24px rgba(26,20,16,0.12);
+      filter: blur(2.5px) brightness(0.5);
+      opacity: 0.75;
     }
 
     /* LEFT */
     .c-card.pos-left {
-      transform: translate(-230px, 0) scale(0.72);
+      transform: translate(-185px, 0) scale(0.65);
       z-index: 3;
-      filter: blur(2.5px) brightness(0.6);
-      box-shadow: 0 8px 24px rgba(26,20,16,0.12);
+      filter: blur(2px) brightness(0.55);
+      opacity: 0.85;
     }
 
     /* RIGHT */
     .c-card.pos-right {
-      transform: translate(230px, 0) scale(0.72);
+      transform: translate(185px, 0) scale(0.65);
       z-index: 3;
-      filter: blur(2.5px) brightness(0.6);
-      box-shadow: 0 8px 24px rgba(26,20,16,0.12);
+      filter: blur(2px) brightness(0.55);
+      opacity: 0.85;
     }
 
     /* Hidden — extra slides waiting off-screen */
@@ -175,12 +188,12 @@ import { Product } from '../../../models/product.model';
     .c-card.pos-center .c-card-label { opacity: 1; }
 
     .c-label-cat {
-      font-family: 'Jost', sans-serif; font-size: 0.6rem;
+      font-family: 'Inter', sans-serif; font-size: 0.6rem;
       letter-spacing: 0.2em; text-transform: uppercase;
       color: #c9a96e; margin-bottom: 0.2rem;
     }
     .c-label-name {
-      font-family: 'Cormorant Garamond', serif; font-size: 1.1rem;
+      font-family: 'DM Serif Display', serif; font-size: 1.1rem;
       font-weight: 500; color: #fff;
     }
 
@@ -198,16 +211,22 @@ import { Product } from '../../../models/product.model';
     .cdot.active { width: 36px; background: #c9a96e; }
 
     /* ── Marquee ──────────────────────────────────────────── */
-    .marquee-bar { padding: 1.1rem 0; overflow: hidden; border-bottom: 1px solid #e8e0d6; }
+    .marquee-bar { padding: 0.75rem 0; overflow: hidden; border-top: 1px solid #e8e0d6; border-bottom: 1px solid #e8e0d6; background: #faf7f4; }
+    .marquee-track { display: flex; gap: 2.5rem; align-items: center; width: max-content; animation: marqueeScroll 30s linear infinite; }
+    .marquee-track:hover { animation-play-state: paused; }
+    @keyframes marqueeScroll {
+      0%   { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
 
     /* ── Section header ───────────────────────────────────── */
     .section-header { text-align: center; margin-bottom: 3.5rem; }
     .section-eyebrow {
-      font-family: 'Jost', sans-serif; font-size: 0.7rem; font-weight: 500;
+      font-family: 'Inter', sans-serif; font-size: 0.7rem; font-weight: 500;
       letter-spacing: 0.25em; text-transform: uppercase; color: #c9a96e; margin-bottom: 0.875rem;
     }
     .section-title {
-      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-family: 'DM Serif Display', Georgia, serif;
       font-size: clamp(2rem, 3.5vw, 3rem); font-weight: 400; color: #1a1410; line-height: 1.15;
     }
     .section-title em { font-style: italic; }
@@ -225,9 +244,9 @@ import { Product } from '../../../models/product.model';
     .cat-card:hover .cat-img img { transform: scale(1.08); }
     .cat-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(26,20,16,0) 40%, rgba(26,20,16,0.75) 100%); }
     .cat-info { position: absolute; bottom: 0; left: 0; right: 0; padding: 1.25rem 1rem; }
-    .cat-name { font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; font-weight: 500; color: #fff; margin-bottom: 0.15rem; }
-    .cat-desc { font-family: 'Jost', sans-serif; font-size: 0.72rem; color: rgba(255,255,255,0.6); margin-bottom: 0.5rem; }
-    .cat-arrow { font-family: 'Jost', sans-serif; font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; color: #c9a96e; opacity: 0; transform: translateY(6px); transition: all 0.3s ease; display: flex; align-items: center; gap: 4px; }
+    .cat-name { font-family: 'DM Serif Display', serif; font-size: 1.2rem; font-weight: 500; color: #fff; margin-bottom: 0.15rem; }
+    .cat-desc { font-family: 'Inter', sans-serif; font-size: 0.72rem; color: rgba(255,255,255,0.6); margin-bottom: 0.5rem; }
+    .cat-arrow { font-family: 'Inter', sans-serif; font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; color: #c9a96e; opacity: 0; transform: translateY(6px); transition: all 0.3s ease; display: flex; align-items: center; gap: 4px; }
     .cat-card:hover .cat-arrow { opacity: 1; transform: translateY(0); }
 
     /* ── Products grid ────────────────────────────────────── */
@@ -236,23 +255,104 @@ import { Product } from '../../../models/product.model';
     @media (max-width: 480px) { .products-grid { grid-template-columns: 1fr; } }
 
     /* ── How it works ─────────────────────────────────────── */
-    .steps-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 0; }
-    @media (max-width: 768px) { .steps-grid { grid-template-columns: 1fr; } }
-    .step-item { padding: 3rem 2.5rem; border-right: 1px solid #e8e0d6; text-align: center; }
-    .step-item:last-child { border-right: none; }
-    @media (max-width: 768px) { .step-item { border-right: none; border-bottom: 1px solid #e8e0d6; } .step-item:last-child { border-bottom: none; } }
-    .step-num { font-family: 'Cormorant Garamond', serif; font-size: 3.5rem; font-weight: 300; color: #e8e0d6; line-height: 1; margin-bottom: 1rem; }
-    .step-icon { display:flex; justify-content:center; margin-bottom: 1rem; }
-    .step-title { font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; font-weight: 500; color: #1a1410; margin-bottom: 0.75rem; }
-    .step-desc { font-family: 'Jost', sans-serif; font-size: 0.85rem; color: #9e9890; line-height: 1.7; }
+    .hiw-section { background: #f5f0e8; padding: 7rem 2rem; position: relative; overflow: hidden; border-top: 1px solid #e8e0d6; border-bottom: 1px solid #e8e0d6; }
+    .hiw-section::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 80% 50% at 50% 0%, rgba(201,169,110,0.1) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hiw-eyebrow {
+      font-family: 'Inter', sans-serif; font-size: 0.65rem; font-weight: 600;
+      letter-spacing: 0.3em; text-transform: uppercase; color: #c9a96e;
+      margin-bottom: 1rem; display: flex; align-items: center; justify-content: center; gap: 0.75rem;
+    }
+    .hiw-eyebrow::before, .hiw-eyebrow::after { content: ''; width: 36px; height: 1px; background: rgba(201,169,110,0.5); }
+    .hiw-title {
+      font-family: 'DM Serif Display', Georgia, serif;
+      font-size: clamp(2.2rem, 4vw, 3.2rem); font-weight: 400;
+      color: #1a1410; text-align: center; margin-bottom: 0.75rem; line-height: 1.15;
+    }
+    .hiw-title em { font-style: italic; color: #c9a96e; }
+    .hiw-sub {
+      font-family: 'Inter', sans-serif; font-size: 0.9rem; color: #9e9890;
+      text-align: center; margin-bottom: 4rem; max-width: 440px; margin-left: auto; margin-right: auto;
+    }
+    .hiw-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.5px; max-width: 1100px; margin: 0 auto; }
+    @media (max-width: 768px) { .hiw-grid { grid-template-columns: 1fr; gap: 1.5px; } }
+
+    .hiw-card {
+      position: relative;
+      background: #fff;
+      padding: 3rem 2.5rem 2.5rem;
+      display: flex; flex-direction: column; align-items: flex-start;
+      border: 1px solid #e8e0d6;
+      transition: background 0.3s ease, box-shadow 0.3s ease;
+      overflow: hidden;
+    }
+    .hiw-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, transparent, #c9a96e, transparent);
+      opacity: 0; transition: opacity 0.3s;
+    }
+    .hiw-card:hover { background: #faf7f4; box-shadow: 0 12px 40px rgba(26,20,16,0.07); }
+    .hiw-card:hover::before { opacity: 1; }
+
+    .hiw-step-num {
+      font-family: 'DM Serif Display', serif;
+      font-size: 5rem; font-weight: 400; line-height: 1;
+      background: linear-gradient(135deg, #c9a96e, #8b6914);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      opacity: 0.5;
+      position: absolute; top: 1.25rem; right: 1.75rem;
+      transition: opacity 0.3s;
+    }
+    .hiw-card:hover .hiw-step-num { opacity: 0.8; }
+
+    .hiw-icon-wrap {
+      width: 56px; height: 56px;
+      border: 1px solid rgba(201,169,110,0.3);
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 1.75rem;
+      background: rgba(201,169,110,0.06);
+      transition: all 0.3s;
+    }
+    .hiw-card:hover .hiw-icon-wrap {
+      border-color: rgba(201,169,110,0.7);
+      background: rgba(201,169,110,0.12);
+    }
+
+    .hiw-connector {
+      position: absolute; top: 50%; right: -1px;
+      width: 1.5px; height: 40px;
+      background: linear-gradient(180deg, transparent, #c9a96e40, transparent);
+      transform: translateY(-50%);
+    }
+
+    .hiw-card-title {
+      font-family: 'DM Serif Display', Georgia, serif;
+      font-size: 1.4rem; font-weight: 400; color: #1a1410;
+      margin-bottom: 0.875rem; line-height: 1.2;
+    }
+    .hiw-card-desc {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.855rem; color: #6b6560; line-height: 1.75;
+    }
+    .hiw-card-tag {
+      margin-top: 1.75rem;
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      font-family: 'Inter', sans-serif; font-size: 0.7rem; font-weight: 500;
+      letter-spacing: 0.12em; text-transform: uppercase; color: #c9a96e;
+    }
 
     /* ── CTA banner ───────────────────────────────────────── */
     .cta-banner { background: rgba(250,247,244,0.96); padding: 5rem 2rem; text-align: center; position: relative; overflow: hidden; border-top: 1px solid #e8e0d6; }
     .cta-banner::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, #c9a96e, transparent); pointer-events: none; }
-    .cta-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 300; color: #1a1410; line-height: 1.15; margin-bottom: 1.25rem; letter-spacing: 0.02em; }
+    .cta-title { font-family: 'DM Serif Display', serif; font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 300; color: #1a1410; line-height: 1.15; margin-bottom: 1.25rem; letter-spacing: 0.02em; }
     .cta-title em { font-style: italic; background: linear-gradient(135deg, #c9a96e, #8b6914); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-    .cta-sub { font-family: 'Jost', sans-serif; font-size: 0.85rem; letter-spacing: 0.1em; color: #6b6560; margin-bottom: 2.5rem; max-width: 400px; margin-left: auto; margin-right: auto; }
-    .cta-eyebrow { font-family: 'Jost', sans-serif; font-size: 0.65rem; font-weight: 500; letter-spacing: 0.3em; text-transform: uppercase; color: #c9a96e; margin-bottom: 1.25rem; display: flex; align-items: center; justify-content: center; gap: 0.75rem; }
+    .cta-sub { font-family: 'Inter', sans-serif; font-size: 0.85rem; letter-spacing: 0.1em; color: #6b6560; margin-bottom: 2.5rem; max-width: 400px; margin-left: auto; margin-right: auto; }
+    .cta-eyebrow { font-family: 'Inter', sans-serif; font-size: 0.65rem; font-weight: 500; letter-spacing: 0.3em; text-transform: uppercase; color: #c9a96e; margin-bottom: 1.25rem; display: flex; align-items: center; justify-content: center; gap: 0.75rem; }
     .cta-eyebrow::before, .cta-eyebrow::after { content: ''; width: 40px; height: 1px; background: rgba(201,169,110,0.5); }
   `],
   template: `
@@ -276,7 +376,7 @@ import { Product } from '../../../models/product.model';
         </div>
         <div class="hero-stats">
           @for (s of stats; track s.label) {
-            <div>
+            <div class="stat-item">
               <div class="stat-num">{{ s.num }}</div>
               <div class="stat-label">{{ s.label }}</div>
             </div>
@@ -298,22 +398,17 @@ import { Product } from '../../../models/product.model';
           }
         </div>
 
-        <!-- Dots -->
-        <div class="carousel-dots">
-          @for (slide of heroSlides; track slide.id; let i = $index) {
-            <button class="cdot" [class.active]="currentSlide() === i" (click)="goToSlide(i)"></button>
-          }
-        </div>
+      
       </div>
 
     </section>
 
     <!-- ══════════════════════════════════════════ MARQUEE ══ -->
     <div class="marquee-bar">
-      <div style="display:flex;gap:3rem;align-items:center;">
+      <div class="marquee-track">
         @for (item of marqueeItems.concat(marqueeItems); track $index) {
-          <span style="font-family:'Jost',sans-serif;font-size:18px;font-weight:600;letter-spacing:0.18em;text-transform:uppercase;color:#1a1410;white-space:nowrap;flex-shrink:0;display:flex;align-items:center;gap:0.75rem;">
-            <svg width="8" height="8" viewBox="0 0 8 8" fill="#c9a96e"><rect x="4" y="0" width="5.66" height="5.66" transform="rotate(45 4 0)"/></svg>
+          <span style="font-family:'Inter', sans-serif;font-size:11px;font-weight:600;letter-spacing:0.18em;text-transform:uppercase;color:#1a1410;white-space:nowrap;flex-shrink:0;display:flex;align-items:center;gap:0.6rem;">
+            <svg width="6" height="6" viewBox="0 0 8 8" fill="#c9a96e"><rect x="4" y="0" width="5.66" height="5.66" transform="rotate(45 4 0)"/></svg>
             {{ item }}
           </span>
         }
@@ -354,7 +449,7 @@ import { Product } from '../../../models/product.model';
           <h2 class="section-title" style="text-align:left;">Featured <em>Products</em></h2>
         </div>
         <a routerLink="/products"
-           style="font-family:'Jost',sans-serif;font-size:0.75rem;letter-spacing:0.15em;text-transform:uppercase;color:#1a1410;text-decoration:none;border-bottom:1px solid #1a1410;padding-bottom:2px;display:inline-flex;align-items:center;gap:0.5rem;"
+           style="font-family:'Inter', sans-serif;font-size:0.75rem;letter-spacing:0.15em;text-transform:uppercase;color:#1a1410;text-decoration:none;border-bottom:1px solid #1a1410;padding-bottom:2px;display:inline-flex;align-items:center;gap:0.5rem;"
            onmouseover="this.style.color='#c9a96e';this.style.borderColor='#c9a96e'"
            onmouseout="this.style.color='#1a1410';this.style.borderColor='#1a1410'">
           View All
@@ -369,32 +464,67 @@ import { Product } from '../../../models/product.model';
     </section>
 
     <!-- ══════════════════════════════════════════ HOW IT WORKS ══ -->
-    <section style="background:#f5f0e8;border-top:1px solid #e8e0d6;border-bottom:1px solid #e8e0d6;">
-      <div style="max-width:1280px;margin:0 auto;padding:5rem 2rem 4rem;">
-        <div class="section-header">
-          <div class="section-eyebrow">The Process</div>
-          <h2 class="section-title">How It <em>Works</em></h2>
+    <section class="hiw-section">
+      <div class="hiw-eyebrow">The Process</div>
+      <h2 class="hiw-title">How It <em>Works</em></h2>
+      <p class="hiw-sub">From browse to doorstep in three simple steps — no account needed.</p>
+
+      <div class="hiw-grid">
+
+        <!-- Step 1 -->
+        <div class="hiw-card">
+          <div class="hiw-step-num">01</div>
+          <div class="hiw-icon-wrap">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#c9a96e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
+            </svg>
+          </div>
+          <div class="hiw-card-title">Browse &amp; Select</div>
+          <div class="hiw-card-desc">Explore thousands of products across fashion, beauty, electronics &amp; more. Filter by category, price or style.</div>
+          <div class="hiw-card-tag">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            No login required
+          </div>
+          <div class="hiw-connector"></div>
         </div>
-      </div>
-      <div style="max-width:1280px;margin:0 auto;padding:0 2rem 5rem;">
-        <div class="steps-grid">
-          @for (step of steps; track step.no) {
-            <div class="step-item">
-              <div class="step-num">0{{ step.no }}</div>
-              <div class="step-icon">
-                <svg [attr.viewBox]="step.svg.viewBox" width="36" height="36" fill="none" stroke="#c9a96e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                  <path *ngFor="let d of step.svg.paths" [attr.d]="d"/>
-                </svg>
-              </div>
-              <div class="step-title">{{ step.title }}</div>
-              <div class="step-desc">{{ step.desc }}</div>
-            </div>
-          }
+
+        <!-- Step 2 -->
+        <div class="hiw-card">
+          <div class="hiw-step-num">02</div>
+          <div class="hiw-icon-wrap">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#c9a96e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+            </svg>
+          </div>
+          <div class="hiw-card-title">Place Your Order</div>
+          <div class="hiw-card-desc">Add items to cart, enter your address and phone number. Checkout takes under 60 seconds — simple and fast.</div>
+          <div class="hiw-card-tag">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Done in 60 seconds
+          </div>
+          <div class="hiw-connector"></div>
         </div>
+
+        <!-- Step 3 -->
+        <div class="hiw-card">
+          <div class="hiw-step-num">03</div>
+          <div class="hiw-icon-wrap">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#c9a96e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0"/>
+            </svg>
+          </div>
+          <div class="hiw-card-title">We Deliver</div>
+          <div class="hiw-card-desc">Your order arrives at your door across Pakistan. Pay cash on delivery — no upfront payment needed.</div>
+          <div class="hiw-card-tag">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Cash on delivery
+          </div>
+        </div>
+
       </div>
     </section>
 
-    <!-- ══════════════════════════════════════════ TRUST STRIP ══ -->
+    <!-- ═════════TRUST STRIP ══ -->
     <section style="padding:4rem 2rem;max-width:1280px;margin:0 auto;">
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:2rem;">
         @for (t of trust; track t.label) {
@@ -404,8 +534,8 @@ import { Product } from '../../../models/product.model';
                 <path *ngFor="let d of t.svg.paths" [attr.d]="d"/>
               </svg>
             </div>
-            <div style="font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:500;color:#1a1410;margin-bottom:0.375rem;">{{ t.label }}</div>
-            <div style="font-family:'Jost',sans-serif;font-size:0.8rem;color:#9e9890;">{{ t.desc }}</div>
+            <div style="font-family:'DM Serif Display', serif;font-size:1.1rem;font-weight:500;color:#1a1410;margin-bottom:0.375rem;">{{ t.label }}</div>
+            <div style="font-family:'Inter', sans-serif;font-size:0.8rem;color:#9e9890;">{{ t.desc }}</div>
           </div>
         }
       </div>
