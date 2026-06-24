@@ -5,7 +5,7 @@ import { timeout } from 'rxjs/operators';
 import { Order } from '../models/order.model';
 
 // Production API URL - Railway backend
-const RAILWAY_URL = 'https://glow-mart-production.up.railway.app/api';
+const RAILWAY_URL = 'http://localhost:8001/api';
 
 @Injectable({ providedIn: 'root' })
 export class OrderService {

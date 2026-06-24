@@ -1,5 +1,5 @@
 """
-PostgreSQL database connection and table definitions using SQLAlchemy.
+SQLite database connection and table definitions using SQLAlchemy.
 """
 from sqlalchemy import (
     create_engine, Column, String, Float, Integer,
@@ -9,12 +9,16 @@ from sqlalchemy.orm import declarative_base, sessionmaker
 from datetime import datetime
 import os
 
+# Use SQLite locally — file will be created at backend/shopzee.db
 DATABASE_URL = os.getenv(
     'DATABASE_URL',
-    'postgresql://postgres:Meharraza786.@localhost:5432/glowmart'
+    'sqlite:///./shopzee.db'
 )
 
-engine = create_engine(DATABASE_URL, echo=False)
+# SQLite needs check_same_thread=False
+connect_args = {"check_same_thread": False} if DATABASE_URL.startswith("sqlite") else {}
+
+engine = create_engine(DATABASE_URL, connect_args=connect_args, echo=False)
 SessionLocal = sessionmaker(bind=engine, autocommit=False, autoflush=False)
 Base = declarative_base()
 
@@ -73,7 +77,8 @@ class ReviewDB(Base):
 def init_db():
     """Create all tables if they don't exist."""
     Base.metadata.create_all(bind=engine)
-    print('[DB] ✓ PostgreSQL — glowmart database ready')
+    db_type = "SQLite" if DATABASE_URL.startswith("sqlite") else "PostgreSQL"
+    print(f'[DB] ✓ {db_type} — database ready')
 
 
 def get_db():

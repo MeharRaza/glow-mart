@@ -7,7 +7,7 @@ import { Product } from '../models/product.model';
 @Injectable({ providedIn: 'root' })
 export class ProductService {
   private http = inject(HttpClient);
-  private apiUrl = 'https://glow-mart-production.up.railway.app/api';
+  private apiUrl = 'http://localhost:8001/api';
 
   // Fallback mock products (used only when API is unreachable)
   private mockProducts: Product[] = [

@@ -382,7 +382,7 @@ export class ProductDetailComponent implements OnInit {
   reviews = signal<Review[]>([]);
   qty = 1;
 
-  private apiUrl = 'https://glow-mart-production.up.railway.app/api';
+  private apiUrl = 'http://localhost:8001/api';
 
   discount = computed(() => {
     const p = this.product();

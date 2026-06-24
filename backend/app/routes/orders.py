@@ -1,6 +1,5 @@
 from fastapi import APIRouter, HTTPException, BackgroundTasks, Depends
 from sqlalchemy.orm import Session
-from sqlalchemy import text
 from app.models.order import Order
 from app.database import OrderDB, get_db
 from app.email_service import send_order_notification
@@ -45,57 +44,36 @@ def get_order_count(db: Session = Depends(get_db)):
 
 @router.get('/')
 def get_orders(db: Session = Depends(get_db)):
-    result = db.execute(text("""
-        SELECT id, "buyerName", "buyerPhone", "buyerEmail",
-               "buyerAddress", "buyerCity", items, total,
-               status, "paymentMethod", notes, "trackingId",
-               "createdAt", "updatedAt"
-        FROM orders
-        ORDER BY "createdAt" DESC
-    """))
-    rows = result.mappings().all()
-    return [dict(r) for r in rows]
+    rows = db.query(OrderDB).order_by(OrderDB.createdAt.desc()).all()
+    return [_row_to_dict(r) for r in rows]
 
 
 @router.post('/')
 def place_order(order: Order, background_tasks: BackgroundTasks, db: Session = Depends(get_db)):
     import json
-    order_id   = f'GM-{str(uuid.uuid4())[:6].upper()}'
+    order_id   = f'SZ-{str(uuid.uuid4())[:6].upper()}'
     items_json = json.dumps([i.model_dump() for i in order.items])
 
-    db.execute(text("""
-        INSERT INTO orders
-            (id, "buyerName", "buyerPhone", "buyerEmail",
-             "buyerAddress", "buyerCity", items, total,
-             status, "paymentMethod", notes, "trackingId",
-             "createdAt", "updatedAt")
-        VALUES
-            (:id, :buyerName, :buyerPhone, :buyerEmail,
-             :buyerAddress, :buyerCity, CAST(:items AS jsonb), :total,
-             'pending', 'cod', :notes, NULL,
-             NOW(), NOW())
-    """), {
-        'id':           order_id,
-        'buyerName':    order.buyerName,
-        'buyerPhone':   order.buyerPhone,
-        'buyerEmail':   order.buyerEmail,
-        'buyerAddress': order.buyerAddress,
-        'buyerCity':    order.buyerCity,
-        'items':        items_json,
-        'total':        order.total,
-        'notes':        order.notes,
-    })
+    new_order = OrderDB(
+        id           = order_id,
+        buyerName    = order.buyerName,
+        buyerPhone   = order.buyerPhone,
+        buyerEmail   = order.buyerEmail,
+        buyerAddress = order.buyerAddress,
+        buyerCity    = order.buyerCity,
+        items        = [i.model_dump() for i in order.items],
+        total        = order.total,
+        status       = 'pending',
+        paymentMethod= 'cod',
+        notes        = order.notes,
+        createdAt    = datetime.utcnow(),
+        updatedAt    = datetime.utcnow(),
+    )
+    db.add(new_order)
     db.commit()
+    db.refresh(new_order)
 
-    result = db.execute(text("""
-        SELECT id, "buyerName", "buyerPhone", "buyerEmail",
-               "buyerAddress", "buyerCity", items, total,
-               status, "paymentMethod", notes, "trackingId",
-               "createdAt", "updatedAt"
-        FROM orders WHERE id = :id
-    """), {'id': order_id}).mappings().one()
-
-    result_dict = dict(result)
+    result_dict = _row_to_dict(new_order)
     background_tasks.add_task(send_order_notification, result_dict)
     return result_dict
 
