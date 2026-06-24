@@ -1,5 +1,5 @@
 """
-SQLite database connection and table definitions using SQLAlchemy.
+Database connection and table definitions using SQLAlchemy.
 """
 from sqlalchemy import (
     create_engine, Column, String, Float, Integer,
@@ -9,13 +9,11 @@ from sqlalchemy.orm import declarative_base, sessionmaker
 from datetime import datetime
 import os
 
-# Use SQLite locally — file will be created at backend/shopzee.db
 DATABASE_URL = os.getenv(
     'DATABASE_URL',
-    'sqlite:///./shopzee.db'
+    'postgresql://postgres:10220@localhost:5432/shopzee-db'
 )
 
-# SQLite needs check_same_thread=False
 connect_args = {"check_same_thread": False} if DATABASE_URL.startswith("sqlite") else {}
 
 engine = create_engine(DATABASE_URL, connect_args=connect_args, echo=False)
