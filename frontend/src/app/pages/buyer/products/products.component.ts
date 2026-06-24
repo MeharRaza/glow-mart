@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal, computed } from '@angular/core';
+import { Component, OnInit, inject, signal, computed, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
@@ -18,11 +18,29 @@ import { Product } from '../../../models/product.model';
       background: #faf7f4;
       position: sticky; top: 106px; z-index: 50;
     }
+    .cat-nav-wrap {
+      position: relative;
+      max-width: 1280px; margin: 0 auto;
+    }
     .cat-nav-inner {
-      max-width: 1280px; margin: 0 auto; padding: 0 2rem;
+      padding: 0 2.5rem;
       display: flex; overflow-x: auto; overflow-y: visible; gap: 0;
     }
     .cat-nav-inner::-webkit-scrollbar { display: none; }
+
+    /* scroll arrows */
+    .scroll-arrow {
+      position: absolute; top: 0; bottom: 0;
+      width: 2.5rem;
+      display: flex; align-items: center; justify-content: center;
+      background: linear-gradient(to right, #faf7f4 60%, transparent);
+      border: none; cursor: pointer; z-index: 10;
+      color: #6b6560; font-size: 1rem;
+      transition: color 0.2s;
+    }
+    .scroll-arrow:hover { color: #1a1410; }
+    .scroll-arrow.left  { left: 0; background: linear-gradient(to right, #faf7f4 60%, transparent); }
+    .scroll-arrow.right { right: 0; background: linear-gradient(to left, #faf7f4 60%, transparent); }
 
     .cat-tab-wrap { position: relative; flex-shrink: 0; }
 
@@ -128,53 +146,61 @@ import { Product } from '../../../models/product.model';
   template: `
     <!-- ── Category tab bar with dropdowns ── -->
     <div class="cat-nav">
-      <div class="cat-nav-inner">
+      <div class="cat-nav-wrap">
+        <!-- Left arrow -->
+        <button class="scroll-arrow left" (click)="scrollNav(-200)">‹</button>
 
-        <!-- All tab -->
-        <div class="cat-tab-wrap">
-          <button class="cat-tab all-tab"
-                  [class.active]="selectedCategory() === '' && !selectedSub()"
-                  (click)="selectCategory('', '')">
-            All
-          </button>
+        <div class="cat-nav-inner" #navInner>
+
+          <!-- All tab -->
+          <div class="cat-tab-wrap">
+            <button class="cat-tab all-tab"
+                    [class.active]="selectedCategory() === '' && !selectedSub()"
+                    (click)="selectCategory('', '')">
+              All
+            </button>
+          </div>
+
+          <!-- Category tabs with subcategory dropdown -->
+          @for (cat of dbCategories(); track cat.id) {
+            <div class="cat-tab-wrap"
+                 (mouseenter)="onTabMouseEnter($event, cat.id)"
+                 (mouseleave)="hoveredCat.set('')">
+              <button class="cat-tab"
+                      [class.active]="selectedCategory() === cat.name"
+                      (click)="selectCategory(cat.name, '')">
+                {{ cat.name }}
+                @if (cat.subcategories?.length) {
+                  <span class="chevron">▾</span>
+                }
+              </button>
+
+              <!-- Subcategory dropdown — fixed positioned, multi-column -->
+              @if (hoveredCat() === cat.id && cat.subcategories?.length) {
+                <div class="cat-dropdown"
+                     [style.top.px]="dropdownPos().top"
+                     [style.left.px]="dropdownPos().left">
+                  <button class="cat-dropdown-all" (click)="selectCategory(cat.name, '')">
+                    All {{ cat.name }} ›
+                  </button>
+                  <div class="cat-dropdown-grid">
+                    @for (sub of cat.subcategories; track sub) {
+                      <button class="cat-dropdown-item"
+                              [class.active]="selectedSub() === sub"
+                              (click)="selectCategory(cat.name, sub)">
+                        {{ sub }}
+                      </button>
+                    }
+                  </div>
+                </div>
+              }
+            </div>
+          }
+
         </div>
 
-        <!-- Category tabs with subcategory dropdown -->
-        @for (cat of dbCategories(); track cat.id) {
-          <div class="cat-tab-wrap"
-               (mouseenter)="onTabMouseEnter($event, cat.id)"
-               (mouseleave)="hoveredCat.set('')">
-            <button class="cat-tab"
-                    [class.active]="selectedCategory() === cat.name"
-                    (click)="selectCategory(cat.name, '')">
-              {{ cat.name }}
-              @if (cat.subcategories?.length) {
-                <span class="chevron">▾</span>
-              }
-            </button>
-
-            <!-- Subcategory dropdown — fixed positioned, multi-column -->
-            @if (hoveredCat() === cat.id && cat.subcategories?.length) {
-              <div class="cat-dropdown"
-                   [style.top.px]="dropdownPos().top"
-                   [style.left.px]="dropdownPos().left">
-                <button class="cat-dropdown-all" (click)="selectCategory(cat.name, '')">
-                  All {{ cat.name }} ›
-                </button>
-                <div class="cat-dropdown-grid">
-                  @for (sub of cat.subcategories; track sub) {
-                    <button class="cat-dropdown-item"
-                            [class.active]="selectedSub() === sub"
-                            (click)="selectCategory(cat.name, sub)">
-                      {{ sub }}
-                    </button>
-                  }
-                </div>
-              </div>
-            }
-          </div>
-        }
-
+        <!-- Right arrow -->
+        <button class="scroll-arrow right" (click)="scrollNav(200)">›</button>
       </div>
     </div>
 
@@ -247,6 +273,12 @@ export class ProductsComponent implements OnInit {
     if (sort === 'price-desc') items = [...items].sort((a, b) => b.sellerPrice - a.sellerPrice);
     return items;
   });
+
+  @ViewChild('navInner') navInner!: ElementRef<HTMLDivElement>;
+
+  scrollNav(by: number) {
+    this.navInner?.nativeElement?.scrollBy({ left: by, behavior: 'smooth' });
+  }
 
   selectCategory(cat: string, sub: string) {
     this.selectedCategory.set(cat);
