@@ -2,6 +2,7 @@ import { Component, inject, signal, HostListener } from '@angular/core';
 import { RouterLink, RouterLinkActive, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { CartService } from '../../services/cart.service';
+import { ProductService } from '../../services/product.service';
 
 @Component({
   selector: 'app-navbar',
@@ -224,8 +225,8 @@ import { CartService } from '../../services/cart.service';
         <div class="mobile-menu">
           <a routerLink="/" (click)="mobileOpen.set(false)" class="mobile-link">Home</a>
           <a routerLink="/products" (click)="mobileOpen.set(false)" class="mobile-link">Shop All</a>
-          @for (cat of shopCategories; track cat.name) {
-            <a routerLink="/products" [queryParams]="{category: cat.name}" (click)="mobileOpen.set(false)" class="mobile-link">{{ cat.name }}</a>
+          @for (cat of shopCategories; track cat) {
+            <a routerLink="/products" [queryParams]="{category: cat}" (click)="mobileOpen.set(false)" class="mobile-link">{{ cat }}</a>
           }
           <a routerLink="/cart" (click)="mobileOpen.set(false)" class="mobile-link">
             Bag @if (cart.totalItems() > 0) { ({{ cart.totalItems() }}) }
@@ -251,102 +252,9 @@ export class NavbarComponent {
   @HostListener('window:scroll')
   onScroll() { this.scrolled = window.scrollY > 10; }
 
-  shopCategories = [
-    {
-      name: 'Clothing',
-      cols: [
-        { title: 'Women', items: ['Kurtas & Suits', 'Dresses & Frocks', 'Tops & T-Shirts', 'Trousers & Palazzos', 'Abayas & Modest Wear', 'Winterwear'] },
-        { title: 'Men', items: ['Shalwar Kameez', 'Shirts & Polos', 'Trousers & Jeans', 'Jackets & Coats', 'Waistcoats', 'Kurtas'] },
-        { title: 'Kids', items: ['Boys Clothing', 'Girls Clothing', 'Baby & Infant', 'School Uniforms', 'Sleepwear'] },
-      ]
-    },
-    {
-      name: 'Beauty',
-      cols: [
-        { title: 'Skincare', items: ['Cleansers & Toners', 'Serums & Essences', 'Moisturisers', 'Sunscreen & SPF', 'Face Masks', 'Eye Cream'] },
-        { title: 'Makeup', items: ['Foundation & Concealer', 'Lipstick & Gloss', 'Mascara & Eyeliner', 'Eyeshadow', 'Blush & Bronzer', 'Setting Powder'] },
-        { title: 'Fragrance & Hair', items: ['Perfumes EDP', 'Body Mists', 'Shampoo & Conditioner', 'Hair Oils', 'Hair Masks', 'Styling Products'] },
-      ]
-    },
-    {
-      name: 'Electronics',
-      cols: [
-        { title: 'Phones & Tablets', items: ['Smartphones', 'Tablets', 'Phone Cases', 'Screen Protectors', 'Chargers & Cables', 'Power Banks'] },
-        { title: 'Audio & Visual', items: ['Earbuds & Headphones', 'Bluetooth Speakers', 'Smart Watches', 'Cameras', 'Projectors'] },
-        { title: 'Computers', items: ['Laptops', 'Keyboards & Mice', 'USB Hubs & Adapters', 'Webcams', 'Laptop Bags'] },
-      ]
-    },
-    {
-      name: 'Daily Gadgets',
-      cols: [
-        { title: 'Smart Home', items: ['LED Smart Bulbs', 'Smart Plugs', 'Security Cameras', 'Door Bells', 'Air Purifiers'] },
-        { title: 'Personal Care', items: ['Electric Shavers', 'Hair Dryers', 'Straighteners', 'Trimmers', 'Massagers'] },
-        { title: 'Everyday Essentials', items: ['Mini Fans', 'Neck Pillows', 'Cable Organizers', 'Portable Chargers', 'Wireless Gadgets'] },
-      ]
-    },
-    {
-      name: 'Kitchen',
-      cols: [
-        { title: 'Cookware', items: ['Non-stick Pans', 'Pressure Cookers', 'Pots & Casseroles', 'Woks & Kadais', 'Bakeware'] },
-        { title: 'Appliances', items: ['Blenders & Juicers', 'Air Fryers', 'Rice Cookers', 'Electric Kettles', 'Toasters'] },
-        { title: 'Dining & Storage', items: ['Crockery Sets', 'Glasses & Mugs', 'Lunch Boxes', 'Food Containers', 'Cutlery Sets'] },
-      ]
-    },
-    {
-      name: 'Bedsheets',
-      cols: [
-        { title: 'Bedding', items: ['Double Bed Sheets', 'Single Bed Sheets', 'King Size Sheets', 'Fitted Sheets', 'Pillow Covers'] },
-        { title: 'Comfort', items: ['Duvets & Quilts', 'Comforters', 'Blankets', 'Mattress Protectors', 'Bed Cushions'] },
-        { title: 'Pillows & More', items: ['Sleeping Pillows', 'Decorative Cushions', 'Bolster Pillows', 'Mattress Toppers'] },
-      ]
-    },
-    {
-      name: 'Home Decor',
-      cols: [
-        { title: 'Living Room', items: ['Wall Art & Frames', 'Vases & Pots', 'Candles & Holders', 'Rugs & Carpets', 'Curtains'] },
-        { title: 'Lighting', items: ['Table Lamps', 'Fairy Lights', 'Night Lights', 'Pendant Lights', 'LED Strips'] },
-        { title: 'Organisation', items: ['Storage Baskets', 'Drawer Organisers', 'Shelves & Racks', 'Bathroom Accessories'] },
-      ]
-    },
-    {
-      name: 'Accessories',
-      cols: [
-        { title: 'Bags & Luggage', items: ['Handbags', 'Backpacks', 'Clutches', 'Wallets', 'Travel Bags', 'Sling Bags'] },
-        { title: 'Jewellery', items: ['Earrings', 'Necklaces', 'Bracelets', 'Rings', 'Hair Accessories', 'Bridal Sets'] },
-        { title: 'Watches & More', items: ['Women Watches', 'Men Watches', 'Sunglasses', 'Belts', 'Scarves & Shawls'] },
-      ]
-    },
-    {
-      name: 'Sports',
-      cols: [
-        { title: 'Fitness', items: ['Dumbbells & Weights', 'Yoga Mats', 'Resistance Bands', 'Jump Ropes', 'Pull-up Bars'] },
-        { title: 'Sportswear', items: ['Gym Shorts', 'Sports Bras', 'Track Suits', 'Running Shoes', 'Compression Wear'] },
-        { title: 'Outdoor', items: ['Cricket Equipment', 'Football & Futsal', 'Badminton Sets', 'Cycling Accessories', 'Camping Gear'] },
-      ]
-    },
-    {
-      name: 'Kids & Toys',
-      cols: [
-        { title: 'Toys', items: ['Building Blocks', 'Remote Control Toys', 'Dolls & Playsets', 'Board Games', 'Puzzles'] },
-        { title: 'Baby', items: ['Baby Clothes', 'Feeding Accessories', 'Diapers & Wipes', 'Baby Monitors', 'Strollers'] },
-        { title: 'Education', items: ['Learning Toys', 'Art & Craft Kits', 'Books & Comics', 'Musical Instruments', 'Science Kits'] },
-      ]
-    },
-    {
-      name: 'Footwear',
-      cols: [
-        { title: 'Women', items: ['Heels & Pumps', 'Flats & Sandals', 'Sneakers', 'Boots', 'Khussa & Ethnic'] },
-        { title: 'Men', items: ['Formal Shoes', 'Sneakers & Trainers', 'Sandals & Slippers', 'Boots', 'Loafers'] },
-        { title: 'Kids', items: ['School Shoes', 'Sneakers', 'Sandals', 'Boots', 'Slippers'] },
-      ]
-    },
-    {
-      name: 'Stationery',
-      cols: [
-        { title: 'Office', items: ['Notebooks & Diaries', 'Pens & Markers', 'Files & Folders', 'Staplers & Punchers', 'Sticky Notes'] },
-        { title: 'Art Supplies', items: ['Sketch Books', 'Color Pencils', 'Watercolors', 'Canvas & Brushes', 'Calligraphy Sets'] },
-        { title: 'School', items: ['Geometry Sets', 'School Bags', 'Pencil Cases', 'Calculators', 'Flash Cards'] },
-      ]
-    },
-  ];
+  shopCategories: string[] = [];
+
+  constructor() {
+    inject(ProductService).getCategories().subscribe(c => this.shopCategories = c);
+  }
 }
