@@ -23,6 +23,16 @@ Base = declarative_base()
 
 # ── ORM Models ────────────────────────────────────────────────────────────────
 
+class CategoryDB(Base):
+    __tablename__ = 'categories'
+    id            = Column(String, primary_key=True)
+    name          = Column(String, nullable=False)
+    icon          = Column(String, default='')
+    image         = Column(String, default='')
+    subcategories = Column(JSON, default=list)
+    order         = Column(Integer, default=0)
+
+
 class ProductDB(Base):
     __tablename__ = 'products'
 

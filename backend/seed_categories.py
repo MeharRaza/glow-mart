@@ -1,0 +1,106 @@
+"""Seed categories with subcategories into DB. Run: python seed_categories.py"""
+import uuid
+from datetime import datetime
+from app.database import SessionLocal, CategoryDB, init_db
+
+init_db()
+db = SessionLocal()
+
+def cat(name, icon, image, subs, order):
+    return CategoryDB(
+        id=str(uuid.uuid4()), name=name, icon=icon,
+        image=image, subcategories=subs, order=order
+    )
+
+CATEGORIES = [
+cat("Cosmetics","💄","https://images.unsplash.com/photo-1512207736890-6ffed8a84e8d?w=100",
+    ["Skin Care","Hair Dryers","Shavers & Trimmers","Hair Care","Curlers & Straighteners",
+     "K-Beauty","Face","Serum & Oil","Lip","Hair Removal","Grooming Accessories",
+     "Makeup Accessories","Eye","Bundles","Personal Care","Nails","Mehndi"],1),
+
+cat("Women's Unstitched","👗","https://images.unsplash.com/photo-1594938298603-c8148c4b4aea?w=100",
+    ["Shirt","2 Piece Suits","Kurti","3 Piece Suits"],2),
+
+cat("Women's Stitched","👚","https://images.unsplash.com/photo-1581044777550-4cfa60707c03?w=100",
+    ["Shirt","2 Piece Suits","West","Women's Hoodies","Women's Coat","Women's Sweater",
+     "3 Piece Suits","Maxi","Dupatta","Women's Kurta","Lehenga","Swimwear",
+     "Trouser","Sleep Wear","Women's Track Suit","Sweaters & Sweatshirts"],3),
+
+cat("Men's Unstitched","🧵","https://images.unsplash.com/photo-1620012253295-c15cc3e65df4?w=100",
+    ["Cotton","Kheddar","Doski","Wool","Wash n Wear","Men's Originals","Silk","Karandi"],4),
+
+cat("Men's Stitched","👔","https://images.unsplash.com/photo-1598032895397-b9472444bf93?w=100",
+    ["T-Shirts","Hoodies","Track Suit","Men's Jacket","Pants & Trousers",
+     "Men's Shirt","Waist Coat","Men's Sweater","Men's Sleep Wear"],5),
+
+cat("Kids Clothing","🧒","https://images.unsplash.com/photo-1518831959646-742c3a14ebf7?w=100",
+    ["Full Dress","Kids Formal Wear","Girl's Kurta","Kids Bathrobes","Kids Hoodies",
+     "Kid's Trouser","Kids Track Suits","Kid's Jacket","Kids Sleep Wear",
+     "Costumes","West","Bottoms"],6),
+
+cat("Kids Accessories","🎒","https://images.unsplash.com/photo-1515488042361-ee00e0ddd4e4?w=100",
+    ["Kids Shoes","Bags","Styling Accessories","Educational Toys",
+     "Classic Toys","Sports & Outdoor Toys"],7),
+
+cat("Women's Handbags","👜","https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=100",
+    ["Clutches","Shoulder Bags","Hand Bags","Purse"],8),
+
+cat("Jewellery","💍","https://images.unsplash.com/photo-1535043934128-cf0b28d52f95?w=100",
+    ["Necklace","Artificial Sets","Earrings","Rings","Bangles & Bracelets",
+     "Tikka","Jewellery Accessories","Anklets","Jewellery Organizers"],9),
+
+cat("Electronics","📱","https://images.unsplash.com/photo-1498049794561-7780e7231661?w=100",
+    ["Mobile Phones","Laptops","Tablets","Earbuds","Bluetooth Speakers",
+     "Smart Watches","Power Banks","USB Accessories","Cameras"],10),
+
+cat("Home Appliances","🏠","https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=100",
+    ["Air Conditioners","Refrigerators","Washing Machines","Microwaves",
+     "Fans","Irons","Vacuum Cleaners","Water Dispensers"],11),
+
+cat("Kitchen","🍳","https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=100",
+    ["Cookware","Air Fryers","Blenders","Electric Kettles","Pressure Cookers",
+     "Lunch Boxes","Knives & Cutlery","Storage Containers"],12),
+
+cat("Footwear","👟","https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=100",
+    ["Women's Heels","Women's Flats","Men's Formal","Men's Casual",
+     "Sneakers","Kids Shoes","Slippers","Khussa"],13),
+
+cat("Sports & Outdoors","⚽","https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=100",
+    ["Cricket","Football","Gym & Fitness","Yoga","Cycling",
+     "Badminton","Swimming","Outdoor Camping"],14),
+
+cat("Bedsheets & Curtains","🛏️","https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=100",
+    ["King Bedsheets","Double Bedsheets","Single Bedsheets","Comforters",
+     "Pillows","Curtains","Blankets","Mattress Covers"],15),
+
+cat("Home Decor","🕯️","https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=100",
+    ["Wall Art","Vases","Candles","Rugs","Fairy Lights",
+     "Photo Frames","Clocks","Artificial Plants"],16),
+
+cat("Bags & Travel","🧳","https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=100",
+    ["Backpacks","Laptop Bags","Travel Bags","Wallets",
+     "Men's Bags","Toiletry Bags","Luggage"],17),
+
+cat("Books & Stationery","📚","https://images.unsplash.com/photo-1456735190827-d1262f71b8a3?w=100",
+    ["Notebooks","Pens & Markers","Art Supplies","Geometry Sets",
+     "Sticky Notes","Calculators","Sketch Books"],18),
+
+cat("Toys & Games","🧸","https://images.unsplash.com/photo-1587654780291-39c9404d746b?w=100",
+    ["Building Blocks","RC Cars","Dolls","Board Games",
+     "Puzzles","Outdoor Toys","Baby Toys","Action Figures"],19),
+
+cat("Health & Wellness","💊","https://images.unsplash.com/photo-1559757175-0eb30cd8c063?w=100",
+    ["Vitamins","Protein Supplements","Medical Devices",
+     "Personal Care","Massagers","First Aid"],20),
+]
+
+existing = db.query(CategoryDB).count()
+if existing > 0:
+    db.query(CategoryDB).delete()
+    db.commit()
+    print(f"Deleted {existing} old categories")
+
+db.bulk_save_objects(CATEGORIES)
+db.commit()
+print(f"✓ Inserted {len(CATEGORIES)} categories!")
+db.close()

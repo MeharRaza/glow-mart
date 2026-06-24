@@ -4,6 +4,7 @@ import { CommonModule, NgFor } from '@angular/common';
 import { ProductCardComponent } from '../../../components/product-card/product-card.component';
 import { ProductService } from '../../../services/product.service';
 import { OrderService } from '../../../services/order.service';
+import { CategoryService, Category } from '../../../services/category.service';
 import { Product } from '../../../models/product.model';
 
 @Component({
@@ -240,23 +241,55 @@ import { Product } from '../../../models/product.model';
     }
     .section-title em { font-style: italic; }
 
-    /* ── Category grid ────────────────────────────────────── */
-    .cat-grid {
-      display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.25rem;
-    }
+    /* ── Category grid — Daraz style ─────────────────────── */
+    .cat-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 1.25rem; }
     @media (max-width: 1024px) { .cat-grid { grid-template-columns: repeat(3,1fr); } }
     @media (max-width: 768px)  { .cat-grid { grid-template-columns: repeat(2,1fr); gap: 0.75rem; } }
 
-    .cat-card { position: relative; overflow: hidden; cursor: pointer; text-decoration: none; display: block; }
-    .cat-img { aspect-ratio: 4/5; overflow: hidden; position: relative; }
-    .cat-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.7s cubic-bezier(0.25,0.46,0.45,0.94); display: block; }
-    .cat-card:hover .cat-img img { transform: scale(1.08); }
-    .cat-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(26,20,16,0) 40%, rgba(26,20,16,0.75) 100%); }
-    .cat-info { position: absolute; bottom: 0; left: 0; right: 0; padding: 1.25rem 1rem; }
-    .cat-name { font-family: 'DM Serif Display', serif; font-size: 1.2rem; font-weight: 500; color: #fff; margin-bottom: 0.15rem; }
-    .cat-desc { font-family: 'Inter', sans-serif; font-size: 0.72rem; color: rgba(255,255,255,0.6); margin-bottom: 0.5rem; }
-    .cat-arrow { font-family: 'Inter', sans-serif; font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; color: #c9a96e; opacity: 0; transform: translateY(6px); transition: all 0.3s ease; display: flex; align-items: center; gap: 4px; }
-    .cat-card:hover .cat-arrow { opacity: 1; transform: translateY(0); }
+    .cat-card {
+      background: #fff; border: 1px solid #e8e0d6;
+      border-radius: 4px; overflow: hidden;
+      cursor: pointer; text-decoration: none; display: block;
+      transition: box-shadow 0.25s, transform 0.25s;
+      padding: 1.25rem;
+    }
+    .cat-card:hover { box-shadow: 0 8px 32px rgba(26,20,16,0.10); transform: translateY(-3px); }
+
+    .cat-card-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 1rem;
+    }
+    .cat-card-title {
+      font-family: 'DM Serif Display', serif; font-size: 1rem;
+      font-weight: 400; color: #1a1410; line-height: 1.2;
+    }
+    .cat-card-sub {
+      font-family: 'Inter', sans-serif; font-size: 0.7rem;
+      color: #9e9890; margin-top: 2px;
+    }
+    .cat-card-arrow { color: #c9a96e; font-size: 1rem; flex-shrink: 0; }
+
+    .cat-subs-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 0.625rem;
+    }
+    .cat-sub-item {
+      display: flex; flex-direction: column; align-items: center;
+      gap: 0.375rem; cursor: pointer; text-decoration: none;
+    }
+    .cat-sub-img {
+      width: 52px; height: 52px; border-radius: 50%;
+      background: #f5f0e8; overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+      border: 1px solid #e8e0d6;
+      font-size: 1.4rem;
+    }
+    .cat-sub-img img { width: 100%; height: 100%; object-fit: cover; }
+    .cat-sub-name {
+      font-family: 'Inter', sans-serif; font-size: 0.62rem;
+      color: #6b6560; text-align: center; line-height: 1.3;
+    }
+    .cat-sub-item:hover .cat-sub-name { color: #c9a96e; }
 
     /* ── Products grid ────────────────────────────────────── */
     .products-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 2rem; }
@@ -441,17 +474,22 @@ import { Product } from '../../../models/product.model';
         }
         @for (cat of categories(); track cat.name) {
           <a routerLink="/products" [queryParams]="{category: cat.name}" class="cat-card">
-            <div class="cat-img">
-              <img [src]="cat.img" [alt]="cat.name" loading="lazy" />
-              <div class="cat-overlay"></div>
-            </div>
-            <div class="cat-info">
-              <div class="cat-name">{{ cat.name }}</div>
-              <div class="cat-desc">{{ cat.desc }}</div>
-              <div class="cat-arrow">
-                Shop Now
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            <div class="cat-card-header">
+              <div>
+                <div class="cat-card-title">{{ cat.name }}</div>
+                <div class="cat-card-sub">{{ cat.subcategories?.length || 0 }} subcategories</div>
               </div>
+              <span class="cat-card-arrow">›</span>
+            </div>
+            <div class="cat-subs-grid">
+              @for (sub of (cat.subcategories || []).slice(0, 8); track sub) {
+                <div class="cat-sub-item">
+                  <div class="cat-sub-img">
+                    <img [src]="cat.image" [alt]="sub" loading="lazy" />
+                  </div>
+                  <span class="cat-sub-name">{{ sub }}</span>
+                </div>
+              }
             </div>
           </a>
         }
@@ -570,49 +608,17 @@ import { Product } from '../../../models/product.model';
   `
 })
 export class HomeComponent implements OnInit, OnDestroy {
-  private productService = inject(ProductService);
-  private orderService   = inject(OrderService);
+  private productService  = inject(ProductService);
+  private orderService    = inject(OrderService);
+  private categoryService = inject(CategoryService);
   products = signal<Product[]>([]);
   currentSlide = signal(0);
   private slideInterval: any;
 
   heroSlides = signal<{id:number,category:string,name:string,img:string}[]>([]);
-  categories = signal<{name:string,desc:string,img:string}[]>([]);
+  categories = signal<Category[]>([]);
 
-  // Category images map
-  private catImages: Record<string,string> = {
-    'Clothing':      'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80',
-    'Beauty':        'https://images.unsplash.com/photo-1512207736890-6ffed8a84e8d?w=600&q=80',
-    'Electronics':   'https://images.unsplash.com/photo-1498049794561-7780e7231661?w=600&q=80',
-    'Kitchen':       'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=600&q=80',
-    'Bedsheets':     'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=600&q=80',
-    'Accessories':   'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=600&q=80',
-    'Sports':        'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=600&q=80',
-    'Kids & Toys':   'https://images.unsplash.com/photo-1545558014-8692077e9b5c?w=600&q=80',
-    'Home Decor':    'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=600&q=80',
-    'Daily Gadgets': 'https://images.unsplash.com/photo-1526738549149-8e07eca6c147?w=600&q=80',
-    'Footwear':      'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&q=80',
-    'Stationery':    'https://images.unsplash.com/photo-1456735190827-d1262f71b8a3?w=600&q=80',
-    'Skincare':      'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=600&q=80',
-    'Makeup':        'https://images.unsplash.com/photo-1586495777744-4e6232bf9f06?w=600&q=80',
-    'Fragrance':     'https://images.unsplash.com/photo-1541643600914-78b084683702?w=600&q=80',
-    'Haircare':      'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=600&q=80',
-  };
-  private catDescs: Record<string,string> = {
-    'Clothing':'Men, Women & Kids fashion','Beauty':'Skincare, makeup & fragrance',
-    'Electronics':'Gadgets, phones & accessories','Kitchen':'Cookware, appliances & utensils',
-    'Bedsheets':'Bedding, pillows & comforters','Accessories':'Bags, jewelry & watches',
-    'Sports':'Fitness gear & sportswear','Kids & Toys':'Toys, games & baby products',
-    'Home Decor':'Furnishings & decorative items','Daily Gadgets':'Smart home & essentials',
-    'Footwear':'Shoes, sandals & boots','Stationery':'Office, school & art supplies',
-    'Skincare':'Cleansers, serums & moisturisers','Makeup':'Foundation, lipstick & more',
-    'Fragrance':'Perfumes & body mists','Haircare':'Shampoo, conditioner & treatments',
-  };
-
-  // Cross layout: center, top, right, bottom, left
-  // Rotation order: top comes to center, center goes to bottom-hidden,
-  // right comes to top, left comes to right, new card comes from left
-  // Positions cycle: 0=center, 1=top, 2=right, 3=bottom, 4=left
+  // Cross layout positions
   getCardClass(i: number): string {
     const total = this.heroSlides().length;
     if (total === 0) return 'pos-hidden';
@@ -676,17 +682,10 @@ export class HomeComponent implements OnInit, OnDestroy {
     });
 
     // Load categories from DB
-    this.productService.getCategories().subscribe(cats => {
-      const catList = cats.map((name, i) => ({
-        name,
-        desc: this.catDescs[name] || name,
-        img:  this.catImages[name] || 'https://images.unsplash.com/photo-1512207736890-6ffed8a84e8d?w=600&q=80'
-      }));
-      this.categories.set(catList);
-
-      // heroSlides from real categories
-      this.heroSlides.set(catList.slice(0, 7).map((c, i) => ({
-        id: i, category: c.name, name: c.name, img: c.img
+    this.categoryService.getCategories().subscribe(cats => {
+      this.categories.set(cats);
+      this.heroSlides.set(cats.slice(0, 7).map((c, i) => ({
+        id: i, category: c.name, name: c.name, img: c.image
       })));
     });
 

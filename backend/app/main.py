@@ -12,7 +12,7 @@ if sys.platform == 'win32':
 load_dotenv()
 
 from app.database import init_db
-from app.routes import products, orders, scraper, reviews
+from app.routes import products, orders, scraper, reviews, categories
 from app.email_service import send_order_notification, BREVO_USER, BREVO_PASS, SELLER_EMAIL, FROM_ADDRESS
 
 app = FastAPI(title='GlowMart API', version='1.0.0')
@@ -35,10 +35,11 @@ def startup():
         print(f'[DB] Warning: Could not initialize database: {e}')
         print('[DB] App will start anyway — check DATABASE_URL variable')
 
-app.include_router(products.router, prefix='/api/products', tags=['products'])
-app.include_router(orders.router,   prefix='/api/orders',   tags=['orders'])
-app.include_router(scraper.router,  prefix='/api/scraper',  tags=['scraper'])
-app.include_router(reviews.router,  prefix='/api/reviews',  tags=['reviews'])
+app.include_router(products.router,   prefix='/api/products',   tags=['products'])
+app.include_router(orders.router,     prefix='/api/orders',     tags=['orders'])
+app.include_router(scraper.router,    prefix='/api/scraper',    tags=['scraper'])
+app.include_router(reviews.router,    prefix='/api/reviews',    tags=['reviews'])
+app.include_router(categories.router, prefix='/api/categories', tags=['categories'])
 
 
 @app.get('/')
