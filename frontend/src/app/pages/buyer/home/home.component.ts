@@ -399,7 +399,7 @@ import { Product } from '../../../models/product.model';
       <!-- Right: 3D Card Carousel -->
       <div class="hero-carousel-side">
         <div class="carousel-track">
-          @for (slide of heroSlides; track slide.id; let i = $index) {
+          @for (slide of heroSlides(); track slide.id; let i = $index) {
             <div class="c-card" [ngClass]="getCardClass(i)" (click)="goToSlide(i)">
               <img [src]="slide.img" [alt]="slide.name" loading="lazy" />
               <div class="c-card-label">
@@ -434,7 +434,12 @@ import { Product } from '../../../models/product.model';
         <h2 class="section-title">Shop by <em>Category</em></h2>
       </div>
       <div class="cat-grid">
-        @for (cat of categories; track cat.name) {
+        @if (categories().length === 0) {
+          <div style="grid-column:1/-1;text-align:center;padding:3rem;color:#9e9890;font-family:'Inter',sans-serif;font-size:0.9rem;">
+            No categories yet — add products from seller panel to see categories here.
+          </div>
+        }
+        @for (cat of categories(); track cat.name) {
           <a routerLink="/products" [queryParams]="{category: cat.name}" class="cat-card">
             <div class="cat-img">
               <img [src]="cat.img" [alt]="cat.name" loading="lazy" />
@@ -571,26 +576,48 @@ export class HomeComponent implements OnInit, OnDestroy {
   currentSlide = signal(0);
   private slideInterval: any;
 
-  heroSlides = [
-    { id: 0, category: 'Fashion',     name: 'Clothing & Apparel',  img: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80' },
-    { id: 1, category: 'Beauty',      name: 'Makeup & Skincare',   img: 'https://images.unsplash.com/photo-1512207736890-6ffed8a84e8d?w=600&q=80' },
-    { id: 2, category: 'Electronics', name: 'Gadgets & Tech',      img: 'https://images.unsplash.com/photo-1498049794561-7780e7231661?w=600&q=80' },
-    { id: 3, category: 'Kitchen',     name: 'Home & Kitchen',      img: 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=600&q=80' },
-    { id: 4, category: 'Accessories', name: 'Bags & Jewellery',    img: 'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=600&q=80' },
-    { id: 5, category: 'Sports',      name: 'Fitness & Sport',     img: 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=600&q=80' },
-    { id: 6, category: 'Kids',        name: 'Toys & Baby',         img: 'https://images.unsplash.com/photo-1545558014-8692077e9b5c?w=600&q=80' },
-  ];
+  heroSlides = signal<{id:number,category:string,name:string,img:string}[]>([]);
+  categories = signal<{name:string,desc:string,img:string}[]>([]);
+
+  // Category images map
+  private catImages: Record<string,string> = {
+    'Clothing':      'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80',
+    'Beauty':        'https://images.unsplash.com/photo-1512207736890-6ffed8a84e8d?w=600&q=80',
+    'Electronics':   'https://images.unsplash.com/photo-1498049794561-7780e7231661?w=600&q=80',
+    'Kitchen':       'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=600&q=80',
+    'Bedsheets':     'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=600&q=80',
+    'Accessories':   'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=600&q=80',
+    'Sports':        'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=600&q=80',
+    'Kids & Toys':   'https://images.unsplash.com/photo-1545558014-8692077e9b5c?w=600&q=80',
+    'Home Decor':    'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=600&q=80',
+    'Daily Gadgets': 'https://images.unsplash.com/photo-1526738549149-8e07eca6c147?w=600&q=80',
+    'Footwear':      'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&q=80',
+    'Stationery':    'https://images.unsplash.com/photo-1456735190827-d1262f71b8a3?w=600&q=80',
+    'Skincare':      'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=600&q=80',
+    'Makeup':        'https://images.unsplash.com/photo-1586495777744-4e6232bf9f06?w=600&q=80',
+    'Fragrance':     'https://images.unsplash.com/photo-1541643600914-78b084683702?w=600&q=80',
+    'Haircare':      'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=600&q=80',
+  };
+  private catDescs: Record<string,string> = {
+    'Clothing':'Men, Women & Kids fashion','Beauty':'Skincare, makeup & fragrance',
+    'Electronics':'Gadgets, phones & accessories','Kitchen':'Cookware, appliances & utensils',
+    'Bedsheets':'Bedding, pillows & comforters','Accessories':'Bags, jewelry & watches',
+    'Sports':'Fitness gear & sportswear','Kids & Toys':'Toys, games & baby products',
+    'Home Decor':'Furnishings & decorative items','Daily Gadgets':'Smart home & essentials',
+    'Footwear':'Shoes, sandals & boots','Stationery':'Office, school & art supplies',
+    'Skincare':'Cleansers, serums & moisturisers','Makeup':'Foundation, lipstick & more',
+    'Fragrance':'Perfumes & body mists','Haircare':'Shampoo, conditioner & treatments',
+  };
 
   // Cross layout: center, top, right, bottom, left
   // Rotation order: top comes to center, center goes to bottom-hidden,
   // right comes to top, left comes to right, new card comes from left
   // Positions cycle: 0=center, 1=top, 2=right, 3=bottom, 4=left
   getCardClass(i: number): string {
-    const total = this.heroSlides.length;
+    const total = this.heroSlides().length;
+    if (total === 0) return 'pos-hidden';
     const active = this.currentSlide();
-    // position slot relative to active
-    let diff = ((i - active) % total + total) % total;
-
+    const diff = ((i - active) % total + total) % total;
     switch (diff) {
       case 0: return 'pos-center';
       case 1: return 'pos-top';
@@ -609,8 +636,8 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   startAutoPlay() {
     this.slideInterval = setInterval(() => {
-      // Rotation: top → center (active increments by 1, so next top slot becomes center)
-      this.currentSlide.set((this.currentSlide() + 1) % this.heroSlides.length);
+      const total = this.heroSlides().length;
+      if (total > 0) this.currentSlide.set((this.currentSlide() + 1) % total);
     }, 3500);
   }
 
@@ -625,21 +652,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     '100% Original Products', '7-Day Easy Returns',
     'Fashion · Beauty · Electronics', 'Kitchen · Accessories · More',
     'Nationwide Delivery', 'No Account Needed',
-  ];
-
-  categories = [
-    { name: 'Clothing',       desc: 'Men, Women & Kids fashion',        img: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80' },
-    { name: 'Beauty',         desc: 'Skincare, makeup & fragrance',      img: 'https://images.unsplash.com/photo-1512207736890-6ffed8a84e8d?w=600&q=80' },
-    { name: 'Electronics',    desc: 'Gadgets, phones & accessories',     img: 'https://images.unsplash.com/photo-1498049794561-7780e7231661?w=600&q=80' },
-    { name: 'Kitchen',        desc: 'Cookware, appliances & utensils',   img: 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=600&q=80' },
-    { name: 'Bedsheets',      desc: 'Bedding, pillows & comforters',     img: 'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=600&q=80' },
-    { name: 'Accessories',    desc: 'Bags, jewelry & watches',           img: 'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=600&q=80' },
-    { name: 'Sports',         desc: 'Fitness gear & sportswear',         img: 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=600&q=80' },
-    { name: 'Kids & Toys',    desc: 'Toys, games & baby products',       img: 'https://images.unsplash.com/photo-1545558014-8692077e9b5c?w=600&q=80' },
-    { name: 'Home Decor',     desc: 'Furnishings & decorative items',    img: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=600&q=80' },
-    { name: 'Daily Gadgets',  desc: 'Smart home & everyday essentials',  img: 'https://images.unsplash.com/photo-1526738549149-8e07eca6c147?w=600&q=80' },
-    { name: 'Footwear',       desc: 'Shoes, sandals & boots',            img: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&q=80' },
-    { name: 'Stationery',     desc: 'Office, school & art supplies',     img: 'https://images.unsplash.com/photo-1456735190827-d1262f71b8a3?w=600&q=80' },
   ];
 
   steps = [
@@ -662,6 +674,22 @@ export class HomeComponent implements OnInit, OnDestroy {
         i === 0 ? { ...st, num: p.length > 0 ? p.length + '+' : '0' } : st
       ));
     });
+
+    // Load categories from DB
+    this.productService.getCategories().subscribe(cats => {
+      const catList = cats.map((name, i) => ({
+        name,
+        desc: this.catDescs[name] || name,
+        img:  this.catImages[name] || 'https://images.unsplash.com/photo-1512207736890-6ffed8a84e8d?w=600&q=80'
+      }));
+      this.categories.set(catList);
+
+      // heroSlides from real categories
+      this.heroSlides.set(catList.slice(0, 7).map((c, i) => ({
+        id: i, category: c.name, name: c.name, img: c.img
+      })));
+    });
+
     this.orderService.getOrders().subscribe({
       next: (orders) => {
         const customers = orders.length;

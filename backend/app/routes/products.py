@@ -26,6 +26,12 @@ def _row_to_dict(row: ProductDB) -> dict:
     }
 
 
+@router.get('/categories')
+def get_categories(db: Session = Depends(get_db)):
+    rows = db.query(ProductDB.category).filter(ProductDB.isActive == True).distinct().all()
+    return [r[0] for r in rows if r[0]]
+
+
 @router.get('/', response_model=list[Product])
 def get_products(db: Session = Depends(get_db)):
     rows = db.query(ProductDB).filter(ProductDB.isActive == True).all()
