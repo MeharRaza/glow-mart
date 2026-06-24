@@ -21,8 +21,9 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=['*'],
     allow_credentials=False,
-    allow_methods=['*'],
+    allow_methods=['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     allow_headers=['*'],
+    expose_headers=['*'],
 )
 
 # Create tables on startup

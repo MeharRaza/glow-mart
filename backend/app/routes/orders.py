@@ -36,6 +36,13 @@ def _row_to_dict(row: OrderDB) -> dict:
     }
 
 
+@router.get('/count')
+def get_order_count(db: Session = Depends(get_db)):
+    total   = db.query(OrderDB).count()
+    pending = db.query(OrderDB).filter(OrderDB.status == 'pending').count()
+    return {'total': total, 'pending': pending}
+
+
 @router.get('/')
 def get_orders(db: Session = Depends(get_db)):
     result = db.execute(text("""
@@ -48,13 +55,6 @@ def get_orders(db: Session = Depends(get_db)):
     """))
     rows = result.mappings().all()
     return [dict(r) for r in rows]
-
-
-@router.get('/count')
-def get_order_count(db: Session = Depends(get_db)):
-    total   = db.query(OrderDB).count()
-    pending = db.query(OrderDB).filter(OrderDB.status == 'pending').count()
-    return {'total': total, 'pending': pending}
 
 
 @router.post('/')
