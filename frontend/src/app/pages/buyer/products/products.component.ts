@@ -20,7 +20,7 @@ import { Product } from '../../../models/product.model';
     }
     .cat-nav-inner {
       max-width: 1280px; margin: 0 auto; padding: 0 2rem;
-      display: flex; overflow-x: auto; gap: 0;
+      display: flex; overflow-x: auto; overflow-y: visible; gap: 0;
     }
     .cat-nav-inner::-webkit-scrollbar { display: none; }
 
@@ -40,14 +40,14 @@ import { Product } from '../../../models/product.model';
     .cat-tab.all-tab.active { border-bottom-color: #1a1410; }
     .cat-tab .chevron { font-size: 0.6rem; opacity: 0.5; }
 
-    /* ── Dropdown ── */
+    /* ── Dropdown — fixed to viewport so never clipped ── */
     .cat-dropdown {
-      position: absolute; top: 100%; left: 0;
+      position: fixed;
       min-width: 200px; max-width: 240px;
       background: #fff;
       border: 1px solid #e8e0d6;
-      box-shadow: 0 8px 32px rgba(26,20,16,0.10);
-      z-index: 200;
+      box-shadow: 0 8px 32px rgba(26,20,16,0.12);
+      z-index: 9999;
       padding: 0.5rem 0;
     }
     .cat-dropdown-item {
@@ -123,7 +123,7 @@ import { Product } from '../../../models/product.model';
         <!-- Category tabs with subcategory dropdown -->
         @for (cat of dbCategories(); track cat.id) {
           <div class="cat-tab-wrap"
-               (mouseenter)="hoveredCat.set(cat.id)"
+               (mouseenter)="onTabMouseEnter($event, cat.id)"
                (mouseleave)="hoveredCat.set('')">
             <button class="cat-tab"
                     [class.active]="selectedCategory() === cat.name"
@@ -134,9 +134,11 @@ import { Product } from '../../../models/product.model';
               }
             </button>
 
-            <!-- Subcategory dropdown -->
+            <!-- Subcategory dropdown — fixed positioned -->
             @if (hoveredCat() === cat.id && cat.subcategories?.length) {
-              <div class="cat-dropdown">
+              <div class="cat-dropdown"
+                   [style.top.px]="dropdownPos().top"
+                   [style.left.px]="dropdownPos().left">
                 <button class="cat-dropdown-item"
                         [class.active]="selectedCategory() === cat.name && !selectedSub()"
                         (click)="selectCategory(cat.name, '')">
@@ -232,6 +234,15 @@ export class ProductsComponent implements OnInit {
     this.selectedSub.set(sub);
     this.searchQuery.set('');
     this.hoveredCat.set('');
+  }
+
+  dropdownPos = signal<{top: number, left: number}>({top: 0, left: 0});
+
+  onTabMouseEnter(event: MouseEvent, catId: string) {
+    const el = event.currentTarget as HTMLElement;
+    const rect = el.getBoundingClientRect();
+    this.dropdownPos.set({ top: rect.bottom, left: rect.left });
+    this.hoveredCat.set(catId);
   }
 
   ngOnInit() {
