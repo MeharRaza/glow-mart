@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { ProductCardComponent } from '../../../components/product-card/product-card.component';
 import { ProductService } from '../../../services/product.service';
+import { CategoryService, Category } from '../../../services/category.service';
 import { Product } from '../../../models/product.model';
 
 @Component({
@@ -11,25 +12,55 @@ import { Product } from '../../../models/product.model';
   standalone: true,
   imports: [CommonModule, FormsModule, ProductCardComponent],
   styles: [`
-    /* ── Category tab bar ── */
-    .cat-nav { border-bottom: 1px solid #e8e0d6; background: #faf7f4; position: sticky; top: 106px; z-index: 50; }
+    /* ── Sticky category tab bar ── */
+    .cat-nav {
+      border-bottom: 1px solid #e8e0d6;
+      background: #faf7f4;
+      position: sticky; top: 106px; z-index: 50;
+    }
     .cat-nav-inner {
       max-width: 1280px; margin: 0 auto; padding: 0 2rem;
       display: flex; overflow-x: auto; gap: 0;
     }
     .cat-nav-inner::-webkit-scrollbar { display: none; }
 
+    .cat-tab-wrap { position: relative; flex-shrink: 0; }
+
     .cat-tab {
-      font-family: 'Inter', sans-serif; font-size: 0.8rem; font-weight: 500;
-      letter-spacing: 0.05em; color: #6b6560; white-space: nowrap;
-      padding: 1rem 1.25rem; cursor: pointer;
+      font-family: 'Inter', sans-serif; font-size: 0.78rem; font-weight: 500;
+      letter-spacing: 0.03em; color: #6b6560; white-space: nowrap;
+      padding: 0.875rem 1rem; cursor: pointer;
       border-bottom: 2px solid transparent; margin-bottom: -1px;
       background: none; border-top: none; border-left: none; border-right: none;
-      transition: color 0.2s, border-color 0.2s;
+      transition: color 0.2s;
+      display: flex; align-items: center; gap: 4px;
     }
     .cat-tab:hover { color: #1a1410; }
     .cat-tab.active { color: #1a1410; border-bottom: 2px solid #c9a96e; font-weight: 600; }
     .cat-tab.all-tab.active { border-bottom-color: #1a1410; }
+    .cat-tab .chevron { font-size: 0.6rem; opacity: 0.5; }
+
+    /* ── Dropdown ── */
+    .cat-dropdown {
+      position: absolute; top: 100%; left: 0;
+      min-width: 200px; max-width: 240px;
+      background: #fff;
+      border: 1px solid #e8e0d6;
+      box-shadow: 0 8px 32px rgba(26,20,16,0.10);
+      z-index: 200;
+      padding: 0.5rem 0;
+    }
+    .cat-dropdown-item {
+      display: block; width: 100%;
+      padding: 0.5rem 1.25rem;
+      font-family: 'Inter', sans-serif; font-size: 0.8rem;
+      color: #6b6560; text-align: left;
+      background: none; border: none; cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .cat-dropdown-item:hover { background: #faf7f4; color: #1a1410; }
+    .cat-dropdown-item.active { color: #c9a96e; font-weight: 600; }
 
     /* ── Page ── */
     .page { max-width: 1280px; margin: 0 auto; padding: 3rem 2rem; }
@@ -38,12 +69,10 @@ import { Product } from '../../../models/product.model';
       .page-header { flex-direction: column; gap: 1rem; }
       .page-title { font-size: 1.75rem; }
       .header-right { width: 100%; flex-direction: column; gap: 0.75rem; }
-      .search-input { width: 100%; }
-      .sort-select { width: 100%; }
-      .cat-nav-inner { padding: 0 1rem; }
+      .search-input, .sort-select { width: 100%; }
+      .cat-nav-inner { padding: 0 0.75rem; }
     }
 
-    /* ── Header ── */
     .page-header {
       display: flex; align-items: flex-start; justify-content: space-between;
       gap: 2rem; flex-wrap: wrap;
@@ -67,34 +96,64 @@ import { Product } from '../../../models/product.model';
       font-family: 'Inter', sans-serif; font-size: 0.82rem; color: #1a1410;
       outline: none; cursor: pointer;
     }
-    .sort-select:focus { border-color: #c9a96e; }
 
     /* ── Grid ── */
     .products-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
     @media (max-width: 900px) { .products-grid { grid-template-columns: repeat(2, 1fr); } }
     @media (max-width: 480px) { .products-grid { grid-template-columns: 1fr; } }
-
     .empty {
       grid-column: 1/-1; text-align: center; padding: 5rem 2rem;
       font-family: 'DM Serif Display', serif; font-size: 1.5rem; color: #b0a898;
     }
   `],
   template: `
-    <!-- ── Category tab bar (real DB categories) ── -->
+    <!-- ── Category tab bar with dropdowns ── -->
     <div class="cat-nav">
       <div class="cat-nav-inner">
-        <button class="cat-tab all-tab"
-                [class.active]="selectedCategory() === ''"
-                (click)="selectCategory('')">
-          All
-        </button>
-        @for (cat of categories(); track cat) {
-          <button class="cat-tab"
-                  [class.active]="selectedCategory() === cat"
-                  (click)="selectCategory(cat)">
-            {{ cat }}
+
+        <!-- All tab -->
+        <div class="cat-tab-wrap">
+          <button class="cat-tab all-tab"
+                  [class.active]="selectedCategory() === '' && !selectedSub()"
+                  (click)="selectCategory('', '')">
+            All
           </button>
+        </div>
+
+        <!-- Category tabs with subcategory dropdown -->
+        @for (cat of dbCategories(); track cat.id) {
+          <div class="cat-tab-wrap"
+               (mouseenter)="hoveredCat.set(cat.id)"
+               (mouseleave)="hoveredCat.set('')">
+            <button class="cat-tab"
+                    [class.active]="selectedCategory() === cat.name"
+                    (click)="selectCategory(cat.name, '')">
+              {{ cat.name }}
+              @if (cat.subcategories?.length) {
+                <span class="chevron">▾</span>
+              }
+            </button>
+
+            <!-- Subcategory dropdown -->
+            @if (hoveredCat() === cat.id && cat.subcategories?.length) {
+              <div class="cat-dropdown">
+                <button class="cat-dropdown-item"
+                        [class.active]="selectedCategory() === cat.name && !selectedSub()"
+                        (click)="selectCategory(cat.name, '')">
+                  All {{ cat.name }}
+                </button>
+                @for (sub of cat.subcategories; track sub) {
+                  <button class="cat-dropdown-item"
+                          [class.active]="selectedSub() === sub"
+                          (click)="selectCategory(cat.name, sub)">
+                    {{ sub }}
+                  </button>
+                }
+              </div>
+            }
+          </div>
         }
+
       </div>
     </div>
 
@@ -102,7 +161,9 @@ import { Product } from '../../../models/product.model';
     <div class="page">
       <div class="page-header">
         <div>
-          <h1 class="page-title">{{ selectedCategory() || 'All Products' }}</h1>
+          <h1 class="page-title">
+            {{ selectedSub() || selectedCategory() || 'All Products' }}
+          </h1>
           <p class="page-count">{{ filtered().length }} product{{ filtered().length !== 1 ? 's' : '' }} found</p>
         </div>
         <div class="header-right">
@@ -135,37 +196,52 @@ import { Product } from '../../../models/product.model';
   `
 })
 export class ProductsComponent implements OnInit {
-  private productService = inject(ProductService);
-  private route = inject(ActivatedRoute);
+  private productService  = inject(ProductService);
+  private categoryService = inject(CategoryService);
+  private route           = inject(ActivatedRoute);
 
-  allProducts    = signal<Product[]>([]);
-  categories     = signal<string[]>([]);
-  searchQuery    = signal('');
+  allProducts      = signal<Product[]>([]);
+  dbCategories     = signal<Category[]>([]);
+  searchQuery      = signal('');
   selectedCategory = signal('');
-  sortBy         = signal('default');
+  selectedSub      = signal('');
+  sortBy           = signal('default');
+  hoveredCat       = signal('');
 
   filtered = computed(() => {
     let items = this.allProducts();
     const q    = this.searchQuery().toLowerCase();
     const cat  = this.selectedCategory();
+    const sub  = this.selectedSub();
     const sort = this.sortBy();
-    if (q)   items = items.filter(p => p.name.toLowerCase().includes(q) || p.description.toLowerCase().includes(q));
+
+    if (q)   items = items.filter(p =>
+      p.name.toLowerCase().includes(q) || p.description.toLowerCase().includes(q));
     if (cat) items = items.filter(p => p.category === cat);
+    // sub filter — match against name or tags
+    if (sub) items = items.filter(p =>
+      p.name.toLowerCase().includes(sub.toLowerCase()) ||
+      (p.tags || []).some((t: string) => t.toLowerCase().includes(sub.toLowerCase())));
     if (sort === 'price-asc')  items = [...items].sort((a, b) => a.sellerPrice - b.sellerPrice);
     if (sort === 'price-desc') items = [...items].sort((a, b) => b.sellerPrice - a.sellerPrice);
     return items;
   });
 
-  selectCategory(cat: string) {
+  selectCategory(cat: string, sub: string) {
     this.selectedCategory.set(cat);
+    this.selectedSub.set(sub);
     this.searchQuery.set('');
+    this.hoveredCat.set('');
   }
 
   ngOnInit() {
     this.productService.getProducts().subscribe(p => this.allProducts.set(p));
-    this.productService.getCategories().subscribe(c => this.categories.set(c));
+    this.categoryService.getCategories().subscribe(c => this.dbCategories.set(c));
     this.route.queryParams.subscribe(params => {
-      if (params['category']) this.selectedCategory.set(params['category']);
+      if (params['category']) {
+        this.selectedCategory.set(params['category']);
+        this.selectedSub.set(params['sub'] || '');
+      }
     });
   }
 }
