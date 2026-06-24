@@ -3,6 +3,7 @@ import { RouterLink } from '@angular/router';
 import { CommonModule, NgFor } from '@angular/common';
 import { ProductCardComponent } from '../../../components/product-card/product-card.component';
 import { ProductService } from '../../../services/product.service';
+import { OrderService } from '../../../services/order.service';
 import { Product } from '../../../models/product.model';
 
 @Component({
@@ -386,7 +387,7 @@ import { Product } from '../../../models/product.model';
           <a href="#categories" class="btn-outline">Explore Categories</a>
         </div>
         <div class="hero-stats">
-          @for (s of stats; track s.label) {
+          @for (s of stats(); track s.label) {
             <div class="stat-item">
               <div class="stat-num">{{ s.num }}</div>
               <div class="stat-label">{{ s.label }}</div>
@@ -565,6 +566,7 @@ import { Product } from '../../../models/product.model';
 })
 export class HomeComponent implements OnInit, OnDestroy {
   private productService = inject(ProductService);
+  private orderService   = inject(OrderService);
   products = signal<Product[]>([]);
   currentSlide = signal(0);
   private slideInterval: any;
@@ -612,11 +614,11 @@ export class HomeComponent implements OnInit, OnDestroy {
     }, 3500);
   }
 
-  stats = [
-    { num: '1000+', label: 'Products' },
-    { num: '5K+',   label: 'Happy Customers' },
-    { num: '4.9★',  label: 'Avg Rating' },
-  ];
+  stats = signal([
+    { num: '...', label: 'Products' },
+    { num: '...', label: 'Happy Customers' },
+    { num: '4.9★', label: 'Avg Rating' },
+  ]);
 
   marqueeItems = [
     'Free Delivery over PKR 2,000', 'Cash on Delivery',
@@ -654,7 +656,21 @@ export class HomeComponent implements OnInit, OnDestroy {
   ];
 
   ngOnInit() {
-    this.productService.getProducts().subscribe(p => this.products.set(p.slice(0, 6)));
+    this.productService.getProducts().subscribe(p => {
+      this.products.set(p.slice(0, 6));
+      this.stats.update(s => s.map((st, i) =>
+        i === 0 ? { ...st, num: p.length > 0 ? p.length + '+' : '0' } : st
+      ));
+    });
+    this.orderService.getOrders().subscribe({
+      next: (orders) => {
+        const customers = orders.length;
+        this.stats.update(s => s.map((st, i) =>
+          i === 1 ? { ...st, num: customers > 0 ? customers + '+' : '0' } : st
+        ));
+      },
+      error: () => {}
+    });
     this.startAutoPlay();
   }
 
