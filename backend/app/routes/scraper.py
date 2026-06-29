@@ -5,6 +5,14 @@ from typing import List, Dict, Any, Optional
 from app.database import ProductDB, get_db
 from datetime import datetime
 import uuid
+import re
+
+try:
+    import httpx
+    from bs4 import BeautifulSoup
+    META_SCRAPER_AVAILABLE = True
+except Exception:
+    META_SCRAPER_AVAILABLE = False
 
 router = APIRouter()
 
@@ -22,12 +30,57 @@ except Exception as e:
 
 class ScrapeRequest(BaseModel):
     url: Optional[str] = None
-    category: Optional[str] = None   # 'Skincare' | 'Makeup' | 'Fragrance' | 'Haircare' | 'Body' | 'All'
+    category: Optional[str] = None
     max_products: int = 100
 
 
 class ImportRequest(BaseModel):
     products: List[Dict[str, Any]]
+
+
+class FetchMetaRequest(BaseModel):
+    url: str
+
+
+# ── Fetch Meta (URL → product info) ─────────────────────────────────────────
+
+@router.post('/fetch-meta')
+async def fetch_meta(request: FetchMetaRequest):
+    if not META_SCRAPER_AVAILABLE:
+        return {'name': '', 'image': '', 'description': '', 'price': 0, 'category': '', 'error': 'httpx or beautifulsoup4 not installed'}
+
+    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'}
+    try:
+        async with httpx.AsyncClient(timeout=15, follow_redirects=True) as client:
+            resp = await client.get(request.url, headers=headers)
+        soup = BeautifulSoup(resp.text, 'html.parser')
+
+        def og(prop):
+            tag = soup.find('meta', property=f'og:{prop}') or soup.find('meta', attrs={'name': f'og:{prop}'})
+            return tag['content'].strip() if tag and tag.get('content') else ''
+
+        name  = og('title') or (soup.find('h1').get_text(strip=True) if soup.find('h1') else '') or 'Product'
+        image = og('image') or ''
+        desc  = og('description') or ''
+
+        # Try to find price
+        price = 0
+        price_text = og('price:amount') or ''
+        if not price_text:
+            for tag in soup.find_all(['span', 'div', 'p'], string=re.compile(r'[\d,]+')):
+                t = tag.get_text(strip=True)
+                nums = re.findall(r'[\d,]+', t)
+                for n in nums:
+                    val = int(n.replace(',', ''))
+                    if 100 <= val <= 500000:
+                        price = val
+                        break
+                if price:
+                    break
+
+        return {'name': name[:120], 'image': image, 'description': desc[:300], 'price': price, 'category': ''}
+    except Exception as e:
+        return {'name': '', 'image': '', 'description': '', 'price': 0, 'category': '', 'error': str(e)}
 
 
 # ── Scrape ──────────────────────────────────────────────────────────────────

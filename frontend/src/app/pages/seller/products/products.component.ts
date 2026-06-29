@@ -1,14 +1,15 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DecimalPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { ProductService } from '../../../services/product.service';
 import { Product } from '../../../models/product.model';
+import { CategoryService, Category } from '../../../services/category.service';
 
 @Component({
   selector: 'app-seller-products',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, DecimalPipe],
   styles: [`
     .page-eyebrow { font-family:'Inter', sans-serif; font-size:0.65rem; font-weight:600; letter-spacing:0.25em; text-transform:uppercase; color:#c9a96e; margin-bottom:0.5rem; }
     .page-title   { font-family:'DM Serif Display', Georgia, serif; font-size:2.25rem; font-weight:400; color:#1a1410; margin-bottom:0.25rem; }
@@ -205,31 +206,55 @@ import { Product } from '../../../models/product.model';
                 <input class="field-input" [(ngModel)]="form.sellerPrice" type="number" placeholder="2200" />
               </div>
             </div>
+
+            <!-- Profit Calculator -->
+            <div style="background:#f5f0e8;border:1px solid #e8e0d6;padding:1rem;border-radius:4px;">
+              <div style="font-family:'Inter',sans-serif;font-size:0.62rem;font-weight:600;letter-spacing:0.15em;text-transform:uppercase;color:#9e9890;margin-bottom:0.75rem;">
+                Profit Calculator (optional)
+              </div>
+              <div class="field-grid">
+                <div>
+                  <label class="field-label">Cost Price (PKR)</label>
+                  <input class="field-input" [(ngModel)]="form.costPrice" type="number" placeholder="1500" (ngModelChange)="calcProfit()" />
+                </div>
+                <div>
+                  <label class="field-label">Profit %</label>
+                  <input class="field-input" [(ngModel)]="form.profitPct" type="number" placeholder="20" (ngModelChange)="calcProfit()" />
+                </div>
+              </div>
+              @if (form.costPrice && form.profitPct) {
+                <div style="margin-top:0.5rem;font-family:'Inter',sans-serif;font-size:0.75rem;color:#6b6560;">
+                  Sell Price = PKR <strong style="color:#1a1410;">{{ calcSellPrice() | number }}</strong>
+                  &nbsp;·&nbsp; Profit = PKR <strong style="color:#16a34a;">{{ calcProfitAmt() | number }}</strong>
+                </div>
+              }
+            </div>
+
+            <!-- Category + Subcategory -->
             <div class="field-grid">
               <div>
                 <label class="field-label">Category *</label>
-                <select class="field-input" [(ngModel)]="form.category">
-                  <option value="">Select...</option>
-                  <option>Skincare</option>
-                  <option>Makeup</option>
-                  <option>Fragrance</option>
-                  <option>Haircare</option>
-                  <option>Body</option>
-                  <option>Clothing</option>
-                  <option>Jewellery</option>
-                  <option>Accessories</option>
-                  <option>Bags</option>
-                  <option>Shoes</option>
-                  <option>Kids</option>
-                  <option>Home & Living</option>
-                  <option>Health & Wellness</option>
-                  <option>Other</option>
+                <select class="field-input" [(ngModel)]="form.category" (ngModelChange)="onCategoryChange($event)">
+                  <option value="">Select category...</option>
+                  @for (cat of dbCategories(); track cat.id) {
+                    <option [value]="cat.name">{{ cat.name }}</option>
+                  }
                 </select>
               </div>
               <div>
-                <label class="field-label">Stock</label>
-                <input class="field-input" [(ngModel)]="form.stock" type="number" placeholder="20" />
+                <label class="field-label">Subcategory</label>
+                <select class="field-input" [(ngModel)]="form.subcategory">
+                  <option value="">Select subcategory...</option>
+                  @for (sub of currentSubcategories(); track sub) {
+                    <option [value]="sub">{{ sub }}</option>
+                  }
+                </select>
               </div>
+            </div>
+
+            <div>
+              <label class="field-label">Stock</label>
+              <input class="field-input" [(ngModel)]="form.stock" type="number" placeholder="20" />
             </div>
             <div>
               <label class="field-label">Product Image</label>
@@ -280,15 +305,18 @@ import { Product } from '../../../models/product.model';
   `
 })
 export class SellerProductsComponent implements OnInit {
-  private productService = inject(ProductService);
-  private http           = inject(HttpClient);
-  products      = signal<Product[]>([]);
-  searchQuery   = '';
-  showModal     = signal(false);
+  private productService  = inject(ProductService);
+  private categoryService = inject(CategoryService);
+  private http            = inject(HttpClient);
+  products       = signal<Product[]>([]);
+  dbCategories   = signal<Category[]>([]);
+  currentSubcategories = signal<string[]>([]);
+  searchQuery    = '';
+  showModal      = signal(false);
   editingProduct = signal<Product | null>(null);
-  formError     = signal('');
-  imageFileName = '';
-  form = { name:'', description:'', originalPrice:0, sellerPrice:0, category:'', stock:20, imageUrl:'' };
+  formError      = signal('');
+  imageFileName  = '';
+  form = { name:'', description:'', originalPrice:0, sellerPrice:0, category:'', subcategory:'', stock:20, imageUrl:'', costPrice:0, profitPct:0 };
 
   onImageFileSelected(event: Event) {
     const input = event.target as HTMLInputElement;
@@ -340,17 +368,24 @@ export class SellerProductsComponent implements OnInit {
     return this.products().filter(p => p.name.toLowerCase().includes(q) || p.category.toLowerCase().includes(q));
   }
 
-  ngOnInit() { this.productService.getProducts().subscribe(p => this.products.set(p)); }
+  ngOnInit() {
+    this.productService.getProducts().subscribe(p => this.products.set(p));
+    this.categoryService.getCategories().subscribe(c => this.dbCategories.set(c));
+  }
 
   openAddModal() {
     this.editingProduct.set(null);
-    this.form = { name:'', description:'', originalPrice:0, sellerPrice:0, category:'', stock:20, imageUrl:'' };
+    this.form = { name:'', description:'', originalPrice:0, sellerPrice:0, category:'', subcategory:'', stock:20, imageUrl:'', costPrice:0, profitPct:0 };
+    this.currentSubcategories.set([]);
     this.imageFileName = '';
     this.formError.set(''); this.showModal.set(true);
   }
   openEditModal(p: Product) {
     this.editingProduct.set(p);
-    this.form = { name:p.name, description:p.description, originalPrice:p.originalPrice, sellerPrice:p.sellerPrice, category:p.category, stock:p.stock, imageUrl:p.images[0]||'' };
+    this.form = { name:p.name, description:p.description, originalPrice:p.originalPrice, sellerPrice:p.sellerPrice, category:p.category, subcategory: (p.tags?.[0] || ''), stock:p.stock, imageUrl:p.images[0]||'', costPrice:0, profitPct:0 };
+    // populate subcategories for the current category
+    const cat = this.dbCategories().find(c => c.name === p.category);
+    this.currentSubcategories.set(cat?.subcategories || []);
     this.imageFileName = '';
     this.formError.set(''); this.showModal.set(true);
   }
@@ -360,7 +395,7 @@ export class SellerProductsComponent implements OnInit {
     if (!this.form.name || !this.form.description || !this.form.category || !this.form.sellerPrice) {
       this.formError.set('Please fill all required fields.'); return;
     }
-    const data = { name:this.form.name, description:this.form.description, originalPrice:Number(this.form.originalPrice), sellerPrice:Number(this.form.sellerPrice), category:this.form.category, stock:Number(this.form.stock), images:this.form.imageUrl?[this.form.imageUrl]:[], tags:[], isActive:true };
+    const data = { name:this.form.name, description:this.form.description, originalPrice:Number(this.form.originalPrice), sellerPrice:Number(this.form.sellerPrice), category:this.form.category, stock:Number(this.form.stock), images:this.form.imageUrl?[this.form.imageUrl]:[], tags:this.form.subcategory ? [this.form.subcategory] : [], isActive:true };
     const editing = this.editingProduct();
     if (editing) {
       this.productService.updateProduct(editing.id, data).subscribe({
@@ -378,6 +413,29 @@ export class SellerProductsComponent implements OnInit {
           this.formError.set(msg);
         }
       });
+    }
+  }
+
+  onCategoryChange(catName: string) {
+    const cat = this.dbCategories().find(c => c.name === catName);
+    this.currentSubcategories.set(cat?.subcategories || []);
+    this.form.subcategory = '';
+  }
+
+  calcSellPrice(): number {
+    if (!this.form.costPrice || !this.form.profitPct) return 0;
+    return Math.round(this.form.costPrice * (1 + this.form.profitPct / 100));
+  }
+
+  calcProfitAmt(): number {
+    return Math.round(this.calcSellPrice() - this.form.costPrice);
+  }
+
+  calcProfit() {
+    const sell = this.calcSellPrice();
+    if (sell > 0) {
+      this.form.sellerPrice  = sell;
+      this.form.originalPrice = Math.round(this.form.costPrice * 1.1);
     }
   }
 

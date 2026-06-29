@@ -32,6 +32,7 @@ export const routes: Routes = [
       { path: 'dashboard', loadComponent: () => import('./pages/seller/dashboard/dashboard.component').then(m => m.DashboardComponent) },
       { path: 'products', loadComponent: () => import('./pages/seller/products/products.component').then(m => m.SellerProductsComponent) },
       { path: 'orders', loadComponent: () => import('./pages/seller/orders/orders.component').then(m => m.SellerOrdersComponent) },
+      { path: 'scraper', loadComponent: () => import('./pages/seller/scraper/scraper.component').then(m => m.ScraperComponent) },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
     ]
   },
