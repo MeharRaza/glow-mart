@@ -104,7 +104,7 @@ import { RouterLink } from '@angular/router';
 
         <!-- Brand -->
         <div>
-          <div class="brand-name">GlowMart</div>
+          <div class="brand-name">Shopzee</div>
           <div class="brand-tagline">Premium Beauty</div>
           <p class="brand-desc">
             Curated beauty &amp; skincare products delivered to your door. No account needed — just shop and glow.
@@ -163,7 +163,7 @@ import { RouterLink } from '@angular/router';
 
       <div style="border-top:1px solid rgba(255,255,255,0.05);">
         <div class="footer-bottom">
-          <span class="footer-copy">© 2025 GlowMart. All rights reserved.</span>
+          <span class="footer-copy">© 2025 Shopzee. All rights reserved.</span>
           <span class="footer-copy" style="color:#c9a96e;">Made with care from Pakistan</span>
         </div>
       </div>

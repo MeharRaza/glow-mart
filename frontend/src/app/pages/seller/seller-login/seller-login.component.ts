@@ -209,7 +209,7 @@ import { AuthService } from '../../../services/auth.service';
 
       <!-- Left decorative panel -->
       <div class="left-panel">
-        <div class="brand-name">GlowMart</div>
+        <div class="brand-name">Shopzee</div>
         <div class="brand-sub">Seller Portal</div>
         <div class="left-divider"></div>
 
@@ -266,9 +266,9 @@ import { AuthService } from '../../../services/auth.service';
         <div class="login-box">
 
           <div class="login-header">
-            <div class="login-eyebrow">Admin Access</div>
-            <h1 class="login-title">Welcome<br>Back</h1>
-            <p class="login-sub">Sign in to your seller dashboard</p>
+            <div class="login-eyebrow">Seller Access</div>
+            <h1 class="login-title">Seller<br>Login</h1>
+            <p class="login-sub">Sign in to manage your store</p>
           </div>
 
           <div class="field-group">
@@ -279,7 +279,7 @@ import { AuthService } from '../../../services/auth.service';
                   <path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
                 </svg>
               </span>
-              <input type="email" [(ngModel)]="email" placeholder="seller@glowmart.pk"
+              <input type="email" [(ngModel)]="email" placeholder="seller@shopzee.pk"
                 class="field-input" (keyup.enter)="login()" />
             </div>
           </div>
@@ -313,7 +313,7 @@ import { AuthService } from '../../../services/auth.service';
           <div class="demo-box">
             <div class="demo-label">Demo Credentials</div>
             <div class="demo-creds">
-              <span>Email:</span> seller&#64;glowmart.pk<br>
+              <span>Email:</span> seller&#64;shopzee.pk<br>
               <span>Password:</span> seller123
             </div>
           </div>

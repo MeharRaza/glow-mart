@@ -118,7 +118,7 @@ interface ScrapedProduct {
           <div style="font-family:'Jost',sans-serif;font-size:0.78rem;font-weight:500;color:#1a1410;margin-bottom:0.125rem;">Local Backend Required for Scraping</div>
           <div style="font-family:'Jost',sans-serif;font-size:0.75rem;color:#9e9890;">
             Scraper runs on your local machine. Start backend first:
-            <code style="background:#e8e0d6;padding:0.1rem 0.375rem;font-family:'JetBrains Mono',monospace;font-size:0.72rem;color:#1a1410;">python -m uvicorn app.main:app --port 8000</code>
+            <code style="background:#e8e0d6;padding:0.1rem 0.375rem;font-family:'JetBrains Mono',monospace;font-size:0.72rem;color:#1a1410;">python -m uvicorn app.main:app --port 8001</code>
           </div>
         </div>
       </div>
@@ -248,7 +248,7 @@ interface ScrapedProduct {
 export class ScraperComponent {
   private http    = inject(HttpClient);
   private apiUrl  = 'https://glow-mart-production.up.railway.app/api';
-  private localUrl = 'http://localhost:8000/api';
+  private localUrl = 'http://localhost:8001/api';
 
   // Use local backend for scraping (Playwright runs locally)
   // Use production for import (saves to real DB)
@@ -294,7 +294,7 @@ export class ScraperComponent {
         else this.results.set(data);
         this.loading.set(false);
       },
-      error: (err) => { this.error.set(err?.error?.detail || 'Scraper failed. Make sure local backend is running on port 8000.'); this.loading.set(false); }
+      error: (err) => { this.error.set(err?.error?.detail || 'Scraper failed. Make sure local backend is running on port 8001.'); this.loading.set(false); }
     });
   }
 

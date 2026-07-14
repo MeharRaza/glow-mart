@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, signal, computed } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { CommonModule, NgFor } from '@angular/common';
 import { ProductCardComponent } from '../../../components/product-card/product-card.component';
@@ -10,431 +10,281 @@ import { Product } from '../../../models/product.model';
   standalone: true,
   imports: [RouterLink, CommonModule, NgFor, ProductCardComponent],
   styles: [`
+
     /* ── Hero ─────────────────────────────────────────────── */
     .hero {
       min-height: 92vh;
       display: grid;
       grid-template-columns: 1fr 1fr;
-      background: #f5f0e8;
+      align-items: center;
+      background: #faf7f4;
       overflow: hidden;
     }
     @media (max-width: 900px) {
-      .hero { grid-template-columns: 1fr; min-height: auto; }
-      .hero-visual { display: none; }
+      .hero { grid-template-columns: 1fr; }
+      .hero-carousel-side { display: none; }
     }
 
+    /* Left content */
     .hero-content {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      padding: 6rem 4rem 6rem 8rem;
+      padding: 6rem 3rem 6rem 8rem;
+      display: flex; flex-direction: column; justify-content: center;
     }
-    @media (max-width: 1200px) { .hero-content { padding: 4rem 3rem 4rem 4rem; } }
-    @media (max-width: 900px)  { .hero-content { padding: 5rem 2rem 4rem; align-items: center; text-align: center; } }
+    @media (max-width: 1200px) { .hero-content { padding: 4rem 2rem 4rem 4rem; } }
 
     .hero-eyebrow {
       font-family: 'Jost', sans-serif;
-      font-size: 0.7rem;
-      font-weight: 500;
-      letter-spacing: 0.25em;
-      text-transform: uppercase;
-      color: #c9a96e;
-      margin-bottom: 1.5rem;
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
+      font-size: 0.7rem; font-weight: 500;
+      letter-spacing: 0.3em; text-transform: uppercase;
+      color: #c9a96e; margin-bottom: 1.5rem;
+      display: flex; align-items: center; gap: 0.75rem;
     }
-    .hero-eyebrow::before, .hero-eyebrow::after {
-      content: '';
-      flex: 1;
-      max-width: 40px;
-      height: 1px;
-      background: #c9a96e;
-    }
-    @media (max-width: 900px) {
-      .hero-eyebrow::before, .hero-eyebrow::after { display: none; }
-    }
+    .hero-eyebrow::after { content: ''; width: 40px; height: 1px; background: #c9a96e; }
 
     .hero-title {
       font-family: 'Cormorant Garamond', Georgia, serif;
-      font-size: clamp(3.5rem, 5vw, 5.5rem);
-      font-weight: 300;
-      line-height: 1.05;
-      color: #1a1410;
-      margin-bottom: 1.5rem;
+      font-size: clamp(3.2rem, 5vw, 5.5rem);
+      font-weight: 300; line-height: 1.05;
+      color: #1a1410; margin-bottom: 1.5rem;
     }
     .hero-title em {
-      font-style: italic;
-      font-weight: 400;
+      font-style: italic; font-weight: 400;
       background: linear-gradient(135deg, #c9a96e, #8b6914);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
     }
 
     .hero-desc {
       font-family: 'Jost', sans-serif;
-      font-size: 1rem;
-      color: #6b6560;
-      line-height: 1.8;
-      max-width: 400px;
-      margin-bottom: 2.5rem;
+      font-size: 0.95rem; color: #6b6560;
+      line-height: 1.8; max-width: 420px; margin-bottom: 2.5rem;
     }
 
     .hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 3rem; }
 
     .hero-stats {
-      display: flex;
-      gap: 2.5rem;
-      padding-top: 2rem;
-      border-top: 1px solid #ddd8d0;
+      display: flex; gap: 2.5rem;
+      padding-top: 2rem; border-top: 1px solid #ddd8d0;
     }
     .stat-num {
       font-family: 'Cormorant Garamond', serif;
-      font-size: 1.75rem;
-      font-weight: 600;
-      color: #1a1410;
-      line-height: 1;
+      font-size: 1.75rem; font-weight: 600; color: #1a1410; line-height: 1;
     }
     .stat-label {
-      font-family: 'Jost', sans-serif;
-      font-size: 0.7rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: #9e9890;
-      margin-top: 0.25rem;
+      font-family: 'Jost', sans-serif; font-size: 0.7rem;
+      letter-spacing: 0.1em; text-transform: uppercase; color: #9e9890; margin-top: 0.25rem;
     }
 
-    .hero-visual {
+    /* ── Right: 3D Carousel ──────────────────────────────── */
+    .hero-carousel-side {
       position: relative;
-      background: linear-gradient(160deg, #ede5d8 0%, #e0d4c4 100%);
-      overflow: hidden;
+      height: 100%;
+      min-height: 92vh;
       display: flex;
       align-items: center;
       justify-content: center;
+      perspective: 1200px;
+      overflow: hidden;
     }
 
-    .hero-visual-inner {
+    .carousel-track {
       position: relative;
       width: 100%;
-      height: 100%;
+      height: 520px;
       display: flex;
       align-items: center;
       justify-content: center;
     }
 
-    /* Main tall product image */
-    .hero-main-img {
+    .c-card {
       position: absolute;
-      left: 50%;
-      top: 50%;
-      transform: translate(-62%, -50%);
-      width: 42%;
-      aspect-ratio: 2/3;
+      width: 220px;
+      height: 300px;
+      border-radius: 4px;
       overflow: hidden;
-      box-shadow: 0 24px 64px rgba(26,20,16,0.18);
-    }
-    .hero-main-img img {
-      width: 100%; height: 100%; object-fit: cover;
-    }
-
-    /* Second overlapping image */
-    .hero-second-img {
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      transform: translate(-5%, -58%);
-      width: 36%;
-      aspect-ratio: 2/3;
-      overflow: hidden;
-      box-shadow: 0 16px 48px rgba(26,20,16,0.14);
-    }
-    .hero-second-img img {
-      width: 100%; height: 100%; object-fit: cover;
+      cursor: pointer;
+      transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      transform-style: preserve-3d;
     }
 
-    /* Third small image bottom right */
-    .hero-third-img {
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      transform: translate(28%, -20%);
-      width: 28%;
-      aspect-ratio: 1/1;
-      overflow: hidden;
-      box-shadow: 0 12px 32px rgba(26,20,16,0.12);
-    }
-    .hero-third-img img {
-      width: 100%; height: 100%; object-fit: cover;
+    .c-card img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.6s ease;
     }
 
-    /* Floating info cards */
-    .hero-float {
-      position: absolute;
-      background: rgba(255,255,255,0.95);
-      backdrop-filter: blur(8px);
-      border: 1px solid rgba(255,255,255,0.8);
-      box-shadow: 0 8px 32px rgba(26,20,16,0.1);
-      padding: 0.875rem 1.125rem;
-    }
-    .hero-float.top-left  { top: 12%; left: 6%; }
-    .hero-float.bot-right { bottom: 10%; right: 5%; }
-
-    .float-label {
-      font-family: 'Jost', sans-serif;
-      font-size: 0.6rem; font-weight: 500;
-      letter-spacing: 0.18em; text-transform: uppercase;
-      color: #9e9890; margin-bottom: 0.25rem;
-    }
-    .float-value {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1rem; font-weight: 600; color: #1a1410;
-    }
-    .float-sub {
-      font-family: 'Jost', sans-serif;
-      font-size: 0.72rem; color: #c9a96e; margin-top: 0.2rem;
+    /* Active / center card */
+    .c-card.pos-0 {
+      transform: translateX(0) scale(1) translateZ(0px);
+      z-index: 5;
+      filter: none;
+      box-shadow: 0 32px 80px rgba(26,20,16,0.28);
+      width: 260px;
+      height: 360px;
     }
 
-    /* Decorative gold line */
-    .hero-deco-line {
-      position: absolute;
-      top: 0; bottom: 0; left: 0;
-      width: 3px;
-      background: linear-gradient(180deg, transparent, #c9a96e 30%, #c9a96e 70%, transparent);
+    /* One step left */
+    .c-card.pos-n1 {
+      transform: translateX(-220px) scale(0.82) translateZ(-80px);
+      z-index: 4;
+      filter: blur(1.5px) brightness(0.75);
+      box-shadow: 0 16px 40px rgba(26,20,16,0.14);
+    }
+
+    /* Two steps left */
+    .c-card.pos-n2 {
+      transform: translateX(-390px) scale(0.66) translateZ(-160px);
+      z-index: 3;
+      filter: blur(3px) brightness(0.55);
+      box-shadow: 0 8px 24px rgba(26,20,16,0.1);
+    }
+
+    /* Three steps left — barely visible */
+    .c-card.pos-n3 {
+      transform: translateX(-520px) scale(0.52) translateZ(-240px);
       z-index: 2;
+      filter: blur(5px) brightness(0.35);
+      opacity: 0.5;
     }
+
+    /* One step right */
+    .c-card.pos-p1 {
+      transform: translateX(220px) scale(0.82) translateZ(-80px);
+      z-index: 4;
+      filter: blur(1.5px) brightness(0.75);
+      box-shadow: 0 16px 40px rgba(26,20,16,0.14);
+    }
+
+    /* Two steps right */
+    .c-card.pos-p2 {
+      transform: translateX(390px) scale(0.66) translateZ(-160px);
+      z-index: 3;
+      filter: blur(3px) brightness(0.55);
+      box-shadow: 0 8px 24px rgba(26,20,16,0.1);
+    }
+
+    /* Three steps right */
+    .c-card.pos-p3 {
+      transform: translateX(520px) scale(0.52) translateZ(-240px);
+      z-index: 2;
+      filter: blur(5px) brightness(0.35);
+      opacity: 0.5;
+    }
+
+    /* Hidden */
+    .c-card.pos-hidden {
+      opacity: 0;
+      pointer-events: none;
+      transform: translateX(0) scale(0.4) translateZ(-300px);
+    }
+
+    /* Label on active card */
+    .c-card-label {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: 1.5rem 1rem 1rem;
+      background: linear-gradient(to top, rgba(26,20,16,0.85) 0%, transparent 100%);
+      transition: opacity 0.4s;
+    }
+    .c-card:not(.pos-0) .c-card-label { opacity: 0; }
+    .c-label-cat {
+      font-family: 'Jost', sans-serif; font-size: 0.6rem;
+      letter-spacing: 0.2em; text-transform: uppercase; color: #c9a96e; margin-bottom: 0.2rem;
+    }
+    .c-label-name {
+      font-family: 'Cormorant Garamond', serif; font-size: 1.1rem;
+      font-weight: 500; color: #fff;
+    }
+
+    /* Dots */
+    .carousel-dots {
+      position: absolute; bottom: 2rem;
+      display: flex; gap: 0.5rem; align-items: center; justify-content: center;
+    }
+    .cdot {
+      width: 20px; height: 2px;
+      background: #ddd8d0; border: none; padding: 0; cursor: pointer;
+      transition: all 0.3s;
+    }
+    .cdot.active { width: 36px; background: #c9a96e; }
 
     /* ── Marquee ──────────────────────────────────────────── */
-    .marquee-bar {
-      background: #1a1410;
-      padding: 0.875rem 0;
-      overflow: hidden;
-    }
+    .marquee-bar { padding: 1.1rem 0; overflow: hidden; border-bottom: 1px solid #e8e0d6; }
 
     /* ── Section header ───────────────────────────────────── */
-    .section-header {
-      text-align: center;
-      margin-bottom: 3.5rem;
-    }
+    .section-header { text-align: center; margin-bottom: 3.5rem; }
     .section-eyebrow {
-      font-family: 'Jost', sans-serif;
-      font-size: 0.7rem;
-      font-weight: 500;
-      letter-spacing: 0.25em;
-      text-transform: uppercase;
-      color: #c9a96e;
-      margin-bottom: 0.875rem;
+      font-family: 'Jost', sans-serif; font-size: 0.7rem; font-weight: 500;
+      letter-spacing: 0.25em; text-transform: uppercase; color: #c9a96e; margin-bottom: 0.875rem;
     }
     .section-title {
       font-family: 'Cormorant Garamond', Georgia, serif;
-      font-size: clamp(2rem, 3.5vw, 3rem);
-      font-weight: 400;
-      color: #1a1410;
-      line-height: 1.15;
+      font-size: clamp(2rem, 3.5vw, 3rem); font-weight: 400; color: #1a1410; line-height: 1.15;
     }
     .section-title em { font-style: italic; }
 
-    /* ── Category cards ───────────────────────────────────── */
+    /* ── Category grid ────────────────────────────────────── */
     .cat-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 1.5rem;
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.25rem;
     }
-    @media (max-width: 900px) { .cat-grid { grid-template-columns: repeat(2, 1fr); } }
-    @media (max-width: 480px) { .cat-grid { grid-template-columns: repeat(2, 1fr); gap: 1rem; } }
+    @media (max-width: 1024px) { .cat-grid { grid-template-columns: repeat(3,1fr); } }
+    @media (max-width: 768px)  { .cat-grid { grid-template-columns: repeat(2,1fr); gap: 1rem; } }
 
-    .cat-card {
-      position: relative;
-      overflow: hidden;
-      cursor: pointer;
-      text-decoration: none;
-      display: block;
-    }
-
-    .cat-img {
-      aspect-ratio: 3/4;
-      overflow: hidden;
-      position: relative;
-    }
-    .cat-img img {
-      width: 100%; height: 100%;
-      object-fit: cover;
-      transition: transform 0.7s cubic-bezier(0.25,0.46,0.45,0.94);
-      display: block;
-    }
+    .cat-card { position: relative; overflow: hidden; cursor: pointer; text-decoration: none; display: block; }
+    .cat-img { aspect-ratio: 4/5; overflow: hidden; position: relative; }
+    .cat-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.7s cubic-bezier(0.25,0.46,0.45,0.94); display: block; }
     .cat-card:hover .cat-img img { transform: scale(1.08); }
-
-    .cat-overlay {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(
-        to bottom,
-        rgba(26,20,16,0) 40%,
-        rgba(26,20,16,0.55) 75%,
-        rgba(26,20,16,0.82) 100%
-      );
-      transition: opacity 0.4s ease;
-    }
-    .cat-card:hover .cat-overlay {
-      background: linear-gradient(
-        to bottom,
-        rgba(26,20,16,0) 30%,
-        rgba(26,20,16,0.65) 70%,
-        rgba(26,20,16,0.88) 100%
-      );
-    }
-
-    .cat-info {
-      position: absolute;
-      bottom: 0; left: 0; right: 0;
-      padding: 1.5rem 1.25rem 1.25rem;
-    }
-    .cat-name {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.3rem;
-      font-weight: 500;
-      color: #fff;
-      margin-bottom: 0.2rem;
-      line-height: 1.2;
-    }
-    .cat-desc {
-      font-family: 'Jost', sans-serif;
-      font-size: 0.75rem;
-      color: rgba(255,255,255,0.65);
-      letter-spacing: 0.03em;
-      margin-bottom: 0.625rem;
-    }
-    .cat-arrow {
-      font-family: 'Jost', sans-serif;
-      font-size: 0.68rem;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: #c9a96e;
-      opacity: 0;
-      transform: translateY(6px);
-      transition: all 0.3s ease;
-      display: flex;
-      align-items: center;
-      gap: 4px;
-    }
+    .cat-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(26,20,16,0) 40%, rgba(26,20,16,0.75) 100%); }
+    .cat-info { position: absolute; bottom: 0; left: 0; right: 0; padding: 1.25rem 1rem; }
+    .cat-name { font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; font-weight: 500; color: #fff; margin-bottom: 0.15rem; }
+    .cat-desc { font-family: 'Jost', sans-serif; font-size: 0.72rem; color: rgba(255,255,255,0.6); margin-bottom: 0.5rem; }
+    .cat-arrow { font-family: 'Jost', sans-serif; font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; color: #c9a96e; opacity: 0; transform: translateY(6px); transition: all 0.3s ease; display: flex; align-items: center; gap: 4px; }
     .cat-card:hover .cat-arrow { opacity: 1; transform: translateY(0); }
 
     /* ── Products grid ────────────────────────────────────── */
-    .products-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 2rem;
-    }
-    @media (max-width: 900px) { .products-grid { grid-template-columns: repeat(2, 1fr); gap: 1.5rem; } }
+    .products-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 2rem; }
+    @media (max-width: 900px) { .products-grid { grid-template-columns: repeat(2,1fr); gap: 1.5rem; } }
     @media (max-width: 480px) { .products-grid { grid-template-columns: 1fr; } }
 
     /* ── How it works ─────────────────────────────────────── */
-    .steps-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 0;
-    }
+    .steps-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 0; }
     @media (max-width: 768px) { .steps-grid { grid-template-columns: 1fr; } }
-
-    .step-item {
-      padding: 3rem 2.5rem;
-      border-right: 1px solid #e8e0d6;
-      text-align: center;
-    }
+    .step-item { padding: 3rem 2.5rem; border-right: 1px solid #e8e0d6; text-align: center; }
     .step-item:last-child { border-right: none; }
-    @media (max-width: 768px) {
-      .step-item { border-right: none; border-bottom: 1px solid #e8e0d6; }
-      .step-item:last-child { border-bottom: none; }
-    }
-
-    .step-num {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 3.5rem;
-      font-weight: 300;
-      color: #e8e0d6;
-      line-height: 1;
-      margin-bottom: 1rem;
-    }
+    @media (max-width: 768px) { .step-item { border-right: none; border-bottom: 1px solid #e8e0d6; } .step-item:last-child { border-bottom: none; } }
+    .step-num { font-family: 'Cormorant Garamond', serif; font-size: 3.5rem; font-weight: 300; color: #e8e0d6; line-height: 1; margin-bottom: 1rem; }
     .step-icon { display:flex; justify-content:center; margin-bottom: 1rem; }
-    .step-title {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.3rem;
-      font-weight: 500;
-      color: #1a1410;
-      margin-bottom: 0.75rem;
-    }
-    .step-desc {
-      font-family: 'Jost', sans-serif;
-      font-size: 0.85rem;
-      color: #9e9890;
-      line-height: 1.7;
-    }
+    .step-title { font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; font-weight: 500; color: #1a1410; margin-bottom: 0.75rem; }
+    .step-desc { font-family: 'Jost', sans-serif; font-size: 0.85rem; color: #9e9890; line-height: 1.7; }
 
     /* ── CTA banner ───────────────────────────────────────── */
-    .cta-banner {
-      background: #1a1410;
-      padding: 6rem 2rem;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-    }
-    .cta-banner::before {
-      content: '';
-      position: absolute;
-      top: 50%; left: 50%;
-      transform: translate(-50%, -50%);
-      width: 600px; height: 600px;
-      background: radial-gradient(circle, rgba(201,169,110,0.08) 0%, transparent 70%);
-      pointer-events: none;
-    }
-    .cta-title {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(2.5rem, 5vw, 4rem);
-      font-weight: 300;
-      color: #faf7f4;
-      line-height: 1.15;
-      margin-bottom: 1.25rem;
-    }
-    .cta-title em {
-      font-style: italic;
-      background: linear-gradient(135deg, #c9a96e, #8b6914);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-    .cta-sub {
-      font-family: 'Jost', sans-serif;
-      font-size: 0.9rem;
-      color: #9e9890;
-      margin-bottom: 2.5rem;
-      max-width: 400px;
-      margin-left: auto;
-      margin-right: auto;
-    }
+    .cta-banner { background: rgba(250,247,244,0.96); padding: 5rem 2rem; text-align: center; position: relative; overflow: hidden; border-top: 1px solid #e8e0d6; }
+    .cta-banner::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, #c9a96e, transparent); pointer-events: none; }
+    .cta-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 300; color: #1a1410; line-height: 1.15; margin-bottom: 1.25rem; letter-spacing: 0.02em; }
+    .cta-title em { font-style: italic; background: linear-gradient(135deg, #c9a96e, #8b6914); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .cta-sub { font-family: 'Jost', sans-serif; font-size: 0.85rem; letter-spacing: 0.1em; color: #6b6560; margin-bottom: 2.5rem; max-width: 400px; margin-left: auto; margin-right: auto; }
+    .cta-eyebrow { font-family: 'Jost', sans-serif; font-size: 0.65rem; font-weight: 500; letter-spacing: 0.3em; text-transform: uppercase; color: #c9a96e; margin-bottom: 1.25rem; display: flex; align-items: center; justify-content: center; gap: 0.75rem; }
+    .cta-eyebrow::before, .cta-eyebrow::after { content: ''; width: 40px; height: 1px; background: rgba(201,169,110,0.5); }
   `],
   template: `
 
     <!-- ══════════════════════════════════════════════ HERO ══ -->
     <section class="hero">
+
       <!-- Left: Content -->
       <div class="hero-content">
-        <div class="hero-eyebrow">Luxury Beauty</div>
-
+        <div class="hero-eyebrow">Everything in One Place</div>
         <h1 class="hero-title">
-          Discover Your<br>
-          <em>Perfect Glow</em><br>
-          This Season
+          Shop <em>Everything</em><br>You Love
         </h1>
-
         <p class="hero-desc">
-          Premium skincare, makeup &amp; fragrance curated for you. No account needed — just browse, order, and glow.
+          Fashion, beauty, kitchen, electronics, accessories &amp; more —
+          all delivered to your door. Cash on delivery. No account needed.
         </p>
-
         <div class="hero-btns">
-          <a routerLink="/products" class="btn-primary">Shop the Collection</a>
+          <a routerLink="/products" class="btn-primary">Shop Now</a>
           <a href="#categories" class="btn-outline">Explore Categories</a>
         </div>
-
         <div class="hero-stats">
           @for (s of stats; track s.label) {
             <div>
@@ -445,65 +295,35 @@ import { Product } from '../../../models/product.model';
         </div>
       </div>
 
-      <!-- Right: Visual -->
-      <div class="hero-visual">
-        <div class="hero-deco-line"></div>
-        <div class="hero-visual-inner">
-
-          <!-- Main tall image -->
-          <div class="hero-main-img">
-            <img src="https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=600&q=80" alt="Skincare" />
-          </div>
-
-          <!-- Second overlapping image -->
-          <div class="hero-second-img">
-            <img src="https://images.unsplash.com/photo-1586495777744-4e6232bf9f06?w=600&q=80" alt="Makeup" />
-          </div>
-
-          <!-- Third small image -->
-          <div class="hero-third-img">
-            <img src="https://images.unsplash.com/photo-1541643600914-78b084683702?w=400&q=80" alt="Fragrance" />
-          </div>
-
-          <!-- Floating card: top left -->
-          <div class="hero-float top-left">
-            <div class="float-label">New Arrival</div>
-            <div class="float-value">Glow Serum Pro</div>
-            <div class="float-sub">PKR 2,800</div>
-          </div>
-
-          <!-- Floating card: bottom right -->
-          <div class="hero-float bot-right">
-            <div style="display:flex;align-items:center;gap:0.625rem;">
-              <div style="display:flex;gap:2px;">
-                @for (s of [1,2,3,4,5]; track s) {
-                  <svg width="12" height="12" viewBox="0 0 20 20" fill="#c9a96e">
-                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-                  </svg>
-                }
-              </div>
-              <div>
-                <div class="float-value" style="font-size:0.9rem;">4.9 / 5.0</div>
-                <div class="float-label" style="margin:0;">1,200+ Reviews</div>
+      <!-- Right: 3D Card Carousel -->
+      <div class="hero-carousel-side">
+        <div class="carousel-track">
+          @for (slide of heroSlides; track slide.id; let i = $index) {
+            <div class="c-card" [ngClass]="getCardClass(i)" (click)="goToSlide(i)">
+              <img [src]="slide.img" [alt]="slide.name" loading="lazy" />
+              <div class="c-card-label">
+                <div class="c-label-cat">{{ slide.category }}</div>
+                <div class="c-label-name">{{ slide.name }}</div>
               </div>
             </div>
-          </div>
-
+          }
         </div>
 
-        <!-- Vertical text -->
-        <div style="position:absolute;bottom:2rem;right:1.5rem;font-family:'Jost',sans-serif;font-size:0.6rem;letter-spacing:0.25em;text-transform:uppercase;color:#b0a898;writing-mode:vertical-rl;">
-          Premium · Authentic · Pakistan
+        <!-- Dots -->
+        <div class="carousel-dots">
+          @for (slide of heroSlides; track slide.id; let i = $index) {
+            <button class="cdot" [class.active]="currentSlide() === i" (click)="goToSlide(i)"></button>
+          }
         </div>
       </div>
+
     </section>
 
     <!-- ══════════════════════════════════════════ MARQUEE ══ -->
     <div class="marquee-bar">
-      <div class="marquee-track" style="display:flex;gap:3rem;align-items:center;">
+      <div style="display:flex;gap:3rem;align-items:center;">
         @for (item of marqueeItems.concat(marqueeItems); track $index) {
-          <span style="font-family:'Jost',sans-serif;font-size:0.7rem;letter-spacing:0.2em;text-transform:uppercase;color:#c9a96e;white-space:nowrap;flex-shrink:0;display:flex;align-items:center;gap:0.75rem;">
-            <!-- diamond separator -->
+          <span style="font-family:'Jost',sans-serif;font-size:18px;font-weight:600;letter-spacing:0.18em;text-transform:uppercase;color:#1a1410;white-space:nowrap;flex-shrink:0;display:flex;align-items:center;gap:0.75rem;">
             <svg width="8" height="8" viewBox="0 0 8 8" fill="#c9a96e"><rect x="4" y="0" width="5.66" height="5.66" transform="rotate(45 4 0)"/></svg>
             {{ item }}
           </span>
@@ -514,34 +334,28 @@ import { Product } from '../../../models/product.model';
     <!-- ══════════════════════════════════════════ CATEGORIES ══ -->
     <section id="categories" style="padding:6rem 2rem;max-width:1280px;margin:0 auto;">
       <div class="section-header">
-        <div class="section-eyebrow">Explore</div>
+        <div class="section-eyebrow">Browse</div>
         <h2 class="section-title">Shop by <em>Category</em></h2>
       </div>
-
       <div class="cat-grid">
         @for (cat of categories; track cat.name) {
           <a routerLink="/products" [queryParams]="{category: cat.name}" class="cat-card">
-            <!-- Full bleed image -->
             <div class="cat-img">
               <img [src]="cat.img" [alt]="cat.name" loading="lazy" />
               <div class="cat-overlay"></div>
             </div>
-            <!-- Text over image -->
             <div class="cat-info">
               <div class="cat-name">{{ cat.name }}</div>
               <div class="cat-desc">{{ cat.desc }}</div>
               <div class="cat-arrow">
                 Shop Now
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:middle;margin-left:4px;"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
               </div>
             </div>
           </a>
         }
       </div>
     </section>
-
-    <!-- Gold divider -->
-    <div style="max-width:1280px;margin:0 auto;padding:0 2rem;"><div class="gold-divider"></div></div>
 
     <!-- ══════════════════════════════════════════ PRODUCTS ══ -->
     <section style="padding:6rem 2rem;max-width:1280px;margin:0 auto;">
@@ -554,11 +368,10 @@ import { Product } from '../../../models/product.model';
            style="font-family:'Jost',sans-serif;font-size:0.75rem;letter-spacing:0.15em;text-transform:uppercase;color:#1a1410;text-decoration:none;border-bottom:1px solid #1a1410;padding-bottom:2px;display:inline-flex;align-items:center;gap:0.5rem;"
            onmouseover="this.style.color='#c9a96e';this.style.borderColor='#c9a96e'"
            onmouseout="this.style.color='#1a1410';this.style.borderColor='#1a1410'">
-          View All Products
+          View All
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
         </a>
       </div>
-
       <div class="products-grid">
         @for (product of products(); track product.id) {
           <app-product-card [product]="product" />
@@ -612,114 +425,101 @@ import { Product } from '../../../models/product.model';
     <!-- ══════════════════════════════════════════ CTA BANNER ══ -->
     <div class="cta-banner">
       <div style="position:relative;max-width:700px;margin:0 auto;">
-        <div class="section-eyebrow" style="color:#c9a96e;margin-bottom:1.25rem;">Limited Offer</div>
-        <h2 class="cta-title">
-          Free Delivery on<br>
-          <em>Orders Over PKR 2,000</em>
-        </h2>
-        <p class="cta-sub">Cash on delivery available. No account needed. Shop now and glow up.</p>
-        <a routerLink="/products" class="btn-gold" style="display:inline-flex;">
-          Shop the Collection
-        </a>
+        <div class="cta-eyebrow">Limited Offer</div>
+        <h2 class="cta-title">Free Delivery on<br><em>Orders Over PKR 2,000</em></h2>
+        <p class="cta-sub">Cash on delivery available. No account needed. Shop everything you love.</p>
+        <a routerLink="/products" class="btn-gold" style="display:inline-flex;">Shop Now</a>
       </div>
     </div>
   `
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, OnDestroy {
   private productService = inject(ProductService);
   products = signal<Product[]>([]);
+  currentSlide = signal(0);
+  private slideInterval: any;
+
+  heroSlides = [
+    { id: 0, category: 'Fashion',     name: 'Clothing & Apparel',  img: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80' },
+    { id: 1, category: 'Beauty',      name: 'Makeup & Skincare',   img: 'https://images.unsplash.com/photo-1512207736890-6ffed8a84e8d?w=600&q=80' },
+    { id: 2, category: 'Electronics', name: 'Gadgets & Tech',      img: 'https://images.unsplash.com/photo-1498049794561-7780e7231661?w=600&q=80' },
+    { id: 3, category: 'Kitchen',     name: 'Home & Kitchen',      img: 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=600&q=80' },
+    { id: 4, category: 'Accessories', name: 'Bags & Jewellery',    img: 'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=600&q=80' },
+    { id: 5, category: 'Sports',      name: 'Fitness & Sport',     img: 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=600&q=80' },
+    { id: 6, category: 'Kids',        name: 'Toys & Baby',         img: 'https://images.unsplash.com/photo-1545558014-8692077e9b5c?w=600&q=80' },
+  ];
+
+  // Returns CSS class based on position relative to active slide
+  getCardClass(i: number): string {
+    const total = this.heroSlides.length;
+    const active = this.currentSlide();
+    let diff = i - active;
+    // Wrap around
+    if (diff > total / 2)  diff -= total;
+    if (diff < -total / 2) diff += total;
+
+    if (diff === 0)  return 'pos-0';
+    if (diff === 1)  return 'pos-p1';
+    if (diff === 2)  return 'pos-p2';
+    if (diff >= 3)   return 'pos-p3';
+    if (diff === -1) return 'pos-n1';
+    if (diff === -2) return 'pos-n2';
+    return 'pos-n3';
+  }
+
+  goToSlide(i: number) {
+    this.currentSlide.set(i);
+    clearInterval(this.slideInterval);
+    this.startAutoPlay();
+  }
+
+  startAutoPlay() {
+    this.slideInterval = setInterval(() => {
+      this.currentSlide.set((this.currentSlide() + 1) % this.heroSlides.length);
+    }, 3000);
+  }
 
   stats = [
-    { num: '500+', label: 'Products' },
-    { num: '1.2K', label: 'Happy Customers' },
-    { num: '4.9★', label: 'Avg Rating' },
+    { num: '1000+', label: 'Products' },
+    { num: '5K+',   label: 'Happy Customers' },
+    { num: '4.9★',  label: 'Avg Rating' },
   ];
 
   marqueeItems = [
-    'Free Delivery over PKR 2,000',
-    'Cash on Delivery',
-    '100% Original Products',
-    '7-Day Easy Returns',
-    'WhatsApp Support',
-    'Oriflame Certified',
-    'Nationwide Delivery',
-    'No Account Needed',
+    'Free Delivery over PKR 2,000', 'Cash on Delivery',
+    '100% Original Products', '7-Day Easy Returns',
+    'Fashion · Beauty · Electronics', 'Kitchen · Accessories · More',
+    'Nationwide Delivery', 'No Account Needed',
   ];
 
   categories = [
-    {
-      name: 'Skincare',
-      desc: 'Serums, moisturizers & more',
-      img: 'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=600&q=80'
-    },
-    {
-      name: 'Makeup',
-      desc: 'Lips, eyes & foundation',
-      img: 'https://images.unsplash.com/photo-1512207736890-6ffed8a84e8d?w=600&q=80'
-    },
-    {
-      name: 'Fragrance',
-      desc: 'Perfumes & body mists',
-      img: 'https://images.unsplash.com/photo-1541643600914-78b084683702?w=600&q=80'
-    },
-    {
-      name: 'Haircare',
-      desc: 'Shampoos, masks & oils',
-      img: 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=600&q=80'
-    },
+    { name: 'Clothing',    desc: 'Men, Women & Kids fashion',     img: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80' },
+    { name: 'Beauty',      desc: 'Skincare, makeup & fragrance',  img: 'https://images.unsplash.com/photo-1512207736890-6ffed8a84e8d?w=600&q=80' },
+    { name: 'Electronics', desc: 'Gadgets, phones & accessories', img: 'https://images.unsplash.com/photo-1498049794561-7780e7231661?w=600&q=80' },
+    { name: 'Kitchen',     desc: 'Cookware, appliances & more',   img: 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=600&q=80' },
+    { name: 'Accessories', desc: 'Bags, jewelry & watches',       img: 'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=600&q=80' },
+    { name: 'Sports',      desc: 'Fitness gear & sportswear',     img: 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=600&q=80' },
+    { name: 'Kids & Toys', desc: 'Toys, games & baby products',   img: 'https://images.unsplash.com/photo-1545558014-8692077e9b5c?w=600&q=80' },
+    { name: 'Home Decor',  desc: 'Furnishings & decorative items',img: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=600&q=80' },
   ];
 
   steps = [
-    {
-      no: 1, title: 'Browse & Select',
-      desc: 'Explore our curated collection of premium beauty products. No login required.',
-      svg: {
-        viewBox: '0 0 24 24',
-        paths: ['M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z']
-      }
-    },
-    {
-      no: 2, title: 'Place Your Order',
-      desc: 'Add to cart, fill in your address and phone number — done in 60 seconds.',
-      svg: {
-        viewBox: '0 0 24 24',
-        paths: [
-          'M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4'
-        ]
-      }
-    },
-    {
-      no: 3, title: 'We Deliver',
-      desc: 'Your order arrives at your door. Pay cash on delivery. Simple.',
-      svg: {
-        viewBox: '0 0 24 24',
-        paths: [
-          'M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0'
-        ]
-      }
-    },
+    { no: 1, title: 'Browse & Select',  desc: 'Explore thousands of products across all categories. No login required.', svg: { viewBox: '0 0 24 24', paths: ['M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z'] } },
+    { no: 2, title: 'Place Your Order', desc: 'Add to cart, fill in your address and phone number — done in 60 seconds.', svg: { viewBox: '0 0 24 24', paths: ['M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4'] } },
+    { no: 3, title: 'We Deliver',       desc: 'Your order arrives at your door. Pay cash on delivery. Simple.', svg: { viewBox: '0 0 24 24', paths: ['M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0'] } },
   ];
 
   trust = [
-    {
-      label: 'Free Delivery', desc: 'On orders over PKR 2,000',
-      svg: { viewBox: '0 0 24 24', paths: ['M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0'] }
-    },
-    {
-      label: 'Cash on Delivery', desc: 'Pay when you receive',
-      svg: { viewBox: '0 0 24 24', paths: ['M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z'] }
-    },
-    {
-      label: '7-Day Returns', desc: 'Hassle-free returns',
-      svg: { viewBox: '0 0 24 24', paths: ['M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15'] }
-    },
-    {
-      label: '100% Original', desc: 'Certified authentic products',
-      svg: { viewBox: '0 0 24 24', paths: ['M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z'] }
-    },
+    { label: 'Free Delivery',    desc: 'On orders over PKR 2,000',   svg: { viewBox: '0 0 24 24', paths: ['M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0'] } },
+    { label: 'Cash on Delivery', desc: 'Pay when you receive',        svg: { viewBox: '0 0 24 24', paths: ['M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z'] } },
+    { label: '7-Day Returns',    desc: 'Hassle-free returns',         svg: { viewBox: '0 0 24 24', paths: ['M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15'] } },
+    { label: '100% Original',   desc: 'Certified authentic products', svg: { viewBox: '0 0 24 24', paths: ['M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z'] } },
   ];
 
   ngOnInit() {
     this.productService.getProducts().subscribe(p => this.products.set(p.slice(0, 6)));
+    this.startAutoPlay();
   }
+
+  ngOnDestroy() { clearInterval(this.slideInterval); }
 }

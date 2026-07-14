@@ -226,7 +226,7 @@ import { OrderService } from '../../services/order.service';
       <!-- Sidebar -->
       <aside class="sidebar">
         <div class="sidebar-logo">
-          <span class="logo-text">GlowMart</span>
+          <span class="logo-text">Shopzee</span>
           <span class="logo-badge">Seller</span>
         </div>
 
@@ -261,7 +261,7 @@ import { OrderService } from '../../services/order.service';
       <div class="main">
         <header class="topbar">
           <div class="topbar-left">
-            <span class="topbar-label">GlowMart</span>
+            <span class="topbar-label">Shopzee</span>
             <div class="topbar-divider"></div>
             <span class="topbar-page">Seller Panel</span>
           </div>

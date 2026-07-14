@@ -137,7 +137,7 @@ import { FormsModule } from '@angular/forms';
       </div>
 
       <h1 class="page-title">Order Placed!</h1>
-      <p class="page-sub">Thank you for shopping with GlowMart.</p>
+      <p class="page-sub">Thank you for shopping with Shopzee.</p>
       <p class="page-note">We'll call you shortly to confirm your order.</p>
 
       <div class="cod-badge">
@@ -192,7 +192,7 @@ export class OrderSuccessComponent implements OnInit {
     { no: 1, title: 'Order Confirmed',  desc: 'We call you to confirm within a few hours.' },
     { no: 2, title: 'Dispatched',       desc: 'Your order is packed and handed to the courier.' },
     { no: 3, title: 'Out for Delivery', desc: 'Courier is on the way to your address.' },
-    { no: 4, title: 'Delivered',        desc: 'Pay cash and enjoy your GlowMart products!' },
+    { no: 4, title: 'Delivered',        desc: 'Pay cash and enjoy your Shopzee products!' },
   ];
 
   ngOnInit() {
