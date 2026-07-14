@@ -229,59 +229,99 @@ export class NavbarComponent {
 
   shopCategories = [
     {
-      name: 'Skincare',
+      name: 'Clothing',
       cols: [
-        { title: 'Shop by product', items: ['Cleansers and toners', 'Serums', 'Moisturisers', 'Eye care', 'Lip care', 'SPF and sun care', 'Masks and exfoliators', 'Routines', 'Gifts'] },
-        { title: 'Shop by benefit', items: ['Anti-ageing', 'Hydrating and plumping', 'Pore minimising', 'Even skin tone', 'Brightening', 'Soothing', 'Clarifying', 'Lifting and wrinkles correction', 'Eye brightening and dark circles'] },
-        { title: 'Shop by ingredient', items: ['Salicylic acid', 'Hyaluronic acid', 'AHA', 'Niacinamide', 'Lactobionic acid', 'Peptides', 'Retinoids', 'Vitamin C', 'Ectoin'] },
+        { title: 'Women', items: ['Kurtas & Suits', 'Dresses & Frocks', 'Tops & T-Shirts', 'Trousers & Palazzos', 'Abayas & Modest Wear', 'Winterwear'] },
+        { title: 'Men', items: ['Shalwar Kameez', 'Shirts & Polos', 'Trousers & Jeans', 'Jackets & Coats', 'Waistcoats', 'Kurtas'] },
+        { title: 'Kids', items: ['Boys Clothing', 'Girls Clothing', 'Baby & Infant', 'School Uniforms', 'Sleepwear'] },
       ]
     },
     {
-      name: 'Fragrance',
+      name: 'Beauty',
       cols: [
-        { title: 'Shop by type', items: ['Eau de Parfum', 'Eau de Toilette', 'Body Mist', 'Gift Sets'] },
-        { title: 'Shop by mood', items: ['Fresh & Floral', 'Warm & Woody', 'Citrus & Light', 'Oriental & Spicy'] },
-        { title: 'Shop by gender', items: ['For Her', 'For Him', 'Unisex'] },
+        { title: 'Skincare', items: ['Cleansers & Toners', 'Serums & Essences', 'Moisturisers', 'Sunscreen & SPF', 'Face Masks', 'Eye Cream'] },
+        { title: 'Makeup', items: ['Foundation & Concealer', 'Lipstick & Gloss', 'Mascara & Eyeliner', 'Eyeshadow', 'Blush & Bronzer', 'Setting Powder'] },
+        { title: 'Fragrance & Hair', items: ['Perfumes EDP', 'Body Mists', 'Shampoo & Conditioner', 'Hair Oils', 'Hair Masks', 'Styling Products'] },
       ]
     },
     {
-      name: 'Makeup',
+      name: 'Electronics',
       cols: [
-        { title: 'Face', items: ['Foundation', 'Concealer', 'Blush & Bronzer', 'Setting Powder', 'Primer'] },
-        { title: 'Eyes', items: ['Mascara', 'Eyeliner', 'Eyeshadow', 'Brow'] },
-        { title: 'Lips', items: ['Lipstick', 'Lip Gloss', 'Lip Liner', 'Lip Care'] },
+        { title: 'Phones & Tablets', items: ['Smartphones', 'Tablets', 'Phone Cases', 'Screen Protectors', 'Chargers & Cables', 'Power Banks'] },
+        { title: 'Audio & Visual', items: ['Earbuds & Headphones', 'Bluetooth Speakers', 'Smart Watches', 'Cameras', 'Projectors'] },
+        { title: 'Computers', items: ['Laptops', 'Keyboards & Mice', 'USB Hubs & Adapters', 'Webcams', 'Laptop Bags'] },
       ]
     },
     {
-      name: 'Nutrition',
+      name: 'Daily Gadgets',
       cols: [
-        { title: 'Supplements', items: ['Vitamins', 'Collagen', 'Omega', 'Probiotics'] },
-        { title: 'Wellness', items: ['Immunity', 'Energy', 'Sleep & Calm', 'Weight management'] },
-        { title: 'Sport', items: ['Protein', 'Pre-workout', 'Recovery'] },
+        { title: 'Smart Home', items: ['LED Smart Bulbs', 'Smart Plugs', 'Security Cameras', 'Door Bells', 'Air Purifiers'] },
+        { title: 'Personal Care', items: ['Electric Shavers', 'Hair Dryers', 'Straighteners', 'Trimmers', 'Massagers'] },
+        { title: 'Everyday Essentials', items: ['Mini Fans', 'Neck Pillows', 'Cable Organizers', 'Portable Chargers', 'Wireless Gadgets'] },
       ]
     },
     {
-      name: 'Bath & Body',
+      name: 'Kitchen',
       cols: [
-        { title: 'Body care', items: ['Body lotions', 'Body oils', 'Body scrubs', 'Hand cream'] },
-        { title: 'Bath', items: ['Shower gel', 'Bath salts', 'Soap bars'] },
-        { title: 'Sun care', items: ['SPF body', 'After sun', 'Self-tan'] },
+        { title: 'Cookware', items: ['Non-stick Pans', 'Pressure Cookers', 'Pots & Casseroles', 'Woks & Kadais', 'Bakeware'] },
+        { title: 'Appliances', items: ['Blenders & Juicers', 'Air Fryers', 'Rice Cookers', 'Electric Kettles', 'Toasters'] },
+        { title: 'Dining & Storage', items: ['Crockery Sets', 'Glasses & Mugs', 'Lunch Boxes', 'Food Containers', 'Cutlery Sets'] },
       ]
     },
     {
-      name: 'Hair',
+      name: 'Bedsheets',
       cols: [
-        { title: 'Hair care', items: ['Shampoo', 'Conditioner', 'Hair masks', 'Scalp care'] },
-        { title: 'Styling', items: ['Heat protection', 'Serums & oils', 'Styling creams'] },
-        { title: 'Colour', items: ['Hair colour', 'Colour care'] },
+        { title: 'Bedding', items: ['Double Bed Sheets', 'Single Bed Sheets', 'King Size Sheets', 'Fitted Sheets', 'Pillow Covers'] },
+        { title: 'Comfort', items: ['Duvets & Quilts', 'Comforters', 'Blankets', 'Mattress Protectors', 'Bed Cushions'] },
+        { title: 'Pillows & More', items: ['Sleeping Pillows', 'Decorative Cushions', 'Bolster Pillows', 'Mattress Toppers'] },
+      ]
+    },
+    {
+      name: 'Home Decor',
+      cols: [
+        { title: 'Living Room', items: ['Wall Art & Frames', 'Vases & Pots', 'Candles & Holders', 'Rugs & Carpets', 'Curtains'] },
+        { title: 'Lighting', items: ['Table Lamps', 'Fairy Lights', 'Night Lights', 'Pendant Lights', 'LED Strips'] },
+        { title: 'Organisation', items: ['Storage Baskets', 'Drawer Organisers', 'Shelves & Racks', 'Bathroom Accessories'] },
       ]
     },
     {
       name: 'Accessories',
       cols: [
-        { title: 'Tools', items: ['Brushes & sponges', 'Face rollers', 'Gua sha', 'Tweezers & tools'] },
-        { title: 'Bags & cases', items: ['Makeup bags', 'Travel sets'] },
-        { title: 'Other', items: ['Mirrors', 'Headbands'] },
+        { title: 'Bags & Luggage', items: ['Handbags', 'Backpacks', 'Clutches', 'Wallets', 'Travel Bags', 'Sling Bags'] },
+        { title: 'Jewellery', items: ['Earrings', 'Necklaces', 'Bracelets', 'Rings', 'Hair Accessories', 'Bridal Sets'] },
+        { title: 'Watches & More', items: ['Women Watches', 'Men Watches', 'Sunglasses', 'Belts', 'Scarves & Shawls'] },
+      ]
+    },
+    {
+      name: 'Sports',
+      cols: [
+        { title: 'Fitness', items: ['Dumbbells & Weights', 'Yoga Mats', 'Resistance Bands', 'Jump Ropes', 'Pull-up Bars'] },
+        { title: 'Sportswear', items: ['Gym Shorts', 'Sports Bras', 'Track Suits', 'Running Shoes', 'Compression Wear'] },
+        { title: 'Outdoor', items: ['Cricket Equipment', 'Football & Futsal', 'Badminton Sets', 'Cycling Accessories', 'Camping Gear'] },
+      ]
+    },
+    {
+      name: 'Kids & Toys',
+      cols: [
+        { title: 'Toys', items: ['Building Blocks', 'Remote Control Toys', 'Dolls & Playsets', 'Board Games', 'Puzzles'] },
+        { title: 'Baby', items: ['Baby Clothes', 'Feeding Accessories', 'Diapers & Wipes', 'Baby Monitors', 'Strollers'] },
+        { title: 'Education', items: ['Learning Toys', 'Art & Craft Kits', 'Books & Comics', 'Musical Instruments', 'Science Kits'] },
+      ]
+    },
+    {
+      name: 'Footwear',
+      cols: [
+        { title: 'Women', items: ['Heels & Pumps', 'Flats & Sandals', 'Sneakers', 'Boots', 'Khussa & Ethnic'] },
+        { title: 'Men', items: ['Formal Shoes', 'Sneakers & Trainers', 'Sandals & Slippers', 'Boots', 'Loafers'] },
+        { title: 'Kids', items: ['School Shoes', 'Sneakers', 'Sandals', 'Boots', 'Slippers'] },
+      ]
+    },
+    {
+      name: 'Stationery',
+      cols: [
+        { title: 'Office', items: ['Notebooks & Diaries', 'Pens & Markers', 'Files & Folders', 'Staplers & Punchers', 'Sticky Notes'] },
+        { title: 'Art Supplies', items: ['Sketch Books', 'Color Pencils', 'Watercolors', 'Canvas & Brushes', 'Calligraphy Sets'] },
+        { title: 'School', items: ['Geometry Sets', 'School Bags', 'Pencil Cases', 'Calculators', 'Flash Cards'] },
       ]
     },
   ];

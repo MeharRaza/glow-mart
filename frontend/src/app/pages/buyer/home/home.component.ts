@@ -74,7 +74,7 @@ import { Product } from '../../../models/product.model';
       letter-spacing: 0.1em; text-transform: uppercase; color: #9e9890; margin-top: 0.25rem;
     }
 
-    /* ── Right: 3D Carousel ──────────────────────────────── */
+    /* ── Right: Cross Carousel ───────────────────────────── */
     .hero-carousel-side {
       position: relative;
       height: 100%;
@@ -82,114 +82,102 @@ import { Product } from '../../../models/product.model';
       display: flex;
       align-items: center;
       justify-content: center;
-      perspective: 1200px;
       overflow: hidden;
     }
 
     .carousel-track {
       position: relative;
-      width: 100%;
-      height: 520px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      width: 320px;
+      height: 480px;
     }
 
     .c-card {
       position: absolute;
-      width: 220px;
-      height: 300px;
+      width: 200px;
+      height: 270px;
       border-radius: 4px;
       overflow: hidden;
       cursor: pointer;
-      transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-      transform-style: preserve-3d;
+      transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+      top: 50%;
+      left: 50%;
+      margin-top: -135px;
+      margin-left: -100px;
     }
 
     .c-card img {
       width: 100%; height: 100%;
       object-fit: cover;
       display: block;
-      transition: transform 0.6s ease;
     }
 
-    /* Active / center card */
-    .c-card.pos-0 {
-      transform: translateX(0) scale(1) translateZ(0px);
+    /* CENTER — active */
+    .c-card.pos-center {
+      transform: translate(0, 0) scale(1);
       z-index: 5;
       filter: none;
-      box-shadow: 0 32px 80px rgba(26,20,16,0.28);
-      width: 260px;
-      height: 360px;
+      box-shadow: 0 28px 70px rgba(26,20,16,0.30);
+      width: 220px;
+      height: 300px;
+      margin-top: -150px;
+      margin-left: -110px;
     }
 
-    /* One step left */
-    .c-card.pos-n1 {
-      transform: translateX(-220px) scale(0.82) translateZ(-80px);
-      z-index: 4;
-      filter: blur(1.5px) brightness(0.75);
-      box-shadow: 0 16px 40px rgba(26,20,16,0.14);
-    }
-
-    /* Two steps left */
-    .c-card.pos-n2 {
-      transform: translateX(-390px) scale(0.66) translateZ(-160px);
+    /* TOP */
+    .c-card.pos-top {
+      transform: translate(0, -230px) scale(0.72);
       z-index: 3;
-      filter: blur(3px) brightness(0.55);
-      box-shadow: 0 8px 24px rgba(26,20,16,0.1);
+      filter: blur(2.5px) brightness(0.6);
+      box-shadow: 0 8px 24px rgba(26,20,16,0.12);
     }
 
-    /* Three steps left — barely visible */
-    .c-card.pos-n3 {
-      transform: translateX(-520px) scale(0.52) translateZ(-240px);
-      z-index: 2;
-      filter: blur(5px) brightness(0.35);
-      opacity: 0.5;
-    }
-
-    /* One step right */
-    .c-card.pos-p1 {
-      transform: translateX(220px) scale(0.82) translateZ(-80px);
-      z-index: 4;
-      filter: blur(1.5px) brightness(0.75);
-      box-shadow: 0 16px 40px rgba(26,20,16,0.14);
-    }
-
-    /* Two steps right */
-    .c-card.pos-p2 {
-      transform: translateX(390px) scale(0.66) translateZ(-160px);
+    /* BOTTOM */
+    .c-card.pos-bottom {
+      transform: translate(0, 230px) scale(0.72);
       z-index: 3;
-      filter: blur(3px) brightness(0.55);
-      box-shadow: 0 8px 24px rgba(26,20,16,0.1);
+      filter: blur(2.5px) brightness(0.6);
+      box-shadow: 0 8px 24px rgba(26,20,16,0.12);
     }
 
-    /* Three steps right */
-    .c-card.pos-p3 {
-      transform: translateX(520px) scale(0.52) translateZ(-240px);
-      z-index: 2;
-      filter: blur(5px) brightness(0.35);
-      opacity: 0.5;
+    /* LEFT */
+    .c-card.pos-left {
+      transform: translate(-230px, 0) scale(0.72);
+      z-index: 3;
+      filter: blur(2.5px) brightness(0.6);
+      box-shadow: 0 8px 24px rgba(26,20,16,0.12);
     }
 
-    /* Hidden */
+    /* RIGHT */
+    .c-card.pos-right {
+      transform: translate(230px, 0) scale(0.72);
+      z-index: 3;
+      filter: blur(2.5px) brightness(0.6);
+      box-shadow: 0 8px 24px rgba(26,20,16,0.12);
+    }
+
+    /* Hidden — extra slides waiting off-screen */
     .c-card.pos-hidden {
+      transform: translate(0, 0) scale(0.3);
+      z-index: 1;
       opacity: 0;
       pointer-events: none;
-      transform: translateX(0) scale(0.4) translateZ(-300px);
     }
 
-    /* Label on active card */
+    /* Label on active card only */
     .c-card-label {
       position: absolute;
       bottom: 0; left: 0; right: 0;
       padding: 1.5rem 1rem 1rem;
       background: linear-gradient(to top, rgba(26,20,16,0.85) 0%, transparent 100%);
+      opacity: 0;
       transition: opacity 0.4s;
     }
-    .c-card:not(.pos-0) .c-card-label { opacity: 0; }
+    .c-card.pos-center .c-card-label { opacity: 1; }
+
     .c-label-cat {
       font-family: 'Jost', sans-serif; font-size: 0.6rem;
-      letter-spacing: 0.2em; text-transform: uppercase; color: #c9a96e; margin-bottom: 0.2rem;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      color: #c9a96e; margin-bottom: 0.2rem;
     }
     .c-label-name {
       font-family: 'Cormorant Garamond', serif; font-size: 1.1rem;
@@ -198,8 +186,9 @@ import { Product } from '../../../models/product.model';
 
     /* Dots */
     .carousel-dots {
-      position: absolute; bottom: 2rem;
-      display: flex; gap: 0.5rem; align-items: center; justify-content: center;
+      position: absolute; bottom: 1.5rem;
+      width: 100%; display: flex; gap: 0.5rem;
+      align-items: center; justify-content: center;
     }
     .cdot {
       width: 20px; height: 2px;
@@ -449,22 +438,24 @@ export class HomeComponent implements OnInit, OnDestroy {
     { id: 6, category: 'Kids',        name: 'Toys & Baby',         img: 'https://images.unsplash.com/photo-1545558014-8692077e9b5c?w=600&q=80' },
   ];
 
-  // Returns CSS class based on position relative to active slide
+  // Cross layout: center, top, right, bottom, left
+  // Rotation order: top comes to center, center goes to bottom-hidden,
+  // right comes to top, left comes to right, new card comes from left
+  // Positions cycle: 0=center, 1=top, 2=right, 3=bottom, 4=left
   getCardClass(i: number): string {
     const total = this.heroSlides.length;
     const active = this.currentSlide();
-    let diff = i - active;
-    // Wrap around
-    if (diff > total / 2)  diff -= total;
-    if (diff < -total / 2) diff += total;
+    // position slot relative to active
+    let diff = ((i - active) % total + total) % total;
 
-    if (diff === 0)  return 'pos-0';
-    if (diff === 1)  return 'pos-p1';
-    if (diff === 2)  return 'pos-p2';
-    if (diff >= 3)   return 'pos-p3';
-    if (diff === -1) return 'pos-n1';
-    if (diff === -2) return 'pos-n2';
-    return 'pos-n3';
+    switch (diff) {
+      case 0: return 'pos-center';
+      case 1: return 'pos-top';
+      case 2: return 'pos-right';
+      case 3: return 'pos-bottom';
+      case 4: return 'pos-left';
+      default: return 'pos-hidden';
+    }
   }
 
   goToSlide(i: number) {
@@ -475,8 +466,9 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   startAutoPlay() {
     this.slideInterval = setInterval(() => {
+      // Rotation: top → center (active increments by 1, so next top slot becomes center)
       this.currentSlide.set((this.currentSlide() + 1) % this.heroSlides.length);
-    }, 3000);
+    }, 3500);
   }
 
   stats = [
@@ -493,14 +485,18 @@ export class HomeComponent implements OnInit, OnDestroy {
   ];
 
   categories = [
-    { name: 'Clothing',    desc: 'Men, Women & Kids fashion',     img: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80' },
-    { name: 'Beauty',      desc: 'Skincare, makeup & fragrance',  img: 'https://images.unsplash.com/photo-1512207736890-6ffed8a84e8d?w=600&q=80' },
-    { name: 'Electronics', desc: 'Gadgets, phones & accessories', img: 'https://images.unsplash.com/photo-1498049794561-7780e7231661?w=600&q=80' },
-    { name: 'Kitchen',     desc: 'Cookware, appliances & more',   img: 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=600&q=80' },
-    { name: 'Accessories', desc: 'Bags, jewelry & watches',       img: 'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=600&q=80' },
-    { name: 'Sports',      desc: 'Fitness gear & sportswear',     img: 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=600&q=80' },
-    { name: 'Kids & Toys', desc: 'Toys, games & baby products',   img: 'https://images.unsplash.com/photo-1545558014-8692077e9b5c?w=600&q=80' },
-    { name: 'Home Decor',  desc: 'Furnishings & decorative items',img: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=600&q=80' },
+    { name: 'Clothing',       desc: 'Men, Women & Kids fashion',        img: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80' },
+    { name: 'Beauty',         desc: 'Skincare, makeup & fragrance',      img: 'https://images.unsplash.com/photo-1512207736890-6ffed8a84e8d?w=600&q=80' },
+    { name: 'Electronics',    desc: 'Gadgets, phones & accessories',     img: 'https://images.unsplash.com/photo-1498049794561-7780e7231661?w=600&q=80' },
+    { name: 'Kitchen',        desc: 'Cookware, appliances & utensils',   img: 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=600&q=80' },
+    { name: 'Bedsheets',      desc: 'Bedding, pillows & comforters',     img: 'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=600&q=80' },
+    { name: 'Accessories',    desc: 'Bags, jewelry & watches',           img: 'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=600&q=80' },
+    { name: 'Sports',         desc: 'Fitness gear & sportswear',         img: 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=600&q=80' },
+    { name: 'Kids & Toys',    desc: 'Toys, games & baby products',       img: 'https://images.unsplash.com/photo-1545558014-8692077e9b5c?w=600&q=80' },
+    { name: 'Home Decor',     desc: 'Furnishings & decorative items',    img: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=600&q=80' },
+    { name: 'Daily Gadgets',  desc: 'Smart home & everyday essentials',  img: 'https://images.unsplash.com/photo-1526738549149-8e07eca6c147?w=600&q=80' },
+    { name: 'Footwear',       desc: 'Shoes, sandals & boots',            img: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&q=80' },
+    { name: 'Stationery',     desc: 'Office, school & art supplies',     img: 'https://images.unsplash.com/photo-1456735190827-d1262f71b8a3?w=600&q=80' },
   ];
 
   steps = [
